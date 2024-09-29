@@ -10,7 +10,6 @@
 		18DCCD4A2CA9999500E20430 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DCCD492CA9999500E20430 /* AppDelegate.swift */; };
 		18DCCD4C2CA9999500E20430 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DCCD4B2CA9999500E20430 /* SceneDelegate.swift */; };
 		18DCCD4E2CA9999500E20430 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DCCD4D2CA9999500E20430 /* ViewController.swift */; };
-		18DCCD512CA9999500E20430 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 18DCCD502CA9999500E20430 /* Base */; };
 		18DCCD532CA9999600E20430 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18DCCD522CA9999600E20430 /* Assets.xcassets */; };
 		18DCCD562CA9999600E20430 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 18DCCD552CA9999600E20430 /* Base */; };
 /* End PBXBuildFile section */
@@ -20,7 +19,6 @@
 		18DCCD492CA9999500E20430 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18DCCD4B2CA9999500E20430 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		18DCCD4D2CA9999500E20430 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		18DCCD502CA9999500E20430 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		18DCCD522CA9999600E20430 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18DCCD552CA9999600E20430 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18DCCD572CA9999600E20430 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -56,15 +54,30 @@
 		18DCCD482CA9999500E20430 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				18DCCD492CA9999500E20430 /* AppDelegate.swift */,
-				18DCCD4B2CA9999500E20430 /* SceneDelegate.swift */,
+				18DCCD5E2CA99B8000E20430 /* Application */,
 				18DCCD4D2CA9999500E20430 /* ViewController.swift */,
-				18DCCD4F2CA9999500E20430 /* Main.storyboard */,
+				18DCCD5D2CA99A4C00E20430 /* Resources */,
+			);
+			path = Tracker;
+			sourceTree = "<group>";
+		};
+		18DCCD5D2CA99A4C00E20430 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
 				18DCCD522CA9999600E20430 /* Assets.xcassets */,
 				18DCCD542CA9999600E20430 /* LaunchScreen.storyboard */,
 				18DCCD572CA9999600E20430 /* Info.plist */,
 			);
-			path = Tracker;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		18DCCD5E2CA99B8000E20430 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				18DCCD492CA9999500E20430 /* AppDelegate.swift */,
+				18DCCD4B2CA9999500E20430 /* SceneDelegate.swift */,
+			);
+			path = Application;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,7 +140,6 @@
 			files = (
 				18DCCD532CA9999600E20430 /* Assets.xcassets in Resources */,
 				18DCCD562CA9999600E20430 /* Base in Resources */,
-				18DCCD512CA9999500E20430 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,14 +159,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		18DCCD4F2CA9999500E20430 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				18DCCD502CA9999500E20430 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		18DCCD542CA9999600E20430 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -294,12 +298,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3UVVPY2T4W;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Tracker/Info.plist;
+				INFOPLIST_FILE = Tracker/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,6 +310,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.gibbonch.Tracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -322,12 +329,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3UVVPY2T4W;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Tracker/Info.plist;
+				INFOPLIST_FILE = Tracker/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -335,6 +341,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.gibbonch.Tracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
