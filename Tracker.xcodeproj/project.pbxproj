@@ -15,6 +15,8 @@
 		18D20DEA2CDBF50B007E9083 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20DE92CDBF50B007E9083 /* TrackersViewController.swift */; };
 		18D20DED2CDBF6A6007E9083 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20DEC2CDBF6A6007E9083 /* PlaceholderView.swift */; };
 		18D20DF02CDBF8FB007E9083 /* UIView+addSubviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20DEF2CDBF8FB007E9083 /* UIView+addSubviews.swift */; };
+		18D20DF42CDC0811007E9083 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20DF32CDC0811007E9083 /* StatisticsViewController.swift */; };
+		18D20DF62CDC084C007E9083 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20DF52CDC084C007E9083 /* MainTabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		18D20DE92CDBF50B007E9083 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		18D20DEC2CDBF6A6007E9083 /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
 		18D20DEF2CDBF8FB007E9083 /* UIView+addSubviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+addSubviews.swift"; sourceTree = "<group>"; };
+		18D20DF32CDC0811007E9083 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		18D20DF52CDC084C007E9083 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,7 @@
 		18D20DE62CDBF4B7007E9083 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
+				18D20DF52CDC084C007E9083 /* MainTabBarController.swift */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -124,17 +129,10 @@
 		18D20DF12CDC0765007E9083 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				18D20DF22CDC0776007E9083 /* StatisticsViewController */,
 				18D20DE92CDBF50B007E9083 /* TrackersViewController.swift */,
+				18D20DF32CDC0811007E9083 /* StatisticsViewController.swift */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		18D20DF22CDC0776007E9083 /* StatisticsViewController */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = StatisticsViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,11 +206,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				18D20DF02CDBF8FB007E9083 /* UIView+addSubviews.swift in Sources */,
+				18D20DF62CDC084C007E9083 /* MainTabBarController.swift in Sources */,
 				180B5CAF2CDBD78E003FDE88 /* AppDelegate.swift in Sources */,
 				18D20DEA2CDBF50B007E9083 /* TrackersViewController.swift in Sources */,
 				180B5CC62CDBDE26003FDE88 /* Typography.swift in Sources */,
 				18D20DED2CDBF6A6007E9083 /* PlaceholderView.swift in Sources */,
 				180B5CB12CDBD78E003FDE88 /* SceneDelegate.swift in Sources */,
+				18D20DF42CDC0811007E9083 /* StatisticsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

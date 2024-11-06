@@ -21,8 +21,6 @@ final class TrackersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        title = "Трекеры"
         setupNavigationBar()
         setupView()
     }
@@ -30,7 +28,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Methods
     
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteApp
         view.addSubview(placeHolderView)
         NSLayoutConstraint.activate([
             placeHolderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -47,7 +45,7 @@ final class TrackersViewController: UIViewController {
         searchController.hidesNavigationBarDuringPresentation = false
         navigationController?.navigationBar.topItem?.searchController = searchController
         
-        let addTrackerBarButtonItem = UIBarButtonItem(image: .plus, style: .plain, target: nil, action: nil)
+        let addTrackerBarButtonItem = UIBarButtonItem(image: .plus, style: .plain, target: self, action: #selector(addTrackerButtonTapped))
         addTrackerBarButtonItem.tintColor = .blackApp
         self.navigationItem.leftBarButtonItem = addTrackerBarButtonItem
         
@@ -55,7 +53,19 @@ final class TrackersViewController: UIViewController {
         datePicker.locale = Locale(identifier: "ru-RU")
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
     }
-    
+
+    // MARK: - Actions
+
+    @objc private func addTrackerButtonTapped() {
+        print("Add Tracker button tapped")
+    }
+
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
+        let selectedDate = sender.date
+        print("Date selected: \(selectedDate)")
+    }
+
 }
