@@ -19,6 +19,8 @@ final class MainTabBarController: UITabBarController {
     // MARK: - Methods
     
     private func setupTabBar() {
+        tabBar.layer.borderWidth = 1.25
+        tabBar.layer.borderColor = UIColor.lightGrayApp.cgColor
         let trackersViewController = TrackersViewController()
         trackersViewController.title = "Трекеры"
         let trackersNavigationController = UINavigationController(rootViewController: trackersViewController)

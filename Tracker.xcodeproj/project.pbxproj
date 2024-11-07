@@ -21,6 +21,8 @@
 		18D20E252CDCF735007E9083 /* UIColor+selectionColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20E242CDCF735007E9083 /* UIColor+selectionColor.swift */; };
 		18D20E272CDCFAE0007E9083 /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20E262CDCFAE0007E9083 /* TrackerCategory.swift */; };
 		18D20E292CDCFB5C007E9083 /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20E282CDCFB5C007E9083 /* TrackerRecord.swift */; };
+		18D20E2B2CDD178C007E9083 /* CreateTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20E2A2CDD178C007E9083 /* CreateTrackerViewController.swift */; };
+		18D20E352CDD3CF7007E9083 /* FilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20E342CDD3CF7007E9083 /* FilledButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		18D20E242CDCF735007E9083 /* UIColor+selectionColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+selectionColor.swift"; sourceTree = "<group>"; };
 		18D20E262CDCFAE0007E9083 /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		18D20E282CDCFB5C007E9083 /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
+		18D20E2A2CDD178C007E9083 /* CreateTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerViewController.swift; sourceTree = "<group>"; };
+		18D20E342CDD3CF7007E9083 /* FilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,9 +77,8 @@
 			isa = PBXGroup;
 			children = (
 				180B5CC32CDBD912003FDE88 /* App */,
-				18D20E212CDCF61A007E9083 /* Models */,
-				180B5CC42CDBD917003FDE88 /* Views */,
-				18D20DEE2CDBF8DC007E9083 /* Extensions */,
+				18D20E2D2CDD2290007E9083 /* Modules */,
+				18D20E302CDD22ED007E9083 /* Common */,
 				180B5CC22CDBD90A003FDE88 /* Resources */,
 			);
 			path = Tracker;
@@ -105,26 +108,9 @@
 			isa = PBXGroup;
 			children = (
 				18D20DF12CDC0765007E9083 /* ViewControllers */,
-				18D20DE62CDBF4B7007E9083 /* TabBar */,
-				18D20DEB2CDBF5D6007E9083 /* Components */,
+				18D20E332CDD3CC5007E9083 /* Buttons */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		18D20DE62CDBF4B7007E9083 /* TabBar */ = {
-			isa = PBXGroup;
-			children = (
-				18D20DF52CDC084C007E9083 /* MainTabBarController.swift */,
-			);
-			path = TabBar;
-			sourceTree = "<group>";
-		};
-		18D20DEB2CDBF5D6007E9083 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				18D20DEC2CDBF6A6007E9083 /* PlaceholderView.swift */,
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		18D20DEE2CDBF8DC007E9083 /* Extensions */ = {
@@ -140,7 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				18D20DE92CDBF50B007E9083 /* TrackersViewController.swift */,
-				18D20DF32CDC0811007E9083 /* StatisticsViewController.swift */,
+				18D20E2A2CDD178C007E9083 /* CreateTrackerViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -153,6 +139,66 @@
 				18D20E282CDCFB5C007E9083 /* TrackerRecord.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		18D20E2D2CDD2290007E9083 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				18D20E2E2CDD2299007E9083 /* Trackers */,
+				18D20E2F2CDD22A1007E9083 /* Statistics */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		18D20E2E2CDD2299007E9083 /* Trackers */ = {
+			isa = PBXGroup;
+			children = (
+				18D20E212CDCF61A007E9083 /* Models */,
+				180B5CC42CDBD917003FDE88 /* Views */,
+			);
+			path = Trackers;
+			sourceTree = "<group>";
+		};
+		18D20E2F2CDD22A1007E9083 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				18D20E322CDD2362007E9083 /* Views */,
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
+		18D20E302CDD22ED007E9083 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				18D20E312CDD2318007E9083 /* Views */,
+				18D20DEE2CDBF8DC007E9083 /* Extensions */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		18D20E312CDD2318007E9083 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				18D20DF52CDC084C007E9083 /* MainTabBarController.swift */,
+				18D20DEC2CDBF6A6007E9083 /* PlaceholderView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		18D20E322CDD2362007E9083 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				18D20DF32CDC0811007E9083 /* StatisticsViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		18D20E332CDD3CC5007E9083 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				18D20E342CDD3CF7007E9083 /* FilledButton.swift */,
+			);
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +274,7 @@
 				18D20DF02CDBF8FB007E9083 /* UIView+addSubviews.swift in Sources */,
 				18D20DF62CDC084C007E9083 /* MainTabBarController.swift in Sources */,
 				180B5CAF2CDBD78E003FDE88 /* AppDelegate.swift in Sources */,
+				18D20E352CDD3CF7007E9083 /* FilledButton.swift in Sources */,
 				18D20E232CDCF630007E9083 /* Tracker.swift in Sources */,
 				18D20DEA2CDBF50B007E9083 /* TrackersViewController.swift in Sources */,
 				18D20E292CDCFB5C007E9083 /* TrackerRecord.swift in Sources */,
@@ -235,6 +282,7 @@
 				180B5CC62CDBDE26003FDE88 /* Typography.swift in Sources */,
 				18D20DED2CDBF6A6007E9083 /* PlaceholderView.swift in Sources */,
 				180B5CB12CDBD78E003FDE88 /* SceneDelegate.swift in Sources */,
+				18D20E2B2CDD178C007E9083 /* CreateTrackerViewController.swift in Sources */,
 				18D20DF42CDC0811007E9083 /* StatisticsViewController.swift in Sources */,
 				18D20E272CDCFAE0007E9083 /* TrackerCategory.swift in Sources */,
 			);

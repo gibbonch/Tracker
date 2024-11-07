@@ -64,11 +64,13 @@ final class TrackersViewController: UIViewController {
 
     @objc private func addTrackerButtonTapped() {
         print("Add Tracker button tapped")
+        let createTrackerViewController = CreateTrackerViewController()
+        present(createTrackerViewController, animated: true)
     }
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         print("Date selected: \(selectedDate)")
     }
-
+    
 }
