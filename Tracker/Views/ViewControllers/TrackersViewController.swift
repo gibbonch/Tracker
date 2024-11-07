@@ -11,6 +11,9 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Properties
     
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    
     private lazy var placeHolderView: PlaceholderView = {
         let placeholderView = PlaceholderView(image: .trackersPlaceholder, message: "Что будем отслеживать?")
         placeholderView.translatesAutoresizingMaskIntoConstraints = false
