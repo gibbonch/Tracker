@@ -22,12 +22,10 @@ final class MainTabBarController: UITabBarController {
         tabBar.layer.borderWidth = 1.25
         tabBar.layer.borderColor = UIColor.lightGrayApp.cgColor
         let trackersViewController = TrackersViewController()
-        trackersViewController.title = "Трекеры"
         let trackersNavigationController = UINavigationController(rootViewController: trackersViewController)
         trackersNavigationController.tabBarItem = UITabBarItem(title: "Трекеры", image: .trackers, selectedImage: nil)
         
         let statisticsViewController = StatisticsViewController()
-        statisticsViewController.title = "Статистка"
         let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
         statisticsNavigationController.tabBarItem = UITabBarItem(title: "Статистка", image: .stats, selectedImage: nil)
         

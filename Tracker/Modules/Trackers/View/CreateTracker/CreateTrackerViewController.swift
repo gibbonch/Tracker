@@ -7,9 +7,18 @@
 
 import UIKit
 
+protocol CreateTrackerViewControllerDelegate: AnyObject {
+    func createTrackerViewControllerDidDismiss()
+}
+
 final class CreateTrackerViewController: UIViewController {
     
     // MARK: - Properties
+    
+    weak var trackersViewModel: TrackersViewModel?
+    weak var delegate: CreateTrackerViewControllerDelegate?
+    
+    // MARK: - Subviews
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -20,11 +29,16 @@ final class CreateTrackerViewController: UIViewController {
         return label
     }()
     
-    private let regularEventButton = FilledButton(title: "Привычка") {
-        print("regular")
+    private lazy var regularEventButton = FilledButton(title: "Привычка") { [weak self] in
+        let configureViewController = NewTrackerViewController(trackerType: .regular)
+        configureViewController.delegate = self
+        self?.present(configureViewController, animated: true)
     }
-    private let singleEventButton = FilledButton(title: "Нерегулярное событие") {
-        print("single")
+    private lazy var singleEventButton = FilledButton(title: "Нерегулярное событие") { [weak self] in
+        let configureViewController = NewTrackerViewController(trackerType: .single)
+        configureViewController.delegate = self
+
+        self?.present(configureViewController, animated: true)
     }
     
     private lazy var buttonStack: UIStackView = {
@@ -46,6 +60,11 @@ final class CreateTrackerViewController: UIViewController {
         setupView()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        delegate?.createTrackerViewControllerDidDismiss()
+    }
+    
     // MARK: - Methods
     
     private func setupView() {
@@ -60,6 +79,14 @@ final class CreateTrackerViewController: UIViewController {
             buttonStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             buttonStack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
+    
+}
+
+extension CreateTrackerViewController: NewTrackerViewControllerDelegate {
+    
+    func newTrackerViewController(_ viewController: NewTrackerViewController, didCreateTracker tracker: Tracker, for category: String) {
+        trackersViewModel?.addTracker(tracker, to: category)
     }
     
 }

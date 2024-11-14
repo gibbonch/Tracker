@@ -11,12 +11,8 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Properties
     
-    private lazy var placeHolderView: PlaceholderView = {
-        let placeholderView = PlaceholderView(image: .statisticsPlaceholder, message: "Анализировать пока нечего")
-        placeholderView.translatesAutoresizingMaskIntoConstraints = false
-        return placeholderView
-    }()
-    
+    private lazy var placeHolderView = PlaceholderView(image: .statisticsPlaceholder, message: "Анализировать пока нечего")
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {

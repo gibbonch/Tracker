@@ -11,13 +11,13 @@ final class PlaceholderView: UIView {
     
     // MARK: - Properties
     
-    private let imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private let messageLabel: UILabel = {
+    private lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.textColor = .blackApp
         label.font = .ypMedium12
@@ -43,6 +43,7 @@ final class PlaceholderView: UIView {
     // MARK: - Methods
     
     private func setupView() {
+        translatesAutoresizingMaskIntoConstraints = false
         addSubviews(imageView, messageLabel)
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: topAnchor),

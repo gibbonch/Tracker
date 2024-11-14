@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct TrackerCategory {
-    let id: UUID
+struct TrackerCategory: Hashable, Codable {
+    var id = UUID()
     let title: String
-    let trackers: [Tracker]
+    var trackers: [Tracker]
 }

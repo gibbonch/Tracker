@@ -1,25 +1,17 @@
 //
-//  FilledButton.swift
+//  UndoButton.swift
 //  Tracker
 //
-//  Created by Александр Торопов on 07.11.2024.
+//  Created by Александр Торопов on 13.11.2024.
 //
 
 import UIKit
 
-final class FilledButton: UIButton {
+final class UndoButton: UIButton {
     
     // MARK: - Properties
     
-    private let enabledBackgroundColor = UIColor.blackApp
-    private let disabledBackgroundColor = UIColor.grayApp
     private let handler: () -> Void
-    
-    override var isEnabled: Bool {
-        didSet {
-            updateBackground()
-        }
-    }
     
     override var intrinsicContentSize: CGSize {
         let defaultSize = super.intrinsicContentSize
@@ -32,7 +24,6 @@ final class FilledButton: UIButton {
         self.handler = handler
         super.init(frame: .zero)
         setupButton(title: title)
-        updateBackground()
         addTarget(self, action: #selector(buttonDidTap), for: .touchUpInside)
     }
     
@@ -45,14 +36,11 @@ final class FilledButton: UIButton {
     private func setupButton(title: String) {
         setTitle(title, for: .normal)
         titleLabel?.font = .ypMedium16
-        titleLabel?.textColor = .whiteApp
+        setTitleColor(.redApp, for: .normal)
         layer.cornerRadius = 16
-        isEnabled = true
+        layer.borderColor = UIColor.redApp.cgColor
+        layer.borderWidth = 1
         translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    private func updateBackground() {
-        backgroundColor = isEnabled ? enabledBackgroundColor : disabledBackgroundColor
     }
     
     @objc private func buttonDidTap() {
