@@ -1,9 +1,15 @@
+//
+//  CheckButton.swift
+//  Tracker
+//
+//  Created by Александр Торопов on 08.11.2024.
+//
+
 import UIKit
 
 final class CheckButton: UIButton {
     
     // MARK: - Properties
-    
     var isChecked = false {
         didSet { animateButtonAppearance() }
     }
@@ -15,34 +21,31 @@ final class CheckButton: UIButton {
     private var color: UIColor? {
         didSet { animateButtonAppearance() }
     }
-    private var handler: (() -> Void)?
     
     // MARK: - Initializer
-    
     init() {
         super.init(frame: .zero)
         setupButtonAppearance()
     }
-
+    
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
-    
-    func configure(with color: UIColor?, handler: @escaping () -> Void) {
+    // MARK: - Public Methods
+    func configure(with color: UIColor?) {
         self.color = color
-        self.handler = handler
     }
-
+    
+    // MARK: - Private Methods
     private func setupButtonAppearance() {
         layer.masksToBounds = true
         layer.cornerRadius = 17
         imageView?.tintColor = .whiteApp
-        addTarget(self, action: #selector(handleButtonTap), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
     }
-
+    
     private func updateButtonAppearance() {
         let imageName = isChecked ? "checkmark" : "plus"
         setImage(UIImage(systemName: imageName), for: .normal)
@@ -59,10 +62,4 @@ final class CheckButton: UIButton {
             }
         })
     }
-    
-    @objc private func handleButtonTap() {
-        isChecked.toggle()
-        handler?()
-    }
-    
 }

@@ -14,12 +14,10 @@ protocol CategoryTableViewDelegate: AnyObject {
 final class CategoryViewController: UIViewController {
     
     // MARK: - Properties
-    
     private weak var delegate: CategoryTableViewDelegate?
     private var categories = ["Важное"]
     
     // MARK: - Subviews
-    
     private lazy var titleLabel = YPLabel(text: "Категория", font: .ypMedium16)
     
     private lazy var categoryTableView: UITableView = {
@@ -35,27 +33,27 @@ final class CategoryViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
+    
     private var categoryTableViewHeighConstraint: NSLayoutConstraint?
     
     // MARK: - Initializer
-    
     init(delegate: CategoryTableViewDelegate) {
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
     }
     
-    // MARK: - Methods
+    // MARK: - Private Methods
     
     private func setupView() {
         view.backgroundColor = .whiteApp
@@ -73,11 +71,9 @@ final class CategoryViewController: UIViewController {
         categoryTableViewHeighConstraint = categoryTableView.heightAnchor.constraint(equalToConstant: CGFloat(categories.count)  * CategoryTableViewCell.cellHeight)
         categoryTableViewHeighConstraint?.isActive = true
     }
-    
 }
 
 // MARK: - UITableViewDataSource
-
 extension CategoryViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -90,8 +86,6 @@ extension CategoryViewController: UITableViewDataSource {
         cell.textLabel?.text = categories[indexPath.row]
         return cell
     }
-    
-    
 }
 
 // MARK: - UITableViewDelegate
@@ -112,5 +106,4 @@ extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
-    
 }

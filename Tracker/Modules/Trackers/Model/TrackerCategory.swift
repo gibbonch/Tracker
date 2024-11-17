@@ -8,7 +8,13 @@
 import Foundation
 
 struct TrackerCategory: Hashable, Codable {
-    var id = UUID()
+    let id: UUID
     let title: String
-    var trackers: [Tracker]
+    let trackers: [Tracker]
+    
+    init(id: UUID = UUID(), title: String, trackers: [Tracker]) {
+        self.id = id
+        self.title = title
+        self.trackers = trackers
+    }
 }

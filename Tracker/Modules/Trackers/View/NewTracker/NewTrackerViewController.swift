@@ -14,8 +14,10 @@ protocol NewTrackerViewControllerDelegate: AnyObject {
 final class NewTrackerViewController: UIViewController {
     
     // MARK: - Properties
-    
     weak var delegate: NewTrackerViewControllerDelegate?
+    
+    private lazy var categoryViewController = CategoryViewController(delegate: self)
+    private lazy var scheduleViewController = ScheduleViewController(delegate: self)
     
     private let trackerType: TrackerType
     private var trackerTitle: String?
@@ -24,16 +26,8 @@ final class NewTrackerViewController: UIViewController {
     private var trackerEmoji: String?
     private var trackerColor: UIColor?
     
-    // MARK: - View Controllers
-    
-    private lazy var categoryViewController = CategoryViewController(delegate: self)
-    private lazy var scheduleViewController = ScheduleViewController(delegate: self)
-    
-    // MARK: - Title Label
-    
+    // MARK: - Subviews
     private lazy var titleLabel = YPLabel(text: trackerType == .regular ? "Новая привычка" : "Новое регулярное событие", font: .ypMedium16)
-    
-    // MARK: - Scroll View
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -48,33 +42,24 @@ final class NewTrackerViewController: UIViewController {
         return view
     }()
     
-    // MARK: - Title Text Field
-    
     private lazy var titleTextField = TrackerTitleTextField(trackerTitleTextFieldDelegate: self)
     
-    // MARK: - Warning Label
-    
     private lazy var warningLabel = YPLabel(text: "Ограничение 38 символов", font: .ypRegular17, textColor: .redApp)
-    private var warningLabelHeighConstraint: NSLayoutConstraint?
     
-    // MARK: - Table View
+    private var warningLabelHeighConstraint: NSLayoutConstraint?
     
     private lazy var parametersTableView = ParametersTableView(parametersTableViewDelegate: self, parameters: prepareParameters())
     
-    // MARK: Emoji Picker
-    
     private lazy var emojiLabel = YPLabel(text: "Emoji", font: .ypBold19)
+    
     private lazy var emojiPickerCollection = PickerCollectionView<EmojiCollectionViewCell>(pickerCollectionViewDelegate: self)
     
-    // MARK: Color Picker
-    
     private lazy var colorLabel = YPLabel(text: "Цвет", font: .ypBold19)
+    
     private lazy var colorPickerCollection = PickerCollectionView<ColorCollectionViewCell>(pickerCollectionViewDelegate: self)
     
-    // MARK: - Buttons
-    
     private lazy var saveButton = FilledButton(title: "Сохранить", isEnabled: false) { [weak self] in
-        guard let self = self,
+        guard let self,
               let tracker = self.createTracker(),
               let trackerCategory = self.trackerCategory
         else { return }
@@ -102,7 +87,6 @@ final class NewTrackerViewController: UIViewController {
     }()
     
     // MARK: - Initializers
-    
     init(trackerType: TrackerType) {
         self.trackerType = trackerType
         if trackerType == .single {
@@ -116,15 +100,13 @@ final class NewTrackerViewController: UIViewController {
     }
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         addGestureRecognizer()
         setupView()
     }
     
-    // MARK: - Methods
-    
+    // MARK: -  Private Methods
     private func setupView() {
         view.backgroundColor = .whiteApp
         
@@ -223,11 +205,9 @@ final class NewTrackerViewController: UIViewController {
         
         saveButton.isEnabled = true
     }
-    
 }
 
 // MARK: - Gesture Recognizer
-
 extension NewTrackerViewController {
     
     private func addGestureRecognizer() {
@@ -239,32 +219,28 @@ extension NewTrackerViewController {
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
-    
 }
 
 // MARK: - TrackerTitleTextFieldDelegate
-
 extension NewTrackerViewController: TrackerTitleTextFieldDelegate {
     
-    func trackerTitleTextFieldDidReachLimit(_ textField: TrackerTitleTextField) {
+    func didReachLimit() {
         warningLabelHeighConstraint?.constant = 30
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
     }
     
-    func trackerTitleTextFieldDidEndEditing(_ textField: TrackerTitleTextField) {
+    func didEndEditing(_ textField: TrackerTitleTextField) {
         trackerTitle = textField.text
         updateButtonAppearance()
     }
-    
 }
 
 // MARK: - ParametersTableViewDelegate
-
 extension NewTrackerViewController: ParametersTableViewDelegate {
     
-    func parametersTableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func didSelectRow(at indexPath: IndexPath) {
         if indexPath.row == 0 {
             present(categoryViewController, animated: true)
         } else {
@@ -286,11 +262,9 @@ extension NewTrackerViewController: ParametersTableViewDelegate {
         
         return parameters
     }
-    
 }
 
 // MARK: - PickerCollectionViewDelegate
-
 extension NewTrackerViewController: PickerCollectionViewDelegate {
     
     func pickerCollectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -302,19 +276,16 @@ extension NewTrackerViewController: PickerCollectionViewDelegate {
         }
         updateButtonAppearance()
     }
-    
 }
 
 // MARK: - ScheduleViewControllerDelegate
-
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     
-    func scheduleViewController(_ viewController: ScheduleViewController, didChangeScheduleState state: [Day]) {
+    func didChangeSchedule(state: [Day]) {
         trackerSchedule = state
         parametersTableView.configure(with: prepareParameters())
         updateButtonAppearance()
     }
-    
 }
 
 extension NewTrackerViewController: CategoryTableViewDelegate {
@@ -324,5 +295,4 @@ extension NewTrackerViewController: CategoryTableViewDelegate {
         parametersTableView.configure(with: prepareParameters())
         updateButtonAppearance()
     }
-    
 }

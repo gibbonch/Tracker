@@ -10,7 +10,12 @@ import UIKit
 final class TrackerCardView: UIView {
     
     // MARK: - Properties
+    override var intrinsicContentSize: CGSize {
+        let defaultSize = super.intrinsicContentSize
+        return CGSize(width: defaultSize.width, height: 90)
+    }
     
+    // MARK: - Subviews
     lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.layer.masksToBounds = true
@@ -38,11 +43,6 @@ final class TrackerCardView: UIView {
         return label
     }()
     
-    override var intrinsicContentSize: CGSize {
-        let defaultSize = super.intrinsicContentSize
-        return CGSize(width: defaultSize.width, height: 90)
-    }
-    
     // MARK: - Initializer
     
     override init(frame: CGRect) {
@@ -50,12 +50,12 @@ final class TrackerCardView: UIView {
         setupView()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
-    
+    // MARK: - Public Methods
     func configure(with tracker: Tracker) {
         emojiLabel.text = tracker.emoji
         titleLabel.text = tracker.title
@@ -63,13 +63,17 @@ final class TrackerCardView: UIView {
         pinImageView.isHidden = !tracker.isPin
     }
     
+    // MARK: - Private Methods
     private func setupView() {
         layer.cornerRadius = 16
         layer.borderWidth = 1
         layer.borderColor = UIColor.grayApp.withAlphaComponent(0.3).cgColor
         translatesAutoresizingMaskIntoConstraints = false
         addSubviews(emojiLabel, pinImageView, titleLabel)
-        
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             emojiLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             emojiLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
@@ -84,5 +88,4 @@ final class TrackerCardView: UIView {
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
         ])
     }
-    
 }

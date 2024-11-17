@@ -19,7 +19,6 @@ protocol PickerCollectionViewDelegate: AnyObject {
 final class PickerCollectionView<T: UICollectionViewCell>: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     // MARK: - Properties
-    
     private weak var pickerCollectionViewDelegate: PickerCollectionViewDelegate?
     
     private let colors = (1...18).map { UIColor(named: "Selection\($0)") }
@@ -33,20 +32,19 @@ final class PickerCollectionView<T: UICollectionViewCell>: UICollectionView, UIC
     private let horizontalInset = 2.0
     private let verticalInset = 24.0
     
-    // MARK: - Initializers
-    
+    // MARK: - Initializer
     init(pickerCollectionViewDelegate: PickerCollectionViewDelegate? = nil) {
         self.pickerCollectionViewDelegate = pickerCollectionViewDelegate
         super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         setupCollectionView()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
-    
+    // MARK: - Private Methods
     private func setupCollectionView() {
         register(T.self, forCellWithReuseIdentifier: T.identifier)
         dataSource = self
@@ -57,7 +55,6 @@ final class PickerCollectionView<T: UICollectionViewCell>: UICollectionView, UIC
     }
     
     // MARK: - UICollectionViewDataSource
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if T.self == ColorCollectionViewCell.self {
             return colors.count
@@ -81,7 +78,6 @@ final class PickerCollectionView<T: UICollectionViewCell>: UICollectionView, UIC
     }
     
     // MARK: - UICollectionViewDelegate
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? PickerCollectionViewCellProtocol
         cell?.applySelectAppearance()
@@ -94,7 +90,6 @@ final class PickerCollectionView<T: UICollectionViewCell>: UICollectionView, UIC
     }
     
     // MARK: - UICollectionViewDelegateFlowLayout
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let availableWidth = collectionView.frame.width - CGFloat(cellsPerLine - 1) * itemSpacing - horizontalInset * 2
         let cellWidth = availableWidth / CGFloat(cellsPerLine)
@@ -112,5 +107,4 @@ final class PickerCollectionView<T: UICollectionViewCell>: UICollectionView, UIC
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset)
     }
-    
 }

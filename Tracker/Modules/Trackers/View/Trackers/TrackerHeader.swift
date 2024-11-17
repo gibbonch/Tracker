@@ -9,17 +9,22 @@ import UIKit
 
 final class TrackerHeader: UICollectionReusableView {
     
-    static let identifier = "tracker-header"
+    // MARK: - Subviews
+    lazy var categoryLabel = YPLabel(font: .ypBold19)
     
-    lazy var categoryLabel: UILabel = {
-        let label = UILabel()
-        label.font = .ypBold19
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupView()
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Private Methods
+    private func setupView() {
         addSubview(categoryLabel)
         NSLayoutConstraint.activate([
             categoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
@@ -27,9 +32,4 @@ final class TrackerHeader: UICollectionReusableView {
             categoryLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 }

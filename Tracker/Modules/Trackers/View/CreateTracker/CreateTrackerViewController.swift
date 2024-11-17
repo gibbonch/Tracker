@@ -14,12 +14,10 @@ protocol CreateTrackerViewControllerDelegate: AnyObject {
 final class CreateTrackerViewController: UIViewController {
     
     // MARK: - Properties
-    
     weak var trackersViewModel: TrackersViewModel?
     weak var delegate: CreateTrackerViewControllerDelegate?
     
     // MARK: - Subviews
-    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
@@ -54,7 +52,6 @@ final class CreateTrackerViewController: UIViewController {
     }()
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -65,8 +62,7 @@ final class CreateTrackerViewController: UIViewController {
         delegate?.createTrackerViewControllerDidDismiss()
     }
     
-    // MARK: - Methods
-    
+    // MARK: - Private Methods
     private func setupView() {
         view.backgroundColor = .whiteApp
         view.addSubviews(titleLabel, buttonStack)
@@ -80,9 +76,9 @@ final class CreateTrackerViewController: UIViewController {
             buttonStack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
-    
 }
 
+// MARK: - NewTrackerViewControllerDelegate
 extension CreateTrackerViewController: NewTrackerViewControllerDelegate {
     
     func newTrackerViewController(_ viewController: NewTrackerViewController, didCreateTracker tracker: Tracker, for category: String) {

@@ -18,18 +18,16 @@ struct Parameter {
 }
 
 protocol ParametersTableViewDelegate: AnyObject {
-    func parametersTableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    func didSelectRow(at indexPath: IndexPath)
 }
 
 final class ParametersTableView: UITableView {
     
     // MARK: - Properties
-    
     private weak var parametersTableViewDelegate: ParametersTableViewDelegate?
     private var parameters = [Parameter]()
     
     // MARK: - Initializer
-    
     init(parametersTableViewDelegate: ParametersTableViewDelegate? = nil, parameters: [Parameter]) {
         self.parametersTableViewDelegate = parametersTableViewDelegate
         self.parameters = parameters
@@ -38,17 +36,18 @@ final class ParametersTableView: UITableView {
         configure(with: parameters)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
-    
+    // MARK: - Public Methods
     func configure(with parameters: [Parameter]) {
         self.parameters = parameters
         reloadData()
     }
     
+    // MARK: - Private Methods
     private func setupTableView() {
         dataSource = self
         delegate = self
@@ -60,11 +59,9 @@ final class ParametersTableView: UITableView {
         separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         translatesAutoresizingMaskIntoConstraints = false
     }
-    
 }
 
 // MARK: - UITableViewDataSource
-
 extension ParametersTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -87,19 +84,16 @@ extension ParametersTableView: UITableViewDataSource {
         
         return cell
     }
-    
 }
 
 // MARK: - UITableViewDelegate
-
 extension ParametersTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        parametersTableViewDelegate?.parametersTableView(tableView, didSelectRowAt: indexPath)
+        parametersTableViewDelegate?.didSelectRow(at: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
-    
 }

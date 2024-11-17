@@ -8,8 +8,8 @@
 import UIKit
 
 protocol TrackerTitleTextFieldDelegate: AnyObject {
-    func trackerTitleTextFieldDidEndEditing(_ textField: TrackerTitleTextField)
-    func trackerTitleTextFieldDidReachLimit(_ textField: TrackerTitleTextField)
+    func didEndEditing(_ textField: TrackerTitleTextField)
+    func didReachLimit()
 }
 
 final class TrackerTitleTextField: UITextField {
@@ -73,13 +73,13 @@ extension TrackerTitleTextField: UITextFieldDelegate {
         if updatedLength <= 38 {
             return true
         } else {
-            trackerTitleTextFieldDelegate?.trackerTitleTextFieldDidReachLimit(self)
+            trackerTitleTextFieldDelegate?.didReachLimit()
             return false
         }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        trackerTitleTextFieldDelegate?.trackerTitleTextFieldDidEndEditing(self)
+        trackerTitleTextFieldDelegate?.didEndEditing(self)
     }
     
 }

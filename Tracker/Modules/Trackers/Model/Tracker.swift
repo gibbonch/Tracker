@@ -8,14 +8,14 @@
 import Foundation
 
 struct Tracker: Hashable, Codable {
-    var id = UUID()
+    let id: UUID
     let type: TrackerType
     let title: String
     let colorID: Int
     let emoji: String
     let schedule: [Day]
-    var checkCount: Int
-    var isPin: Bool
+    let checkCount: Int
+    let isPin: Bool
     
     init(id: UUID = UUID(), type: TrackerType, title: String, colorID: Int, emoji: String, schedule: [Day], trackerValue: Int = 0, isPin: Bool = false) {
         self.id = id

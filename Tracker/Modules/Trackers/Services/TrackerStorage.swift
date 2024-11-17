@@ -15,13 +15,11 @@ protocol DataStorage {
 final class TrackerUserDefaultsDataStorage: DataStorage {
     
     // MARK: - Properties
-    
     private let userDefaults = UserDefaults.standard
     private let categoriesStorageKey = "trackerCategories"
     private let completedTrackersStorageKey = "completedTrackers"
     
     // MARK: - Category Methods
-    
     func saveCategories(_ categories: [TrackerCategory]) {
         do {
             let data = try JSONEncoder().encode(categories)
@@ -44,7 +42,6 @@ final class TrackerUserDefaultsDataStorage: DataStorage {
     }
     
     // MARK: - Completed Trackers Methods
-    
     func saveCompletedTrackers(_ completedTrackers: [TrackerRecord]) {
         do {
             let data = try JSONEncoder().encode(completedTrackers)
@@ -65,6 +62,5 @@ final class TrackerUserDefaultsDataStorage: DataStorage {
             return []
         }
     }
-    
 }
 

@@ -10,11 +10,11 @@ import UIKit
 final class TrackersViewController: UIViewController {
     
     // MARK: - Properties
-    
     private var trackersViewModel: TrackersViewModel?
     private var dataSourceProvider: TrackerDataSourceProvider?
     
     // MARK: - Subviews
+    private lazy var placeholderView = PlaceholderView()
     
     private lazy var trackersCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UICollectionViewFlowLayout())
@@ -39,7 +39,7 @@ final class TrackersViewController: UIViewController {
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         return datePicker
     }()
     
@@ -61,29 +61,39 @@ final class TrackersViewController: UIViewController {
         return searchBar
     }()
     
-    private lazy var placeholderView: PlaceholderView = {
-        let placeholderView = PlaceholderView(image: .trackersPlaceholder, message: "Что будем отслеживать?")
-        return placeholderView
-    }()
+    // MARK: - Initializer
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        trackersViewModel = TrackersViewModel()
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         setupGestureRecognizer()
         setupView()
+        
         trackersViewModel = TrackersViewModel()
-        dataSourceProvider = TrackerDataSourceProvider(collectionView: trackersCollectionView, delegate: self)
-        dataSourceProvider?.trackersViewModel = trackersViewModel
+        dataSourceProvider = TrackerDataSourceProvider(collectionView: trackersCollectionView)
+        dataSourceProvider?.delegate = self
+        
         updateTrackers()
     }
     
-    // MARK: - Methods
-    
+    // MARK: - Private Methods
     private func setupView() {
         view.backgroundColor = .whiteApp
         view.addSubviews(titleLabel, searchBar, trackersCollectionView, placeholderView)
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -108,8 +118,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func updateTrackers() {
-        let selectedDay = Day.getDay(from: datePicker.date)
-        let relevantCategories = trackersViewModel?.relevantCategories(filterText: searchBar.text, selectedDay: selectedDay)
+        let relevantCategories = trackersViewModel?.relevantCategories(filterText: searchBar.text, selectedDate: datePicker.date)
         dataSourceProvider?.applySnapshot(for: relevantCategories, date: datePicker.date)
     }
     
@@ -120,7 +129,6 @@ final class TrackersViewController: UIViewController {
     }
     
     // MARK: - Actions
-    
     @objc private func addTrackerButtonTapped() {
         let createTrackerViewController = CreateTrackerViewController()
         createTrackerViewController.trackersViewModel = trackersViewModel
@@ -128,21 +136,18 @@ final class TrackersViewController: UIViewController {
         present(createTrackerViewController, animated: true)
     }
     
-    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        let selectedDate = sender.date
-        let selectedDay = Day.getDay(from: selectedDate)
-        dataSourceProvider?.applySnapshot(for: trackersViewModel?.relevantCategories(filterText: searchBar.text ?? "", selectedDay: selectedDay), date: datePicker.date)
+    @objc private func datePickerValueChanged() {
+        let relevantCategories = trackersViewModel?.relevantCategories(filterText: searchBar.text, selectedDate: datePicker.date)
+        dataSourceProvider?.applySnapshot(for: relevantCategories, date: datePicker.date)
     }
     
     @objc private func dismissKeyboard() {
         searchBar.resignFirstResponder()
         animateHideSearchBarCancelButton()
     }
-    
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -166,32 +171,54 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)
     }
-    
 }
 
 // MARK: - TrackersDataSourceProviderDelegate
-
 extension TrackersViewController: TrackersDataSourceProviderDelegate {
     
-    func trackersDataSourceProvider(_ dataSourceProvider: TrackerDataSourceProvider, didUpdateItemCount count: Int) {
+    func didUpdateItemCount(to count: Int) {
         if count > 0 {
             placeholderView.isHidden = true
             trackersCollectionView.isHidden = false
         } else {
+            if searchBar.text != "" {
+                placeholderView.imageView.image = .searchPlaceholder
+                placeholderView.messageLabel.text = "Ничего не найдено"
+            } else {
+                placeholderView.imageView.image = .trackersPlaceholder
+                placeholderView.messageLabel.text = "Что будем отслеживать?"
+            }
             placeholderView.isHidden = false
             trackersCollectionView.isHidden = true
         }
     }
     
+    func isTrackerCompleted(for trackerId: UUID, on date: Date) -> Bool {
+        trackersViewModel?.isTrackerCompleted(trackerId, on: date) ?? false
+    }
+}
+
+// MARK: - TrackerCollectionViewCellDelegate
+extension TrackersViewController: TrackerCollectionViewCellDelegate {
+    
+    func didTapCheckButton(in cell: TrackerCollectionViewCell) {
+        guard let indexPath = trackersCollectionView.indexPath(for: cell),
+              let tracker = dataSourceProvider?.tracker(for: indexPath) else { return }
+        
+        let isCompleted = trackersViewModel?.isTrackerCompleted(tracker.id, on: datePicker.date) ?? false
+        if isCompleted {
+            trackersViewModel?.uncheckTracker(tracker.id, on: datePicker.date)
+        } else {
+            trackersViewModel?.checkTracker(tracker.id, on: datePicker.date)
+        }
+    }
 }
 
 // MARK: - UISearchBarDelegate
-
 extension TrackersViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let selectedDay = Day.getDay(from: datePicker.date)
-        let relevantCategories = trackersViewModel?.relevantCategories(filterText: searchText, selectedDay: selectedDay)
+        let relevantCategories = trackersViewModel?.relevantCategories(filterText: searchBar.text, selectedDate: datePicker.date)
         dataSourceProvider?.applySnapshot(for: relevantCategories, date: datePicker.date)
     }
     
@@ -215,7 +242,6 @@ extension TrackersViewController: UISearchBarDelegate {
             self.searchBar.setShowsCancelButton(false, animated: true)
         }
     }
-    
 }
 
 // MARK: - CreateTrackerViewControllerDelegate
@@ -225,5 +251,4 @@ extension TrackersViewController: CreateTrackerViewControllerDelegate {
     func createTrackerViewControllerDidDismiss() {
        updateTrackers()
     }
-    
 }

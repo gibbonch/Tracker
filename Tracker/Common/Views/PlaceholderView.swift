@@ -11,13 +11,13 @@ final class PlaceholderView: UIView {
     
     // MARK: - Properties
     
-    private lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private lazy var messageLabel: UILabel = {
+    lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.textColor = .blackApp
         label.font = .ypMedium12
@@ -29,7 +29,7 @@ final class PlaceholderView: UIView {
     
     // MARK: - Initializer
     
-    init(image: UIImage?, message: String) {
+    init(image: UIImage? = nil, message: String? = nil) {
         super.init(frame: .zero)
         imageView.image = image
         messageLabel.text = message
