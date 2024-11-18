@@ -10,6 +10,7 @@ import Foundation
 final class TrackersViewModel {
     
     // MARK: - Properties
+    
     private var categories: [TrackerCategory]
     private var completedTrackers: [TrackerRecord]
     
@@ -23,6 +24,7 @@ final class TrackersViewModel {
     }
     
     // MARK: - Public Methods
+    
     func relevantCategories(filterText: String? = "", selectedDate: Date) -> [TrackerCategory] {
         let selectedDay = Day.getDay(from: selectedDate)
         return categories.compactMap { category in
@@ -68,11 +70,12 @@ final class TrackersViewModel {
     }
     
     func isTrackerCompleted(_ trackerID: UUID, on date: Date) -> Bool {
-        return completedTrackers.contains { record in
+        let trackers = completedTrackers.contains { record in
             let calendar = Calendar.current
             return record.trackerID == trackerID &&
                 calendar.isDate(record.date, inSameDayAs: date)
         }
+        return trackers
     }
     
     func checkTracker(_ trackerID: UUID, on date: Date) {
@@ -89,6 +92,7 @@ final class TrackersViewModel {
     }
     
     // MARK: - Private Methods
+    
     private func updateTrackerCounter(for trackerID: UUID) {
         for index in categories.indices {
             if let trackerIndex = categories[index].trackers.firstIndex(where: { $0.id == trackerID }) {

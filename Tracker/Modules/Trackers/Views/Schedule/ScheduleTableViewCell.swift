@@ -7,7 +7,11 @@
 
 import UIKit
 
+// MARK: - ScheduleTableViewCell
+
 final class ScheduleTableViewCell: UITableViewCell {
+    
+    // MARK: - Subviews
     
     lazy var dayLabel: UILabel = {
         let label = UILabel()
@@ -24,14 +28,19 @@ final class ScheduleTableViewCell: UITableViewCell {
         return daySwitch
     }()
     
+    // MARK: - Initializer
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Private Methods
     
     private func setupCell() {
         backgroundColor = UIColor.lightGrayApp.withAlphaComponent(0.3)
@@ -45,5 +54,4 @@ final class ScheduleTableViewCell: UITableViewCell {
             daySwitch.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
-    
 }

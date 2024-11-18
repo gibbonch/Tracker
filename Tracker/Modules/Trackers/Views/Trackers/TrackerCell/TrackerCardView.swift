@@ -10,12 +10,14 @@ import UIKit
 final class TrackerCardView: UIView {
     
     // MARK: - Properties
+    
     override var intrinsicContentSize: CGSize {
         let defaultSize = super.intrinsicContentSize
         return CGSize(width: defaultSize.width, height: 90)
     }
     
     // MARK: - Subviews
+    
     lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.layer.masksToBounds = true
@@ -56,6 +58,7 @@ final class TrackerCardView: UIView {
     }
     
     // MARK: - Public Methods
+    
     func configure(with tracker: Tracker) {
         emojiLabel.text = tracker.emoji
         titleLabel.text = tracker.title
@@ -64,6 +67,7 @@ final class TrackerCardView: UIView {
     }
     
     // MARK: - Private Methods
+    
     private func setupView() {
         layer.cornerRadius = 16
         layer.borderWidth = 1

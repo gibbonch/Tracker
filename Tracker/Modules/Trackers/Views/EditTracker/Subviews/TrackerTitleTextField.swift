@@ -9,7 +9,7 @@ import UIKit
 
 protocol TrackerTitleTextFieldDelegate: AnyObject {
     func didEndEditing(_ textField: TrackerTitleTextField)
-    func didReachLimit()
+    func didCharacterLimitExceeded()
 }
 
 final class TrackerTitleTextField: UITextField {
@@ -73,7 +73,7 @@ extension TrackerTitleTextField: UITextFieldDelegate {
         if updatedLength <= 38 {
             return true
         } else {
-            trackerTitleTextFieldDelegate?.didReachLimit()
+            trackerTitleTextFieldDelegate?.didCharacterLimitExceeded()
             return false
         }
     }

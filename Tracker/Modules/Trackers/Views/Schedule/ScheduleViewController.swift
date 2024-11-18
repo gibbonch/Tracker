@@ -7,26 +7,26 @@
 
 import UIKit
 
+// MARK: - Protocol Definition
+
 protocol ScheduleViewControllerDelegate: AnyObject {
-    func didChangeSchedule(state: [Day])
+    func didChange(schedule: [Day])
 }
+
+// MARK: - ScheduleViewController
 
 final class ScheduleViewController: UIViewController {
     
     // MARK: - Properties
+    
     private weak var delegate: ScheduleViewControllerDelegate?
+    
     private let days = Day.allCases
-    private var scheduleState = [Day]()
+    private var schedule = [Day]()
     
     // MARK: - Subviews
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Расписание"
-        label.font = .ypMedium16
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    
+    private lazy var titleLabel = YPLabel(text: "Расписание",font: .ypMedium16)
     
     private lazy var scheduleTableView: UITableView = {
         let tableView = UITableView()
@@ -38,7 +38,6 @@ final class ScheduleViewController: UIViewController {
         tableView.layer.masksToBounds = true
         tableView.layer.cornerRadius = 16
         tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -48,9 +47,10 @@ final class ScheduleViewController: UIViewController {
     }
     
     // MARK: - Initializer
+    
     init(delegate: ScheduleViewControllerDelegate?, scheduleState: [Day] = [Day]()) {
         self.delegate = delegate
-        self.scheduleState = scheduleState
+        self.schedule = scheduleState
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -60,6 +60,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -67,10 +68,18 @@ final class ScheduleViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        delegate?.didChangeSchedule(state: scheduleState)
+        delegate?.didChange(schedule: schedule)
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func daySwitchDidToggle(_ sender: UISwitch) {
+        let day = days[sender.tag]
+        updateScheduleState(for: day, isOn: sender.isOn)
     }
     
     // MARK: - Private Methods
+    
     private func setupView() {
         view.backgroundColor = .whiteApp
         
@@ -91,24 +100,18 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func updateScheduleState(for day: Day, isOn: Bool) {
-        if isOn && !scheduleState.contains(day)  {
-            scheduleState.append(day)
+        if isOn && !schedule.contains(day)  {
+            schedule.append(day)
         } else {
-            scheduleState.removeAll { $0 == day }
+            schedule.removeAll { $0 == day }
         }
-        scheduleState.sort(by: { $0.rawValue < $1.rawValue })
-    }
-    
-    // MARK: - Actions
-    @objc private func daySwitchDidToggle(_ sender: UISwitch) {
-        let day = days[sender.tag]
-        updateScheduleState(for: day, isOn: sender.isOn)
+        schedule.sort(by: { $0.rawValue < $1.rawValue })
     }
 }
 
 // MARK: - UITableViewDataSource
+
 extension ScheduleViewController: UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return days.count
     }
@@ -120,16 +123,24 @@ extension ScheduleViewController: UITableViewDataSource {
         }
         scheduleCell.selectionStyle = .none
         scheduleCell.dayLabel.text = days[indexPath.row].toString()
-        scheduleCell.daySwitch.addTarget(self, action: #selector(daySwitchDidToggle(_:)), for: .valueChanged)
+        scheduleCell.daySwitch.addTarget(self, action: #selector(daySwitchDidToggle), for: .valueChanged)
         scheduleCell.daySwitch.tag = indexPath.row
         return scheduleCell
     }
 }
 
 // MARK: - UITableViewDelegate
+
 extension ScheduleViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == days.count - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: tableView.bounds.width)
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        }
     }
 }

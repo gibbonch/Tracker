@@ -7,14 +7,19 @@
 
 import UIKit
 
+// MARK: - Protocol Definition
+
 protocol CreateTrackerViewControllerDelegate: AnyObject {
-    func createTrackerViewControllerDidDismiss()
+    func addTracker(_ tracker: Tracker, to categoryTitle: String)
+    func willDisappear()
 }
+
+// MARK: - CreateTrackerViewController
 
 final class CreateTrackerViewController: UIViewController {
     
     // MARK: - Properties
-    weak var trackersViewModel: TrackersViewModel?
+    
     weak var delegate: CreateTrackerViewControllerDelegate?
     
     // MARK: - Subviews
@@ -28,14 +33,13 @@ final class CreateTrackerViewController: UIViewController {
     }()
     
     private lazy var regularEventButton = FilledButton(title: "Привычка") { [weak self] in
-        let configureViewController = NewTrackerViewController(trackerType: .regular)
+        let configureViewController = EditTrackerViewController(title: "Новая привычка", trackerType: .regular)
         configureViewController.delegate = self
         self?.present(configureViewController, animated: true)
     }
     private lazy var singleEventButton = FilledButton(title: "Нерегулярное событие") { [weak self] in
-        let configureViewController = NewTrackerViewController(trackerType: .single)
+        let configureViewController = EditTrackerViewController(title: "Новое нерегулярное событие", trackerType: .single)
         configureViewController.delegate = self
-
         self?.present(configureViewController, animated: true)
     }
     
@@ -52,6 +56,7 @@ final class CreateTrackerViewController: UIViewController {
     }()
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -59,10 +64,11 @@ final class CreateTrackerViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        delegate?.createTrackerViewControllerDidDismiss()
+        delegate?.willDisappear()
     }
     
     // MARK: - Private Methods
+    
     private func setupView() {
         view.backgroundColor = .whiteApp
         view.addSubviews(titleLabel, buttonStack)
@@ -79,10 +85,9 @@ final class CreateTrackerViewController: UIViewController {
 }
 
 // MARK: - NewTrackerViewControllerDelegate
-extension CreateTrackerViewController: NewTrackerViewControllerDelegate {
-    
-    func newTrackerViewController(_ viewController: NewTrackerViewController, didCreateTracker tracker: Tracker, for category: String) {
-        trackersViewModel?.addTracker(tracker, to: category)
+
+extension CreateTrackerViewController: EditTrackerViewControllerDelegate {
+    func addTracker(_ tracker: Tracker, to categoryTitle: String) {
+        delegate?.addTracker(tracker, to: categoryTitle)
     }
-    
 }

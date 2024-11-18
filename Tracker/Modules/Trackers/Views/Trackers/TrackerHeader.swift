@@ -10,9 +10,11 @@ import UIKit
 final class TrackerHeader: UICollectionReusableView {
     
     // MARK: - Subviews
+    
     lazy var categoryLabel = YPLabel(font: .ypBold19)
     
     // MARK: - Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -24,6 +26,7 @@ final class TrackerHeader: UICollectionReusableView {
     }
     
     // MARK: - Private Methods
+    
     private func setupView() {
         addSubview(categoryLabel)
         NSLayoutConstraint.activate([

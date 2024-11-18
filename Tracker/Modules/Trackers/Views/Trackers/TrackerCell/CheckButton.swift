@@ -10,19 +10,21 @@ import UIKit
 final class CheckButton: UIButton {
     
     // MARK: - Properties
+    
     var isChecked = false {
         didSet { animateButtonAppearance() }
+    }
+    
+    private var color: UIColor? {
+        didSet { updateButtonAppearance() }
     }
     
     override var intrinsicContentSize: CGSize {
         return CGSize(width: 34, height: 34)
     }
     
-    private var color: UIColor? {
-        didSet { animateButtonAppearance() }
-    }
-    
     // MARK: - Initializer
+    
     init() {
         super.init(frame: .zero)
         setupButtonAppearance()
@@ -34,11 +36,13 @@ final class CheckButton: UIButton {
     }
     
     // MARK: - Public Methods
+    
     func configure(with color: UIColor?) {
         self.color = color
     }
     
     // MARK: - Private Methods
+    
     private func setupButtonAppearance() {
         layer.masksToBounds = true
         layer.cornerRadius = 17
@@ -47,18 +51,20 @@ final class CheckButton: UIButton {
     }
     
     private func updateButtonAppearance() {
+        
         let imageName = isChecked ? "checkmark" : "plus"
         setImage(UIImage(systemName: imageName), for: .normal)
         backgroundColor = isChecked ? color?.withAlphaComponent(0.3) : color
     }
     
     private func animateButtonAppearance() {
-        UIView.animate(withDuration: 0.15, animations: {
-            self.updateButtonAppearance()
-            self.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-        }, completion: { _ in
+        
+        UIView.animate(withDuration: 0.15, animations: { [weak self] in
+            self?.updateButtonAppearance()
+            self?.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+        }, completion: { [weak self] _ in
             UIView.animate(withDuration: 0.15) {
-                self.transform = CGAffineTransform.identity
+                self?.transform = CGAffineTransform.identity
             }
         })
     }

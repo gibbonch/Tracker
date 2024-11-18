@@ -14,22 +14,31 @@ protocol TrackerCollectionViewCellDelegate: AnyObject {
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
+    
     weak var delegate: TrackerCollectionViewCellDelegate?
+    
+    var tracker: Tracker? {
+        didSet {
+            guard let tracker else { return }
+            trackerCardView.configure(with: tracker)
+            daysCount = tracker.checkCount
+            checkButton.configure(with: UIColor.selectionColor(tracker.colorID))
+            checkButton.addTarget(self, action: #selector(checkButtonDidTap), for: .touchUpInside)
+        }
+    }
+    
     private var daysCount: Int = 0 {
         didSet { updateDayLabel() }
     }
     
     // MARK: - Subviews
-    lazy var checkButton: CheckButton = {
-        let button = CheckButton()
-        button.addTarget(self, action: #selector(checkButtonDidTap), for: .touchUpInside)
-        return button
-    }()
     
-    private let trackerCardView = TrackerCardView()
-    private lazy var dayLabel = YPLabel(font: .ypMedium12)
+    lazy var dayLabel = YPLabel(font: .ypMedium12)
+    lazy var checkButton = CheckButton()
+    lazy var trackerCardView = TrackerCardView()
     
     // MARK: - Initializer
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
@@ -40,15 +49,16 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Public Methods
-    func configure(with tracker: Tracker, isChecked: Bool) {
-        trackerCardView.configure(with: tracker)
-        self.daysCount = tracker.checkCount
-        checkButton.configure(with: UIColor.selectionColor(tracker.colorID))
-        checkButton.isChecked = isChecked
+    // MARK: - Actions
+    
+    @objc private func checkButtonDidTap() {
+        delegate?.didTapCheckButton(in: self)
+        checkButton.isChecked.toggle()
+        daysCount += checkButton.isChecked ? 1 : -1
     }
     
     // MARK: - Private Methods
+    
     private func setupCell() {
         contentView.addSubviews(trackerCardView, dayLabel, checkButton)
         
@@ -78,12 +88,5 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         default:
             return "дней"
         }
-    }
-    
-    // MARK: - Actions
-    @objc private func checkButtonDidTap() {
-        delegate?.didTapCheckButton(in: self)
-        daysCount += checkButton.isChecked ? -1 : 1
-        checkButton.isChecked.toggle()
     }
 }
