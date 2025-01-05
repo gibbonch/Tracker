@@ -35,7 +35,7 @@ final class UndoButton: UIButton {
     
     private func setupButton(title: String) {
         setTitle(title, for: .normal)
-        titleLabel?.font = .ypMedium16
+        titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         setTitleColor(.redApp, for: .normal)
         layer.cornerRadius = 16
         layer.borderColor = UIColor.redApp.cgColor

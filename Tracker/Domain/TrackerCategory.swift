@@ -9,21 +9,12 @@ import Foundation
 
 // MARK: - TrackerCategory
 
-struct TrackerCategory: Hashable, Codable {
-    let id: UUID
+struct TrackerCategory: Hashable {
     let title: String
     let trackers: [Tracker]
     
-    init(id: UUID = UUID(), title: String, trackers: [Tracker]) {
-        self.id = id
+    init(title: String, trackers: [Tracker]) {
         self.title = title
         self.trackers = trackers
     }
-}
-
-// MARK: - TrackerCategoryType
-
-enum TrackerCategoryType: String, Codable {
-    case pinned = "Закрепленные"
-    case standard
 }

@@ -12,14 +12,13 @@ final class EmojiCollectionViewDataSource: NSObject, UICollectionViewDataSource 
     // MARK: - Properties
     
     private weak var viewModel: TrackerEditingViewModel?
-    private let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱",
-                          "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-                          "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
+    private let emojis: [String]
     
     // MARK: - Initializer
     
     init(viewModel: TrackerEditingViewModel) {
         self.viewModel = viewModel
+        self.emojis = Self.loadEmojis()
         super.init()
     }
     
@@ -57,5 +56,23 @@ final class EmojiCollectionViewDataSource: NSObject, UICollectionViewDataSource 
         
         emojiHeaderView.textLabel.text = "Emoji"
         return emojiHeaderView
+    }
+    
+    // MARK: - Private Methods
+    
+    private static func loadEmojis() -> [String] {
+        guard let plist = Bundle.main.url(forResource: "Emojis", withExtension: "plist") else {
+            print("Failed to locate Emojis.plist")
+            return []
+        }
+        
+        do {
+            let data = try Data(contentsOf: plist)
+            let serializedData = try PropertyListSerialization.propertyList(from: data, format: nil)
+            return serializedData as? [String] ?? []
+        } catch {
+            print("Failed to load or parse Emojis.plist: \(error.localizedDescription)")
+            return []
+        }
     }
 }

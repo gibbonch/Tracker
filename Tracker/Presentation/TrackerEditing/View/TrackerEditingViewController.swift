@@ -19,10 +19,9 @@ final class TrackerEditingViewController: UIViewController {
     private let categoryAndScheduleTableViewDataSource: CategoryAndScheduleTableViewDataSource
     
     private let emojiCollectionViewDataSource: EmojiCollectionViewDataSource
-    private let emojiCollectionViewDelegate: EmojiCollectionViewDelegate
-    
     private let colorCollectionViewDataSource: ColorCollectionViewDataSource
-    private let colorCollectionViewDelegate: ColorCollectionViewDelegate
+    
+    private let pickerCollectionViewDelegate: PickerCollectionViewDelegate
     
     // MARK: - Subviews
     
@@ -111,10 +110,27 @@ final class TrackerEditingViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var pickerCollectionViewFlowLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        let itemsPerLine = 6
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 5
+        layout.sectionInset = UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 18)
+        
+        let availableWidth = (view.frame.width - layout.sectionInset.left - layout.sectionInset.right - layout.minimumInteritemSpacing * CGFloat(itemsPerLine))
+        let itemSize = availableWidth / CGFloat(itemsPerLine)
+        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        
+        layout.scrollDirection = .vertical
+        layout.headerReferenceSize = CGSize(width: view.frame.width, height: 18.0)
+        
+        return layout
+    }()
+    
     private lazy var emojiCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: pickerCollectionViewFlowLayout)
         collectionView.dataSource = emojiCollectionViewDataSource
-        collectionView.delegate = emojiCollectionViewDelegate
+        collectionView.delegate = pickerCollectionViewDelegate
         collectionView.register(EmojiCollectionViewCell.self, forCellWithReuseIdentifier: EmojiCollectionViewCell.identifier)
         collectionView.register(PickerHeaderReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PickerHeaderReusableView.identifier)
         collectionView.isScrollEnabled = false
@@ -125,9 +141,9 @@ final class TrackerEditingViewController: UIViewController {
     }()
     
     private lazy var colorCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: pickerCollectionViewFlowLayout)
         collectionView.dataSource = colorCollectionViewDataSource
-        collectionView.delegate = colorCollectionViewDelegate
+        collectionView.delegate = pickerCollectionViewDelegate
         collectionView.register(ColorCollectionViewCell.self, forCellWithReuseIdentifier: ColorCollectionViewCell.identifier)
         collectionView.register(PickerHeaderReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PickerHeaderReusableView.identifier)
         collectionView.isScrollEnabled = false
@@ -169,10 +185,8 @@ final class TrackerEditingViewController: UIViewController {
         categoryAndScheduleTableViewDataSource = CategoryAndScheduleTableViewDataSource(viewModel: viewModel)
         
         emojiCollectionViewDataSource = EmojiCollectionViewDataSource(viewModel: viewModel)
-        emojiCollectionViewDelegate = EmojiCollectionViewDelegate(viewModel: viewModel)
-        
         colorCollectionViewDataSource = ColorCollectionViewDataSource(viewModel: viewModel)
-        colorCollectionViewDelegate = ColorCollectionViewDelegate(viewModel: viewModel)
+        pickerCollectionViewDelegate = PickerCollectionViewDelegate(viewModel: viewModel)
         
         super.init(nibName: nil, bundle: nil)
         

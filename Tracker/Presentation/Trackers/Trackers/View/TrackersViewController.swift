@@ -7,20 +7,23 @@
 
 import UIKit
 
-final class TrackersViewController: UIViewController, MainTabBarViewController {
+final class TrackersViewController: UIViewController {
+    
+    // MARK: - Type Aliases
+    
+    private typealias DataSource = UICollectionViewDiffableDataSource<TrackerCategorySection, TrackerItem>
+    private typealias Snapshot = NSDiffableDataSourceSnapshot<TrackerCategorySection, TrackerItem>
     
     // MARK: - Properties
     
-    var mainTabBarItem = UITabBarItem(title: "Трекеры", image: .trackers, selectedImage: nil)
-    
-    private let viewModel: TrackersViewModel
-    private var trackersCollectionViewManager: TrackersDataSourceManager?
+    private let trackersViewModel: TrackersViewModel
     private var trackersCollectionViewDelegate: TrackersCollectionViewDelegate?
+    private var trackersCollectionViewDataSource: DataSource?
     
     // MARK: - Subviews
     
     private lazy var addTrackerBarButtonItem: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: .plus, style: .plain, target: self, action: #selector(addTrackerButtonTapped))
+        let button = UIBarButtonItem(image: .plus, style: .plain, target: self, action: #selector(didTapAddTrackerButton))
         button.tintColor = .blackApp
         return button
     }()
@@ -53,25 +56,34 @@ final class TrackersViewController: UIViewController, MainTabBarViewController {
         return placeholder
     }()
     
+    private lazy var trackersCollectionViewFlowLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: (view.frame.width - 32) / 2 - 4.5, height: 148)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 9
+        layout.scrollDirection = .vertical
+        layout.headerReferenceSize = CGSize(width: (view.frame.width - 32) / 2, height: 40)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        return layout
+    }()
+    
     private lazy var trackersCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.showsVerticalScrollIndicator = false
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: trackersCollectionViewFlowLayout)
         collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 24, right: 0)
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        trackersCollectionViewDelegate?.layoutConfiguration = prepareLayoutConfiguration()
-        trackersCollectionViewDelegate?.parentViewController = self
+        trackersCollectionViewDelegate = TrackersCollectionViewDelegate(viewModel: trackersViewModel, parentViewController: self)
         collectionView.delegate = trackersCollectionViewDelegate
-        trackersCollectionViewManager = TrackersDataSourceManager(collectionView: collectionView, viewModel: viewModel)
-        trackersCollectionViewManager?.delegate = self
         return collectionView
     }()
     
     // MARK: - Initializer
     
     init(viewModel: TrackersViewModel) {
-        self.viewModel = viewModel
-        trackersCollectionViewDelegate = TrackersCollectionViewDelegate(viewModel: viewModel)
+        self.trackersViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        tabBarItem = UITabBarItem(title: "Трекеры", image: .trackers, selectedImage: nil)
+        (trackersViewModel as? DefaultTrackersViewModel)?.delegate = self
     }
     
     @available(*, unavailable)
@@ -86,6 +98,9 @@ final class TrackersViewController: UIViewController, MainTabBarViewController {
         setupNavigationBar()
         setupView()
         setConstraints()
+        registerReusableViews()
+        setupDataSource()
+        applySnapshot()
     }
     
     // MARK: - Private Methods
@@ -120,49 +135,75 @@ final class TrackersViewController: UIViewController, MainTabBarViewController {
         ])
     }
     
-    private func prepareLayoutConfiguration() -> CollectionViewLayoutConfiguration {
-        CollectionViewLayoutConfiguration(
-            cellsPerLine: 2,
-            amountWidth: view.frame.width,
-            cellHeight: 148,
-            minimumLineSpacing: 0,
-            minimumInteritemSpacing: 9,
-            headerHeight: 40,
-            sectionInsets: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    private func registerReusableViews() {
+        trackersCollectionView.register(
+            TrackerCollectionViewCell.self,
+            forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier
+        )
+        
+        trackersCollectionView.register(
+            TrackerHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: TrackerHeaderView.identifier
         )
     }
     
-    // MARK: - Objc Methods
-    
-    @objc private func addTrackerButtonTapped() {
-        let trackerCreationViewController = AppDIContainer.shared.createTrackerCreationViewController()
-        (trackerCreationViewController as? TrackerCreationViewController)?.delegate = self
-        present(trackerCreationViewController, animated: true)
+    private func setupDataSource() {
+        trackersCollectionViewDataSource = DataSource(collectionView: trackersCollectionView) { [weak self] collectionView, indexPath, trackerItem in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCollectionViewCell.identifier, for: indexPath)
+            guard let trackerCell = cell as? TrackerCollectionViewCell,
+                  let trackerCellViewModel = self?.trackersViewModel.createTrackerCellViewModel(tracker: trackerItem.tracker, isPinned: trackerItem.isPinned)
+            else { return cell }
+            
+            trackerCell.setupCell(viewModel: trackerCellViewModel)
+            return trackerCell
+        }
+        
+        trackersCollectionViewDataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+            let supplementaryView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: TrackerHeaderView.identifier,
+                for: indexPath
+            )
+            
+            guard kind == UICollectionView.elementKindSectionHeader,
+                  let headerView = supplementaryView as? TrackerHeaderView,
+                  let dataSource = self?.trackersCollectionViewDataSource
+            else { return supplementaryView }
+            
+            let snapshot = dataSource.snapshot()
+            let category = snapshot.sectionIdentifiers[indexPath.section]
+            
+            switch category {
+            case .section(let title):
+                headerView.setupHeaderView(category: title)
+            }
+            
+            return headerView
+        }
     }
     
-    @objc private func datePickerValueChanged() {
-        viewModel.updateDate(datePicker.date)
-    }
-    
-    @objc private func dismissKeyboard() {
-        searchController.searchBar.endEditing(true)
-        searchController.dismiss(animated: true)
-    }
-}
+    private func applySnapshot(animatingDifferences: Bool = true) {
+        guard let trackersCollectionViewDataSource else { return }
+        
+        var snapshot = Snapshot()
+        for category in trackersViewModel.visibleCategories {
+            let section = TrackerCategorySection.section(title: category.title)
+            let items = category.trackers.map { tracker in
+                TrackerItem(tracker: tracker, isPinned: category.title == Constants.pinnedCategoryTitle)
+            }
+            
+            snapshot.appendSections([section])
+            snapshot.appendItems(items, toSection: section)
+        }
+        
+        trackersCollectionViewDataSource.apply(snapshot, animatingDifferences: true)
 
-// MARK: - UISearchBarDelegate
-
-extension TrackersViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel.updateSearchText(searchText)
-    }
-}
-
-// MARK: - TrackersDataSourceManagerDelegate
-
-extension TrackersViewController: TrackersDataSourceManagerDelegate {
-    func didApplySnapshot(itemCount: Int) {
-        itemCount == 0 ? showPlaceholderView() : showTrackersCollectionView()
+        if snapshot.numberOfItems == 0 {
+            showPlaceholderView()
+        } else {
+            showTrackersCollectionView()
+        }
     }
     
     private func showTrackersCollectionView() {
@@ -178,12 +219,36 @@ extension TrackersViewController: TrackersDataSourceManagerDelegate {
         placeholderView.setTitle(searchController.searchBar.text?.isEmpty == true ? "Что будем отслеживать?" : "Ничего не найдено")
         placeholderView.isHidden = false
     }
+    
+    // MARK: - Objc Methods
+    
+    @objc private func didTapAddTrackerButton() {
+        let trackerCreationViewController = TrackerCreationViewController()
+        present(trackerCreationViewController, animated: true)
+    }
+    
+    @objc private func datePickerValueChanged() {
+        trackersViewModel.date = Calendar.current.startOfDay(for: datePicker.date) 
+    }
+    
+    @objc private func dismissKeyboard() {
+        searchController.searchBar.endEditing(true)
+        searchController.dismiss(animated: true)
+    }
 }
 
-// MARK: - TrackerCreationViewControllerDelegate
+// MARK: - UISearchBarDelegate
 
-extension TrackersViewController: TrackerCreationViewControllerDelegate {
-    func viewWillDismiss() {
-        viewModel.viewWillAppear()
+extension TrackersViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        trackersViewModel.searchText = searchText
+    }
+}
+
+// MARK: - DefaultTrackersViewModelDelegate
+
+extension TrackersViewController: DefaultTrackersViewModelDelegate {
+    func didUpdateVisibleCategories() {
+        applySnapshot()
     }
 }

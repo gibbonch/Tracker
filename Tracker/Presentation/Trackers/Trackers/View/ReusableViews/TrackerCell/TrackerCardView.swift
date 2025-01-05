@@ -17,7 +17,7 @@ final class TrackerCardView: UIView {
         label.layer.cornerRadius = 15
         label.backgroundColor = .whiteApp.withAlphaComponent(0.3)
         label.textAlignment = .center
-        label.font = .ypMedium16
+        label.font = .systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -32,7 +32,7 @@ final class TrackerCardView: UIView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .ypMedium12
+        label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textColor = .whiteApp
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -53,11 +53,11 @@ final class TrackerCardView: UIView {
     
     // MARK: - Public Methods
     
-    func setup(with cellState: TrackerCellState) {
-        emojiLabel.text = cellState.emoji
-        titleLabel.text = cellState.title
-        backgroundColor = cellState.color
-        pinImageView.isHidden = !cellState.isPinned
+    func setup(with tracker: Tracker, isPinned: Bool) {
+        emojiLabel.text = tracker.emoji
+        titleLabel.text = tracker.title
+        backgroundColor = tracker.color
+        pinImageView.isHidden = !isPinned
     }
     
     // MARK: - Private Methods

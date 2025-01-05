@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TrackerScheduleViewController: UIViewController {
+final class TrackerScheduleViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -130,6 +130,8 @@ class TrackerScheduleViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
+
 extension TrackerScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         weekdays.count
@@ -145,6 +147,8 @@ extension TrackerScheduleViewController: UITableViewDataSource {
         return scheduleCell
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension TrackerScheduleViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

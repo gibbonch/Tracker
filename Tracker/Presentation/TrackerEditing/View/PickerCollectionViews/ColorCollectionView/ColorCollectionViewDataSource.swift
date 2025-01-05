@@ -12,11 +12,12 @@ final class ColorCollectionViewDataSource: NSObject, UICollectionViewDataSource 
     // MARK: - Properties
     
     private weak var viewModel: TrackerEditingViewModel?
-    private let colors = (1...18).map { UIColor(named: "Selection\($0)") }
+    private let colors: [UIColor]
     
     // MARK: - Initializer
     
     init(viewModel: TrackerEditingViewModel) {
+        self.colors = (1...18).compactMap { UIColor(named: "Selection\($0)") }
         self.viewModel = viewModel
         super.init()
     }

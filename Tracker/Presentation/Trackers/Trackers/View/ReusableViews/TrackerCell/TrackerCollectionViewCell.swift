@@ -11,13 +11,15 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    var viewModel: TrackerCellViewModel? {
-        didSet { updateCell() }
-    }
+    var isPinned: Bool { viewModel?.isPinned ?? false }
+    var completionsCount: Int { viewModel?.completionsCount ?? 0 }
+    var previewView: UIView { trackerCardView }
+    
+    private var viewModel: TrackerCellViewModel?
     
     // MARK: - Subviews
     
-    lazy var trackerCardView: TrackerCardView = {
+    private lazy var trackerCardView: TrackerCardView = {
         let cardView = TrackerCardView()
         cardView.layer.cornerRadius = 16
         cardView.layer.borderWidth = 1
@@ -49,6 +51,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupContentView()
+        setConstraints()
     }
     
     @available(*, unavailable)
@@ -56,20 +59,33 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
+    
+    func setupCell(viewModel: TrackerCellViewModel) {
+        self.viewModel = viewModel
+        (self.viewModel as? DefaultTrackerCellViewModel)?.delegate = self
+        let days = viewModel.completionsCount
+        dayLabel.text = "\(days) \(Utilities.dayWord(for: days))"
+        trackerCardView.setup(with: viewModel.tracker, isPinned: viewModel.isPinned)
+        completeButton.isEnabled = viewModel.isEnabled
+        updateButtonAppearance()
+    }
+    
     // MARK: - Private Methods
     
     private func updateCell() {
-        guard let state = viewModel?.trackerCellState else { return }
-        trackerCardView.setup(with: state)
-        dayLabel.text = state.completionsCountText
+        guard let viewModel else { return }
+        let days = viewModel.completionsCount
+        dayLabel.text = "\(days) \(Utilities.dayWord(for: days))"
         animateButtonAppearanceUpdate()
-        completeButton.isEnabled = state.isEnabled
     }
     
     private func setupContentView() {
         layer.cornerRadius = 16
         contentView.addSubviews(trackerCardView, dayLabel, completeButton)
-        
+    }
+    
+    private func setConstraints() {
         NSLayoutConstraint.activate([
             trackerCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             trackerCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -86,12 +102,13 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         ])
     }
     
+    
     private func updateButtonAppearance() {
-        guard let state = viewModel?.trackerCellState else { return }
-        let imageName = state.isCompleted ? "checkmark" : "plus"
+        guard let viewModel else { return }
+        let imageName = viewModel.isCompleted ? "checkmark" : "plus"
         completeButton.setImage(UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate), for: .normal)
         completeButton.tintColor = .whiteApp
-        completeButton.backgroundColor = state.isCompleted ? state.color.withAlphaComponent(0.3) : state.color
+        completeButton.backgroundColor = viewModel.isCompleted ? viewModel.tracker.color.withAlphaComponent(0.3) : viewModel.tracker.color
     }
     
     private func animateButtonAppearanceUpdate() {
@@ -110,14 +127,17 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     @objc private func completeButtonDidTap() {
         guard let viewModel else { return }
-        viewModel.completeButtonDidTap()
+        viewModel.completeTracker()
+        updateCell()
     }
 }
 
 // MARK: - DefaultTrackerCellViewModelDelegate
 
 extension TrackerCollectionViewCell: DefaultTrackerCellViewModelDelegate {
-    func didUpdateTrackerCellState() {
-        updateCell()
+    func didUpdateDate() {
+        completeButton.isEnabled = viewModel?.isEnabled == true
+        updateButtonAppearance()
     }
 }
+

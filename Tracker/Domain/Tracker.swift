@@ -29,13 +29,23 @@ struct Tracker: Hashable {
 
 // MARK: - Weekday
 
-enum Weekday: Int, CaseIterable, Codable {
+enum Weekday: Int, CaseIterable {
     case  sunday, monday, tuesday, wednesday, thursday, friday, saturday
+}
+
+extension Weekday {
+    var bitMask: Int16 {
+        return 1 << self.rawValue
+    }
+    
+    static func from(bitMask: Int16) -> [Weekday] {
+        return Weekday.allCases.filter { bitMask & $0.bitMask != 0 }
+    }
 }
 
 // MARK: - TrackerType
 
-enum TrackerType: String, Codable {
+enum TrackerType: String {
     case regular
     case single
 }

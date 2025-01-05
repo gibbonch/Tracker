@@ -15,7 +15,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     
     private lazy var dayLabel: UILabel = {
         let label = UILabel()
-        label.font = .ypRegular17
+        label.font = .systemFont(ofSize: 17, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
