@@ -1,5 +1,5 @@
 //
-//  UIView+extensions.swift
+//  UIView+Extensions.swift
 //  Tracker
 //
 //  Created by Александр Торопов on 06.11.2024.

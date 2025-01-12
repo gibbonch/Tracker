@@ -1,5 +1,5 @@
 //
-//  Date+weekday.swift
+//  Date+Extensions.swift
 //  Tracker
 //
 //  Created by Александр Торопов on 17.11.2024.

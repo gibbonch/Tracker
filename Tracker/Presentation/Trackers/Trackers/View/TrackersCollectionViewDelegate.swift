@@ -62,7 +62,7 @@ final class TrackersCollectionViewDelegate: NSObject, UICollectionViewDelegate {
     }
 
     private func createContextMenuActions(for cell: TrackerCollectionViewCell, at indexPath: IndexPath) -> [UIAction] {
-        let isPinned = cell.isPinned == true
+        let isPinned = cell.isPinned
 
         let pinActionTitle = isPinned ? "Открепить" : "Закрепить"
         let pinAction = UIAction(title: pinActionTitle) { [weak self] _ in
