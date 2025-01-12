@@ -45,7 +45,7 @@ final class FilledButton: UIButton {
     
     private func setupButton(title: String) {
         setTitle(title, for: .normal)
-        titleLabel?.font = .ypMedium16
+        titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         titleLabel?.textColor = .whiteApp
         layer.cornerRadius = 16
         isEnabled = true

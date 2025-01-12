@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="TrackerCategoryCoreData" representedClassName="TrackerCategoryCoreData" syncable="YES">
+        <attribute name="title" attributeType="String"/>
+        <relationship name="trackers" toMany="YES" deletionRule="Cascade" destinationEntity="TrackerCoreData" inverseName="categories" inverseEntity="TrackerCoreData"/>
+    </entity>
+    <entity name="TrackerCoreData" representedClassName="TrackerCoreData" syncable="YES">
+        <attribute name="color" attributeType="Transformable" valueTransformerName="UIColorTransformer" customClassName="UIColor"/>
+        <attribute name="emoji" attributeType="String"/>
+        <attribute name="scheduleMask" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sectionTitle" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="trackerID" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String" customClassName="NSData"/>
+        <relationship name="categories" toMany="YES" deletionRule="Nullify" destinationEntity="TrackerCategoryCoreData" inverseName="trackers" inverseEntity="TrackerCategoryCoreData"/>
+        <relationship name="records" toMany="YES" deletionRule="Cascade" destinationEntity="TrackerRecordCoreData" inverseName="tracker" inverseEntity="TrackerRecordCoreData"/>
+    </entity>
+    <entity name="TrackerRecordCoreData" representedClassName="TrackerRecordCoreData" syncable="YES">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="tracker" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCoreData" inverseName="records" inverseEntity="TrackerCoreData"/>
+    </entity>
+</model>
