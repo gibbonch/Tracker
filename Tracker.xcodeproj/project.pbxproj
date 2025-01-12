@@ -19,6 +19,8 @@
 		1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1841E4B02D2AA55D00EC7933 /* Emojis.plist */; };
 		1841E4B32D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */; };
 		1847BBAE2CE9D13200092A7A /* Date+weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1847BBAD2CE9D13200092A7A /* Date+weekday.swift */; };
+		187294E82D33C1C6004B4D18 /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187294E72D33C1C6004B4D18 /* TrackerTests.swift */; };
+		187294EF2D33C1E2004B4D18 /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187294EE2D33C1E2004B4D18 /* LoggerTests.swift */; };
 		187FBB532CE4F9880079266A /* UndoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB522CE4F9880079266A /* UndoButton.swift */; };
 		187FBB552CE4FF900079266A /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB542CE4FF900079266A /* ScheduleTableViewCell.swift */; };
 		187FBB642CE5E82A0079266A /* TrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB632CE5E82A0079266A /* TrackersViewModel.swift */; };
@@ -66,6 +68,16 @@
 		18D20E4B2CDFEEAC007E9083 /* TrackerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D20E4A2CDFEEAC007E9083 /* TrackerHeaderView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		187294E92D33C1C6004B4D18 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 180B5CA32CDBD78E003FDE88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 180B5CAA2CDBD78E003FDE88;
+			remoteInfo = Tracker;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		180B5CAB2CDBD78E003FDE88 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		180B5CAE2CDBD78E003FDE88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,6 +93,9 @@
 		1841E4B02D2AA55D00EC7933 /* Emojis.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Emojis.plist; sourceTree = "<group>"; };
 		1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		1847BBAD2CE9D13200092A7A /* Date+weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+weekday.swift"; sourceTree = "<group>"; };
+		187294E52D33C1C6004B4D18 /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		187294E72D33C1C6004B4D18 /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
+		187294EE2D33C1E2004B4D18 /* LoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
 		187FBB522CE4F9880079266A /* UndoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoButton.swift; sourceTree = "<group>"; };
 		187FBB542CE4FF900079266A /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		187FBB632CE5E82A0079266A /* TrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewModel.swift; sourceTree = "<group>"; };
@@ -136,6 +151,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		187294E22D33C1C6004B4D18 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -143,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				180B5CAD2CDBD78E003FDE88 /* Tracker */,
+				187294E62D33C1C6004B4D18 /* TrackerTests */,
 				180B5CAC2CDBD78E003FDE88 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -151,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				180B5CAB2CDBD78E003FDE88 /* Tracker.app */,
+				187294E52D33C1C6004B4D18 /* TrackerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -270,6 +294,15 @@
 				189AC13C2D0C5A1600717D6F /* ColorCollectionViewCell.swift */,
 			);
 			path = ColorCollectionView;
+			sourceTree = "<group>";
+		};
+		187294E62D33C1C6004B4D18 /* TrackerTests */ = {
+			isa = PBXGroup;
+			children = (
+				187294E72D33C1C6004B4D18 /* TrackerTests.swift */,
+				187294EE2D33C1E2004B4D18 /* LoggerTests.swift */,
+			);
+			path = TrackerTests;
 			sourceTree = "<group>";
 		};
 		187FBB5D2CE545F30079266A /* ViewModel */ = {
@@ -529,6 +562,24 @@
 			productReference = 180B5CAB2CDBD78E003FDE88 /* Tracker.app */;
 			productType = "com.apple.product-type.application";
 		};
+		187294E42D33C1C6004B4D18 /* TrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 187294ED2D33C1C6004B4D18 /* Build configuration list for PBXNativeTarget "TrackerTests" */;
+			buildPhases = (
+				187294E12D33C1C6004B4D18 /* Sources */,
+				187294E22D33C1C6004B4D18 /* Frameworks */,
+				187294E32D33C1C6004B4D18 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				187294EA2D33C1C6004B4D18 /* PBXTargetDependency */,
+			);
+			name = TrackerTests;
+			productName = TrackerTests;
+			productReference = 187294E52D33C1C6004B4D18 /* TrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -541,6 +592,10 @@
 				TargetAttributes = {
 					180B5CAA2CDBD78E003FDE88 = {
 						CreatedOnToolsVersion = 15.4;
+					};
+					187294E42D33C1C6004B4D18 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 180B5CAA2CDBD78E003FDE88;
 					};
 				};
 			};
@@ -558,6 +613,7 @@
 			projectRoot = "";
 			targets = (
 				180B5CAA2CDBD78E003FDE88 /* Tracker */,
+				187294E42D33C1C6004B4D18 /* TrackerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -570,6 +626,13 @@
 				1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */,
 				180B5CB82CDBD78F003FDE88 /* Assets.xcassets in Resources */,
 				180B5CBB2CDBD78F003FDE88 /* Base in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		187294E32D33C1C6004B4D18 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -637,7 +700,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		187294E12D33C1C6004B4D18 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				187294E82D33C1C6004B4D18 /* TrackerTests.swift in Sources */,
+				187294EF2D33C1E2004B4D18 /* LoggerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		187294EA2D33C1C6004B4D18 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 180B5CAA2CDBD78E003FDE88 /* Tracker */;
+			targetProxy = 187294E92D33C1C6004B4D18 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		180B5CB92CDBD78F003FDE88 /* LaunchScreen.storyboard */ = {
@@ -834,6 +914,44 @@
 			};
 			name = Release;
 		};
+		187294EB2D33C1C6004B4D18 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3UVVPY2T4W;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.gibbonch.TrackerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tracker";
+			};
+			name = Debug;
+		};
+		187294EC2D33C1C6004B4D18 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3UVVPY2T4W;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.gibbonch.TrackerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tracker";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -851,6 +969,15 @@
 			buildConfigurations = (
 				180B5CC02CDBD78F003FDE88 /* Debug */,
 				180B5CC12CDBD78F003FDE88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		187294ED2D33C1C6004B4D18 /* Build configuration list for PBXNativeTarget "TrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				187294EB2D33C1C6004B4D18 /* Debug */,
+				187294EC2D33C1C6004B4D18 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

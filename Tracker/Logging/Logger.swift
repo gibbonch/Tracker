@@ -7,7 +7,10 @@
 
 import Foundation
 
-enum Logger {
+struct Logger {
+    
+    // MARK: - Helpers
+    
     private enum LogLevel {
         case debug
         case error
@@ -32,16 +35,7 @@ enum Logger {
         }
     }
     
-    private static func handleLog(level: LogLevel, message: String, context: Context? = nil) {
-        var log = "\(level.prefix): \(message)"
-        if let description = context?.description {
-            log += " (\(description))"
-        }
-        
-        #if DEBUG
-        print(log)
-        #endif
-    }
+    // MARK: - Public Methods
     
     static func debug(
         _ message: String,
@@ -63,5 +57,18 @@ enum Logger {
     ) {
         let context = shouldLogContext ? Context(file: file, function: function, line: line): nil
         handleLog(level: .error, message: message, context: context)
+    }
+    
+    // MARK: - Private Methods
+    
+    private static func handleLog(level: LogLevel, message: String, context: Context? = nil) {
+        var log = "\(level.prefix): \(message)"
+        if let description = context?.description {
+            log += " (\(description))"
+        }
+        
+        #if DEBUG
+        print(log)
+        #endif
     }
 }
