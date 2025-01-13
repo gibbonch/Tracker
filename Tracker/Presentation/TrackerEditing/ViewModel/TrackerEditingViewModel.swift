@@ -84,17 +84,16 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
     }
     
     private let trackerStore: TrackerStoring
-    private let trackerCategoryStore: TrackerCategoryStore = TrackerCategoryStore()
     
     // MARK: - Initializers
     
-    init(store: TrackerStoring, tracker: Tracker, completionsCount: Int) {
+    init(store: TrackerStoring, tracker: Tracker, completionsCount: Int, categoryTitle: String) {
         self.trackerStore = store
         
         self.trackerType = tracker.type
         self.trackerID = tracker.id
         self.title = tracker.title
-        self.category = store.fetchCategoryTitle(tracker: tracker)
+        self.category = categoryTitle
         self.schedule = tracker.schedule
         self.emoji = tracker.emoji
         self.color = tracker.color

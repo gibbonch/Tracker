@@ -24,12 +24,15 @@ final class MainTabBarControllerTests: XCTestCase {
         let tabBarController = MainTabBarController(viewControllers: viewControllers)
         
         // Then
-        XCTAssertEqual(tabBarController.viewControllers?.count, 2)
-        XCTAssertTrue(tabBarController.viewControllers?.first is UINavigationController)
         
-        guard let navigationController = tabBarController.viewControllers?.first as? UINavigationController else { return }
-        XCTAssertTrue((navigationController.viewControllers.contains(where: { $0 == viewController1 })))
-        XCTAssertEqual(navigationController.viewControllers.first?.tabBarItem.title, "Trackers")
+        guard let viewControllers = tabBarController.viewControllers?.compactMap({ ($0 as? UINavigationController)?.topViewController }) else {
+            return
+        }
+        
+        XCTAssertEqual(viewControllers.count, 2)
+        XCTAssertTrue((viewControllers.contains(where: { $0 == viewController1 })))
+        XCTAssertTrue((viewControllers.contains(where: { $0 == viewController2 })))
+        XCTAssertEqual(viewControllers.first?.tabBarItem.title, "Trackers")
         XCTAssertEqual(tabBarController.tabBar.layer.borderWidth, 1.25)
         XCTAssertEqual(tabBarController.tabBar.layer.borderColor, UIColor.lightGrayApp.cgColor)
     }

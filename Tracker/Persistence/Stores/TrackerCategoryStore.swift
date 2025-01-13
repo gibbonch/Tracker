@@ -9,7 +9,7 @@ import CoreData
 
 // MARK: - TrackerCategoryStoring
 
-protocol TrackerCategoryStoring: DataStore {
+protocol TrackerCategoryStoring {
     func createCategory(title: String)
     func fetchCategory(title: String) -> TrackerCategoryCoreData?
     func updateCategory(title: String, newTitle: String)

@@ -14,7 +14,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
         window = UIWindow(windowScene: windowScene)
         
-        let trackersViewModel = DefaultTrackersViewModel(trackerStore: TrackerStore())
+        let trackerStore = TrackerStore()
+        let trackersViewModel = DefaultTrackersViewModel(trackerStore: trackerStore,trackerProvider: TrackerProvider(store: trackerStore))
         let trackersViewController = TrackersViewController(viewModel: trackersViewModel)
         let statisticsViewController = StatisticsViewController()
         window?.rootViewController = MainTabBarController(viewControllers: [trackersViewController, statisticsViewController])

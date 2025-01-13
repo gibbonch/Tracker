@@ -11,19 +11,13 @@ import Combine
 // MARK: - TrackerCellViewModel
 
 protocol TrackerCellViewModel: AnyObject {
+    var onDateUpdate: ((_ isCompleted: Bool, _ isEnabled: Bool) -> Void)? { get set }
+    var onCompletionsCountChangeState: ((_ isCompleted: Bool, _ completionsCount: Int) -> Void)? { get set }
+    
     var tracker: Tracker { get }
     var isPinned: Bool { get }
-    var isEnabled: Bool { get }
-    var isCompleted: Bool { get }
-    var completionsCount: Int { get }
     
-    func completeTracker()
-}
-
-// MARK: - DefaultTrackerCellViewModelDelegate
-
-protocol DefaultTrackerCellViewModelDelegate: AnyObject {
-    func didUpdateDate()
+    func didCompleteTracker()
 }
 
 // MARK: - DefaultTrackerCellViewModel
@@ -32,46 +26,44 @@ final class DefaultTrackerCellViewModel: TrackerCellViewModel {
     
     // MARK: - Properties
     
-    weak var delegate: DefaultTrackerCellViewModelDelegate?
+    var onDateUpdate: ((Bool, Bool) -> Void)? {
+        didSet { onDateUpdate?(isCompleted, isEnabled) }
+    }
     
-    var tracker: Tracker
-    var isPinned: Bool
-    var isEnabled: Bool
-    var isCompleted: Bool
-    var completionsCount: Int
+    var onCompletionsCountChangeState: ((Bool, Int) -> Void)? {
+        didSet { onCompletionsCountChangeState?(isCompleted, completionsCount) }
+    }
+    
+    let tracker: Tracker
+    let isPinned: Bool
+    
+    private var isEnabled: Bool
+    private var isCompleted: Bool
+    private var completionsCount: Int
     
     private var date: Date
     private let store: TrackerRecordStoring
-    
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initializer
     
     init(store: TrackerRecordStoring, date: Date, tracker: Tracker, isPinned: Bool) {
-        self.date = date
         self.store = store
+        self.date = date
         self.tracker = tracker
         self.isPinned = isPinned
         
+        let trackerRecords = store.fetchRecords(for: tracker)
+        isCompleted = trackerRecords.contains { Calendar.current.isDate($0.date, inSameDayAs: date) }
         isEnabled = date <= Calendar.current.startOfDay(for: Date())
-        isCompleted = store.fetchRecords(for: tracker).contains { Calendar.current.isDate($0.date, inSameDayAs: date) }
         completionsCount = store.fetchRecordsAmount(for: tracker)
-        
-        NotificationCenter.default.publisher(for: Notification.Name("dateChanged"))
-            .sink { [weak self] notification in
-                if let updatedDate = notification.object as? Date {
-                    self?.date = updatedDate
-                    self?.isEnabled = updatedDate <= Calendar.current.startOfDay(for: Date())
-                    self?.isCompleted = store.fetchRecords(for: tracker).contains { Calendar.current.isDate($0.date, inSameDayAs: updatedDate) }
-                    self?.delegate?.didUpdateDate()
-                }
-            }
-            .store(in: &cancellables)
+         
+        bind()
     }
     
     // MARK: - Public Methods
     
-    func completeTracker() {
+    func didCompleteTracker() {
         isCompleted.toggle()
         completionsCount += isCompleted ? 1 : -1
         
@@ -80,5 +72,25 @@ final class DefaultTrackerCellViewModel: TrackerCellViewModel {
         } else {
             store.deleteRecord(tracker: tracker, date: date)
         }
+        
+        onCompletionsCountChangeState?(isCompleted, completionsCount)
+    }
+    
+    // MARK: - Private Methods
+    
+    private func bind() {
+        NotificationCenter.default.publisher(for: Notification.dateDidChange)
+            .sink { [weak self] notification in
+                guard let self else { return }
+                if let updatedDate = notification.object as? Date {
+                    self.date = updatedDate
+                    let trackerRecords = store.fetchRecords(for: tracker)
+                    isCompleted = trackerRecords.contains { Calendar.current.isDate($0.date, inSameDayAs: self.date) }
+                    isEnabled = date <= Calendar.current.startOfDay(for: Date())
+                    
+                    onDateUpdate?(isCompleted, isEnabled)
+                }
+            }
+            .store(in: &cancellables)
     }
 }

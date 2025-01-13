@@ -13,9 +13,16 @@ protocol TrackerProviderDelegate: AnyObject {
     func didUpdateFetchedTrackers(_ categories: [TrackerCategory])
 }
 
+// MARK: - TrackerProviding
+
+protocol TrackerProviding: AnyObject {
+    var delegate: TrackerProviderDelegate? { get set }
+    func updateTrackerQuery(_ trackerQuery: TrackerQuery)
+}
+
 // MARK: - TrackerProvider
 
-final class TrackerProvider: NSObject {
+final class TrackerProvider: NSObject, TrackerProviding {
     
     // MARK: - Properties
     
