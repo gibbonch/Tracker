@@ -329,7 +329,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             guard let self else { return }
             
             let trackerEditingViewModel = trackersViewModel.createTrackerEditingViewModel(at: indexPath)
-            let trackerEditingViewController = TrackerEditingViewController(viewModel: trackerEditingViewModel)
+            let trackerEditingViewController = TrackerEditingViewController(title: "Редактирование привычки", viewModel: trackerEditingViewModel)
             present(trackerEditingViewController, animated: true)
         }
         

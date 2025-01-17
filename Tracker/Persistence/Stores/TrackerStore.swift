@@ -27,7 +27,10 @@ final class TrackerStore: DataStore, TrackerStoring {
     
     func create(tracker: Tracker, in categoryTitle: String) {
         let trackerCategoryStore = TrackerCategoryStore(context: context)
-        guard let categoryEntity = trackerCategoryStore.fetchCategory(title: categoryTitle) else { return }
+        guard let categoryEntity = trackerCategoryStore.fetchCategory(title: categoryTitle) else {
+            Logger.error("Failed to load category entity")
+            return
+        }
         
         let trackerEntity = TrackerCoreData(context: context)
         trackerEntity.trackerID = tracker.id

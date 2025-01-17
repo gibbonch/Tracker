@@ -22,7 +22,7 @@ final class TrackerCategoryStore: DataStore, TrackerCategoryStoring {
     
     // MARK: - Initializer
         
-    override init(context: NSManagedObjectContext = CoreDataStack.shared.persistentContainer.viewContext) {
+    override init(context: NSManagedObjectContext = CoreDataStack.shared.context) {
         super.init()
         createPinnedTrackerCategory()
     }

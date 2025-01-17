@@ -10,7 +10,9 @@ import CoreData
 final class CoreDataStack {
     static let shared = CoreDataStack()
     
-    lazy var persistentContainer: NSPersistentContainer = {
+    var context: NSManagedObjectContext { persistentContainer.viewContext }
+    
+    private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TrackerModel")
         container.loadPersistentStores { _, error in
             if let error {
@@ -19,8 +21,6 @@ final class CoreDataStack {
         }
         return container
     }()
-    
-    var context: NSManagedObjectContext { persistentContainer.viewContext }
     
     private init() {
         ValueTransformer.setValueTransformer(UIColorTransformer(), forName: .uiColorTransformerName)

@@ -42,7 +42,6 @@ final class TrackerEditingViewController: UIViewController {
     
     private lazy var headerLabel: UILabel = {
         let label = UILabel()
-        label.text = viewModel.header
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .blackApp
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -176,7 +175,7 @@ final class TrackerEditingViewController: UIViewController {
     
     // MARK: - Initializer
     
-    init(viewModel: TrackerEditingViewModel) {
+    init(title: String, viewModel: TrackerEditingViewModel) {
         self.viewModel = viewModel
         
         trackerTitleTextFieldDelegate = TrackerTitleTextFieldDelegate(viewModel: viewModel)
@@ -192,6 +191,7 @@ final class TrackerEditingViewController: UIViewController {
         
         guard let viewModel = viewModel as? DefaultTrackerEditingViewModel else { return }
         viewModel.delegate = self
+        headerLabel.text = title
     }
     
     required init?(coder: NSCoder) {

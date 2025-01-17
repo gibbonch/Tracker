@@ -30,7 +30,8 @@ final class TrackerRecordStore: DataStore, TrackerRecordStoring {
             let recordEntities = try context.fetch(request)
             return recordEntities.map { $0.mapToDomainModel() }
         } catch {
-            fatalError("Failed to fetch tracker records: \(error.localizedDescription)")
+            Logger.error("Failed to fetch tracker records: \(error.localizedDescription)")
+            return []
         }
     }
     
@@ -46,7 +47,8 @@ final class TrackerRecordStore: DataStore, TrackerRecordStoring {
             let result = try context.fetch(request)
             return result.first?.intValue ?? 0
         } catch {
-            fatalError("Failed to fetch record count: \(error.localizedDescription)")
+            Logger.error("Failed to fetch record count: \(error.localizedDescription)")
+            return -1
         }
     }
     
@@ -58,7 +60,8 @@ final class TrackerRecordStore: DataStore, TrackerRecordStoring {
         )
         
         guard let trackerEntity = try? context.fetch(request).first else {
-            fatalError("Failed to create record")
+            Logger.error("Failed to create record")
+            return
         }
         
         let recordEntity = TrackerRecordCoreData(context: context)
@@ -72,7 +75,7 @@ final class TrackerRecordStore: DataStore, TrackerRecordStoring {
         }
     }
     
-    func deleteRecord(tracker: Tracker, date: Date) {
+    func deleteRecord(tracker: Tracker, date: Date) { 
         let request = TrackerRecordCoreData.fetchRequest()
         request.predicate = NSPredicate(
             format: "%K == %@ && %K == %@",
@@ -84,7 +87,7 @@ final class TrackerRecordStore: DataStore, TrackerRecordStoring {
             let recordEntities = try context.fetch(request)
             recordEntities.forEach { context.delete($0) }
         } catch {
-            fatalError("Failed to delete record: \(error.localizedDescription)")
+            Logger.error("Failed to delete record: \(error.localizedDescription)")
         }
     }
 }

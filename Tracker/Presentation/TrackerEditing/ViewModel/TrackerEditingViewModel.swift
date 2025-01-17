@@ -10,7 +10,6 @@ import UIKit
 // MARK: - TrackerEditingViewModel
 
 protocol TrackerEditingViewModel: AnyObject {
-    var header: String { get }
     var applyButtonText: String { get }
     var completionsCount: Int? { get }
     var isApplyButtonEnabled: Bool { get }
@@ -45,7 +44,6 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
     
     weak var delegate: DefaultTrackerEditingViewModelDelegate?
     
-    let header: String
     let applyButtonText: String
     let completionsCount: Int?
     let trackerType: TrackerType
@@ -99,7 +97,6 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
         self.color = tracker.color
         
         self.isNewTracker = false
-        self.header = "Редактирование привычки"
         self.applyButtonText = "Сохранить"
         self.isApplyButtonEnabled = true
         self.completionsCount = completionsCount
@@ -117,7 +114,6 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
         self.color = .clear
 
         self.isNewTracker = true
-        self.header = trackerType == .regular ? "Новая привычка" : "Новое нерегулярное событие"
         self.applyButtonText = "Создать"
         self.isApplyButtonEnabled = false
         self.completionsCount = nil

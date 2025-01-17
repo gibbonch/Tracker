@@ -9,4 +9,5 @@ import Foundation
 
 struct Constants {
     static let pinnedCategoryTitle = "Закрепленные"
+    static let didPresentOnboarding = "didPresentOnboarding"
 }
