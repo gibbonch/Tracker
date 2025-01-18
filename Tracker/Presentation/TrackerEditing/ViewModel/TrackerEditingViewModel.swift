@@ -18,11 +18,11 @@ protocol TrackerEditingViewModel: AnyObject {
     var title: String { get set }
     var emoji: String { get set }
     var color: UIColor { get set }
-    var category: String { get }
+    var category: String? { get }
     var schedule: [Weekday] { get }
     
     func applyButtonDidTap()
-//    func createTrackerCategoriesViewModel(_ categoryTitle: String?) -> any TrackerCategoriesViewModel
+    func createTrackerCategoriesViewModel(_ categoryTitle: String?) -> any TrackerCategoriesViewModel
     func createTrackerScheduleViewModel() -> any TrackerScheduleViewModel
     func presentWarningMessage()
 }
@@ -49,6 +49,7 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
     let trackerType: TrackerType
     
     private let isNewTracker: Bool
+    private let originalCategory: String?
     private let trackerID: UUID?
 
     private(set) var isApplyButtonEnabled: Bool {
@@ -67,7 +68,7 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
         didSet { validateApplyButtonState() }
     }
     
-    private(set) var category: String {
+    private(set) var category: String? {
         didSet {
             delegate?.didUpdateCategory()
             validateApplyButtonState()
@@ -92,6 +93,7 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
         self.trackerID = tracker.id
         self.title = tracker.title
         self.category = categoryTitle
+        self.originalCategory = categoryTitle
         self.schedule = tracker.schedule
         self.emoji = tracker.emoji
         self.color = tracker.color
@@ -119,27 +121,51 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
         self.completionsCount = nil
         self.schedule = trackerType == .regular ? [] : Weekday.allCases
         
-        self.category = "Важное"
-        TrackerCategoryStore().createCategory(title: category)
+        self.category = nil
+        self.originalCategory = nil
     }
     
     // MARK: - Public Methods
     
     func applyButtonDidTap() {
+        guard let category else {
+            return
+        }
+        
         if isNewTracker {
             let newTracker = Tracker(type: trackerType, title: title, schedule: schedule, color: color, emoji: emoji)
             trackerStore.create(tracker: newTracker, in: category)
         } else {
             guard let trackerID else { return }
             let updatedTracker = Tracker(id: trackerID, type: trackerType, title: title, schedule: schedule, color: color, emoji: emoji)
-            trackerStore.update(tracker: updatedTracker, in: category)
+            
+            if let originalCategory, originalCategory != category {
+                trackerStore.update(tracker: updatedTracker, from: originalCategory, to: category)
+            } else {
+                trackerStore.update(tracker: updatedTracker, in: category)
+            }
         }
     }
+
     
     func createTrackerScheduleViewModel() -> any TrackerScheduleViewModel {
         let scheduleViewModel = DefaultTrackerScheduleViewModel(schedule: schedule)
         scheduleViewModel.delegate = self
         return scheduleViewModel
+    }
+    
+    func createTrackerCategoriesViewModel(_ categoryTitle: String?) -> any TrackerCategoriesViewModel {
+        let categoryStore = TrackerCategoryStore()
+        let categoryProvider = TrackerCategoryProvider(store: categoryStore)
+        let categoriesViewModel = DefaultTrackerCategoriesViewModel(selectedCategory: categoryTitle,
+                                                                    categoryStore: categoryStore,
+                                                                    categoryProvider: categoryProvider)
+        
+        categoriesViewModel.onChangeSelectedCategory = { [weak self] selectedCategory in
+            self?.category = selectedCategory
+        }
+        
+        return categoriesViewModel
     }
     
     func presentWarningMessage() {
@@ -149,7 +175,7 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
     // MARK: - Private Methods
     
     private func validateApplyButtonState() {
-        isApplyButtonEnabled = !title.isEmpty && !category.isEmpty && !schedule.isEmpty && !emoji.isEmpty && color != .clear
+        isApplyButtonEnabled = !title.isEmpty && category != nil && !schedule.isEmpty && !emoji.isEmpty && color != .clear
     }
 }
 

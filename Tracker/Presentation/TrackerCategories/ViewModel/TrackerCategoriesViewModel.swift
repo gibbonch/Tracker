@@ -7,45 +7,84 @@
 
 import Foundation
 
-protocol TrackerCategoriesViewModel {
-    var onChangeExistingCategories: Binding<[String]>? { get set }
+// MARK: - TrackerCategoriesViewModel
+
+protocol TrackerCategoriesViewModel: AnyObject {
+    var onChangeExistingCategories: Binding<(insertedIndices: [Int], deletedIndices: [Int])>? { get set }
+    var onChangeSelectedCategory: Binding<String?>? { get set }
+    var categoryTitles: [String] { get }
     
-    func getCategoryTitles() -> [String]
-    func getSelectedCategory() -> String?
+    func isSelectedCategory(at indexPath: IndexPath) -> Bool
     func didSelectCategory(at indexPath: IndexPath)
-    func willDismissViewController()
+    func deleteCategory(at indexPath: IndexPath)
+    func createCategoryEditingViewModel(indexPath: IndexPath?) -> any CategoryEditingViewModel
 }
 
+// MARK: - DefaultTrackerCategoriesViewModel
+
 final class DefaultTrackerCategoriesViewModel: TrackerCategoriesViewModel {
+
+    // MARK: - Properties
     
-    var onChangeExistingCategories: Binding<[String]>?
+    var onChangeSelectedCategory: Binding<String?>?
+    var onChangeExistingCategories: Binding<(insertedIndices: [Int], deletedIndices: [Int])>?
+    private(set) var categoryTitles: [String] = []
     
     private var selectedCategory: String?
-    private var categoryTitles: [String] = []
-    private let trackerCategoryStorage: TrackerCategoryStoring
-    private let trackerCategoryProvider: TrackerCategoryProvider
+    private let categoryStore: TrackerCategoryStoring
+    private let categoryProvider: TrackerCategoryProvider
     
-    init(selectedCategory: String?, trackerCategoryStorage: TrackerCategoryStoring, trackerCategoryProvider: TrackerCategoryProvider) {
+    // MARK: - Initializer
+    
+    init(selectedCategory: String?, categoryStore: TrackerCategoryStoring, categoryProvider: TrackerCategoryProvider) {
         self.selectedCategory = selectedCategory
-        self.trackerCategoryStorage = trackerCategoryStorage
-        self.trackerCategoryProvider = trackerCategoryProvider
-        
-        
+        self.categoryStore = categoryStore
+        self.categoryProvider = categoryProvider
+        categoryProvider.delegate = self
     }
     
-    func getCategoryTitles() -> [String] {
-        categoryTitles
-    }
+    // MARK: - Public Methods
     
-    func getSelectedCategory() -> String? {
-        selectedCategory
+    func isSelectedCategory(at indexPath: IndexPath) -> Bool {
+        categoryTitles[indexPath.row] == selectedCategory
     }
     
     func didSelectCategory(at indexPath: IndexPath) {
-        <#code#>
+        selectedCategory = categoryTitles[indexPath.row]
+        onChangeSelectedCategory?(selectedCategory)
     }
     
-    func willDismissViewController() {
+    func deleteCategory(at indexPath: IndexPath) {
+        categoryStore.deleteCategory(title: categoryTitles[indexPath.row])
+        onChangeSelectedCategory?(nil)
+    }
+    
+    func createCategoryEditingViewModel(indexPath: IndexPath?) -> any CategoryEditingViewModel {
+        if let indexPath {
+            return DefaultCategoryEditingViewModel(title: categoryTitles[indexPath.row], categoryStore: categoryStore)
+        } else {
+            return DefaultCategoryEditingViewModel(title: nil, categoryStore: categoryStore)
+        }
+    }
+}
+
+// MARK: - TrackerCategoryProviderDelegate
+
+extension DefaultTrackerCategoriesViewModel: TrackerCategoryProviderDelegate {
+    func didUpdateFetchedCategories(_ categories: [String]) {
+        let oldCategories = categoryTitles
+        let newCategories = categories
         
+        let insertedIndices = newCategories.enumerated().compactMap { index, element in
+            oldCategories.contains(element) ? nil : index
+        }
+        
+        let deletedIndices = oldCategories.enumerated().compactMap { index, element in
+            newCategories.contains(element) ? nil : index
+        }
+        
+        categoryTitles = categories
+        
+        onChangeExistingCategories?((insertedIndices, deletedIndices))
     }
 }

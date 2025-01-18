@@ -59,25 +59,14 @@ final class TrackerEditingViewController: UIViewController {
         return label
     }()
     
-    private lazy var titleTextField: UITextField = {
-        let textField = UITextField()
+    private lazy var titleTextField: TitleTextField = {
+        let textField = TitleTextField()
         textField.delegate = trackerTitleTextFieldDelegate
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
         textField.text = viewModel.title
         textField.placeholder = "Введите название трекера"
-        textField.textColor = .blackApp
-        textField.font = .systemFont(ofSize: 17, weight: .regular)
         
-        textField.backgroundColor = .lightGrayApp.withAlphaComponent(0.3)
-        textField.layer.cornerRadius = 16
-        textField.clearButtonMode = .whileEditing
-        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 75))
-        textField.leftViewMode = .always
-        textField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 75))
-        textField.rightViewMode = .unlessEditing
-        
-        textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     

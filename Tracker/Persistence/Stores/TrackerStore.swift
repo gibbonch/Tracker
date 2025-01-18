@@ -15,6 +15,7 @@ protocol TrackerStoring {
     func fetchCategoryTitle(tracker: Tracker) -> String
     func delete(tracker: Tracker)
     func update(tracker: Tracker, in categoryTitle: String)
+    func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String)
     func pin(tracker: Tracker)
     func unpin(tracker: Tracker)
 }
@@ -64,6 +65,32 @@ final class TrackerStore: DataStore, TrackerStoring {
         return categoryEntity?.title ?? ""
     }
     
+    func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) {
+        let trackerCategoryStore = TrackerCategoryStore(context: context)
+        guard let originalCategoryEntity = trackerCategoryStore.fetchCategory(title: originalCategoryTitle),
+              let newCategoryEntity = trackerCategoryStore.fetchCategory(title: newCategoryTitle),
+              let trackerEntity = fetchTracker(with: tracker.id) else { return }
+        
+        trackerEntity.title = tracker.title
+        trackerEntity.emoji = tracker.emoji
+        trackerEntity.color = tracker.color
+        trackerEntity.schedule = tracker.schedule
+        trackerEntity.sectionTitle = newCategoryTitle
+
+        if trackerEntity.categories.contains(originalCategoryEntity) {
+            trackerEntity.categories.remove(originalCategoryEntity)
+            originalCategoryEntity.removeFromTrackers(trackerEntity)
+        }
+        
+        trackerEntity.categories.insert(newCategoryEntity)
+        
+        do {
+            try saveContext()
+        } catch {
+            Logger.error("Failed to update tracker: \(error.localizedDescription)")
+        }
+    }
+
     func update(tracker: Tracker, in categoryTitle: String) {
         let trackerCategoryStore = TrackerCategoryStore(context: context)
         guard let categoryEntity = trackerCategoryStore.fetchCategory(title: categoryTitle),
@@ -80,11 +107,12 @@ final class TrackerStore: DataStore, TrackerStoring {
         }
         
         do {
-           try saveContext()
+            try saveContext()
         } catch {
             Logger.error("Failed to update tracker: \(error.localizedDescription)")
         }
     }
+
     
     func delete(tracker: Tracker) {
         guard let trackerEntity = fetchTracker(with: tracker.id) else { return }

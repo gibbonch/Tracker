@@ -29,7 +29,7 @@ final class AppCoordinator {
     
     func switchToOnboarding() {
         let onboardingViewController = OnboardingViewController()
-        window?.rootViewController = OnboardingViewController()
+        window?.rootViewController = onboardingViewController
     }
     
 }
