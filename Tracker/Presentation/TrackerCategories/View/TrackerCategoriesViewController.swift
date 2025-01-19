@@ -147,16 +147,32 @@ final class TrackerCategoriesViewController: UIViewController {
         viewModel.onChangeExistingCategories = { [weak self] categoriesChanges in
             guard let self else { return }
             
-            scrollView.isHidden = viewModel.categoryTitles.count == 0
-            placeholderView.isHidden = viewModel.categoryTitles.count != 0
-            categoriesTableViewHeightConstraint?.constant = cellHeight * CGFloat(viewModel.categoryTitles.count)
+            let isTableEmpty = viewModel.categoryTitles.isEmpty
+            scrollView.isHidden = isTableEmpty
+            placeholderView.isHidden = !isTableEmpty
+            
+            let targetHeight = cellHeight * CGFloat(viewModel.categoryTitles.count)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.categoriesTableViewHeightConstraint?.constant = targetHeight
+                self.view.layoutIfNeeded()
+            })
             
             categoriesTableView.performBatchUpdates { [weak self] in
                 let insertedIndexPaths = categoriesChanges.insertedIndices.map { IndexPath(row: $0, section: 0) }
                 let deletedIndexPaths = categoriesChanges.deletedIndices.map { IndexPath(row: $0, section: 0) }
                 
-                self?.categoriesTableView.insertRows(at: insertedIndexPaths, with: .top)
-                self?.categoriesTableView.deleteRows(at: deletedIndexPaths, with: .bottom)
+                self?.categoriesTableView.insertRows(at: insertedIndexPaths, with: .fade)
+                self?.categoriesTableView.deleteRows(at: deletedIndexPaths, with: .fade)
+            } completion: { _ in
+                let count = self.viewModel.categoryTitles.count
+                if count > 1 {
+                    let lastIndexPath = IndexPath(row: count - 1, section: 0)
+                    let secondLastIndexPath = IndexPath(row: count - 2, section: 0)
+                    self.categoriesTableView.reloadRows(at: [lastIndexPath, secondLastIndexPath], with: .none)
+                } else if count == 1 {
+                    let lastIndexPath = IndexPath(row: 0, section: 0)
+                    self.categoriesTableView.reloadRows(at: [lastIndexPath], with: .none)
+                }
             }
         }
     }
