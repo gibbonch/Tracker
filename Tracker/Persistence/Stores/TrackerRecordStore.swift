@@ -14,6 +14,7 @@ protocol TrackerRecordStoring {
     func fetchRecordsAmount(for tracker: Tracker) -> Int
     func create(record: TrackerRecord)
     func deleteRecord(tracker: Tracker, date: Date)
+    func deleteRecord(tracker: Tracker, weekday: Weekday)
 }
 
 // MARK: - TrackerRecordStore
@@ -68,11 +69,7 @@ final class TrackerRecordStore: DataStore, TrackerRecordStoring {
         recordEntity.date = record.date
         recordEntity.tracker = trackerEntity
         
-        do {
-           try saveContext()
-        } catch {
-            Logger.error("Failed to create record: \(error.localizedDescription)")
-        }
+        coreDataStack.saveContext()
     }
     
     func deleteRecord(tracker: Tracker, date: Date) { 
@@ -86,6 +83,26 @@ final class TrackerRecordStore: DataStore, TrackerRecordStoring {
         do {
             let recordEntities = try context.fetch(request)
             recordEntities.forEach { context.delete($0) }
+        } catch {
+            Logger.error("Failed to delete record: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteRecord(tracker: Tracker, weekday: Weekday) {
+        let request = TrackerRecordCoreData.fetchRequest()
+        request.predicate = NSPredicate(
+            format: "%K == %@",
+            #keyPath(TrackerRecordCoreData.tracker.trackerID), tracker.id as NSUUID
+        )
+        
+        do {
+            let recordEntities = try context.fetch(request)
+            recordEntities.forEach { entity in
+                let entityWeekday = entity.date.weekday
+                if entityWeekday == weekday {
+                    context.delete(entity)
+                }
+            }
         } catch {
             Logger.error("Failed to delete record: \(error.localizedDescription)")
         }

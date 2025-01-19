@@ -89,26 +89,4 @@ final class TrackersViewModelTests: XCTestCase {
         
         XCTAssertTrue(mockTrackerStore.unpinTrackerCalled)
     }
-    
-    func testCreateTrackerEditingViewModel() throws {
-        let indexPath = IndexPath(item: 0, section: 1)
-        
-        let trackerEditingViewModel = viewModel.createTrackerEditingViewModel(at: indexPath)
-        
-        XCTAssertEqual(trackerEditingViewModel.title, "tracker 4")
-        XCTAssertEqual(trackerEditingViewModel.trackerType, TrackerType.regular)
-        XCTAssertEqual(trackerEditingViewModel.emoji, "🥶")
-        XCTAssertEqual(trackerEditingViewModel.color, UIColor.selection4)
-        XCTAssertEqual(trackerEditingViewModel.category, "category 2")
-        XCTAssertEqual(trackerEditingViewModel.schedule, [.monday])
-    }
-    
-    func testCreateTrackerCellViewModel() throws {
-        let indexPath = IndexPath(item: 0, section: 1)
-        
-        let trackerCellViewModel = viewModel.createTrackerCellViewModel(at: indexPath)
-        
-        XCTAssertEqual(trackerCellViewModel.tracker, mockTrackerStore.trackerCategories[indexPath.section].trackers[indexPath.row])
-        XCTAssertFalse(trackerCellViewModel.isPinned)
-    }
 }

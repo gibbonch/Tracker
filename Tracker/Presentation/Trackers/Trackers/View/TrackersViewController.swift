@@ -334,10 +334,21 @@ extension TrackersViewController: UICollectionViewDelegate {
         }
         
         let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
-            self?.trackersViewModel.didDeleteTracker(at: indexPath)
+            self?.presentDeleteTrackerAlert(indexPath: indexPath)
         }
         
         return [pinAction, editAction, deleteAction]
+    }
+    
+    private func presentDeleteTrackerAlert(indexPath: IndexPath) {
+        let alert = UIAlertController(title: nil, message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            self?.trackersViewModel.didDeleteTracker(at: indexPath)
+        }
+        let cancelAction = UIAlertAction(title: "Отменить", style: .cancel) { _ in }
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
     }
 }
 

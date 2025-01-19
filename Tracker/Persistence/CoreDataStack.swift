@@ -7,13 +7,16 @@
 
 import CoreData
 
-final class CoreDataStack {
+class CoreDataStack {
     static let shared = CoreDataStack()
+    static let modelName = "TrackerModel"
     
-    var context: NSManagedObjectContext { persistentContainer.viewContext }
+    var context: NSManagedObjectContext {
+        persistentContainer.viewContext
+    }
     
-    private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "TrackerModel")
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: CoreDataStack.modelName)
         container.loadPersistentStores { _, error in
             if let error {
                 Logger.error("Failed to load persistent stores (\(error.localizedDescription))")
@@ -22,7 +25,15 @@ final class CoreDataStack {
         return container
     }()
     
-    private init() {
+    init() {
         ValueTransformer.setValueTransformer(UIColorTransformer(), forName: .uiColorTransformerName)
+    }
+    
+    func saveContext() {
+        do {
+            try context.save()
+        } catch {
+            Logger.error("Failed to save context (\(error.localizedDescription))")
+        }
     }
 }

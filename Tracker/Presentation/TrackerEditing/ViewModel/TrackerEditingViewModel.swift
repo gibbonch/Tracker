@@ -86,8 +86,8 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
     
     // MARK: - Initializers
     
-    init(store: TrackerStoring, tracker: Tracker, completionsCount: Int, categoryTitle: String) {
-        self.trackerStore = store
+    init(trackerStore: TrackerStoring, tracker: Tracker, completionsCount: Int, categoryTitle: String) {
+        self.trackerStore = trackerStore
         
         self.trackerType = tracker.type
         self.trackerID = tracker.id
@@ -104,8 +104,8 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
         self.completionsCount = completionsCount
     }
     
-    init(trackerType: TrackerType, store: TrackerStoring) {
-        self.trackerStore = store
+    init(trackerStore: TrackerStoring, trackerType: TrackerType) {
+        self.trackerStore = trackerStore
         
         self.trackerType = trackerType
         self.trackerID = nil
@@ -155,7 +155,7 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
     }
     
     func createTrackerCategoriesViewModel(_ categoryTitle: String?) -> any TrackerCategoriesViewModel {
-        let categoryStore = TrackerCategoryStore()
+        let categoryStore = TrackerCategoryStore(coreDataStack: CoreDataStack.shared)
         let categoryProvider = TrackerCategoryProvider(store: categoryStore)
         let categoriesViewModel = DefaultTrackerCategoriesViewModel(selectedCategory: categoryTitle,
                                                                     categoryStore: categoryStore,

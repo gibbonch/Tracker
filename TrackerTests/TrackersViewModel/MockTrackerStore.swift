@@ -23,8 +23,10 @@ final class MockTrackerStore: TrackerStoring {
         self.trackerCategories = trackerCategories
     }
     
-    func create(tracker: Tracker, in categoryTitle: String) {
+    @discardableResult
+    func create(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData? {
         createTrackerCalled = true
+        return nil
     }
     
     func fetchTracker(with id: UUID) -> TrackerCoreData? {
@@ -41,8 +43,13 @@ final class MockTrackerStore: TrackerStoring {
         deleteTrackerCalled = true
     }
     
-    func update(tracker: Tracker, in categoryTitle: String) {
+    func update(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData? {
         updateTrackerCalled = true
+        return nil
+    }
+    
+    func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) -> TrackerCoreData? {
+        return nil
     }
     
     func pin(tracker: Tracker) {

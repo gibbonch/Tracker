@@ -51,12 +51,11 @@ final class DefaultTrackersViewModel: TrackersViewModel {
     
     init(trackerStore: TrackerStoring, trackerProvider: TrackerProviding) {
         self.trackerStore = trackerStore
+        self.trackerProvider = trackerProvider
         date = Calendar.current.startOfDay(for: Date())
         searchText = ""
         filter = .all
-        
-        self.trackerProvider = trackerProvider
-        trackerProvider.delegate = self
+        self.trackerProvider.delegate = self
     }
     
     // MARK: - Public Methods
@@ -95,9 +94,9 @@ final class DefaultTrackersViewModel: TrackersViewModel {
         trackerStore.unpin(tracker: tracker)
     }
     
-    func createTrackerCellViewModel(at indexPath: IndexPath) -> any TrackerCellViewModel {
+    func createTrackerCellViewModel(at indexPath: IndexPath) -> any TrackerCellViewModel {        
         let category = visibleCategories[indexPath.section]
-        return DefaultTrackerCellViewModel(store: TrackerRecordStore(),
+        return DefaultTrackerCellViewModel(store: TrackerRecordStore(coreDataStack: CoreDataStack.shared),
                                            date: date,
                                            tracker: category.trackers[indexPath.row],
                                            isPinned: category.title == Constants.pinnedCategoryTitle)
@@ -106,10 +105,15 @@ final class DefaultTrackersViewModel: TrackersViewModel {
     func createTrackerEditingViewModel(at indexPath: IndexPath) -> any TrackerEditingViewModel {
         let category = visibleCategories[indexPath.section]
         let tracker = category.trackers[indexPath.row]
-        return DefaultTrackerEditingViewModel(store: TrackerStore(),
+        
+        let recordStore = TrackerRecordStore(coreDataStack: CoreDataStack.shared)
+        let completionsCount = recordStore.fetchRecordsAmount(for: tracker)
+        let categoryTitle = trackerStore.fetchCategoryTitle(tracker: tracker)
+        
+        return DefaultTrackerEditingViewModel(trackerStore: trackerStore,
                                               tracker: tracker,
-                                              completionsCount: TrackerRecordStore().fetchRecordsAmount(for: tracker), 
-                                              categoryTitle: category.title)
+                                              completionsCount: completionsCount,
+                                              categoryTitle: categoryTitle)
     }
 }
 

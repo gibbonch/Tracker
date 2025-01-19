@@ -68,8 +68,8 @@ final class TrackerProvider: NSObject, TrackerProviding {
     
     // MARK: - Initializer
     
-    init(store: DataStore) {
-        self.context = store.context
+    init(context: NSManagedObjectContext) {
+        self.context = context
         super.init()
     }
     

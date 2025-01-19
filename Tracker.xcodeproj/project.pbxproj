@@ -32,6 +32,8 @@
 		1872954D2D3A8E4B004B4D18 /* CategoryEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1872954C2D3A8E4B004B4D18 /* CategoryEditingViewController.swift */; };
 		1872954F2D3A9010004B4D18 /* TitleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1872954E2D3A9010004B4D18 /* TitleTextField.swift */; };
 		187295512D3BE863004B4D18 /* CategoryEditingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187295502D3BE863004B4D18 /* CategoryEditingViewModel.swift */; };
+		187295582D3D0045004B4D18 /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187295572D3D0045004B4D18 /* TestCoreDataStack.swift */; };
+		1872955A2D3D00FF004B4D18 /* TrackerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187295592D3D00FF004B4D18 /* TrackerStoreTests.swift */; };
 		187FBB532CE4F9880079266A /* UndoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB522CE4F9880079266A /* UndoButton.swift */; };
 		187FBB552CE4FF900079266A /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB542CE4FF900079266A /* ScheduleTableViewCell.swift */; };
 		187FBB642CE5E82A0079266A /* TrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB632CE5E82A0079266A /* TrackersViewModel.swift */; };
@@ -116,6 +118,8 @@
 		1872954C2D3A8E4B004B4D18 /* CategoryEditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditingViewController.swift; sourceTree = "<group>"; };
 		1872954E2D3A9010004B4D18 /* TitleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTextField.swift; sourceTree = "<group>"; };
 		187295502D3BE863004B4D18 /* CategoryEditingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditingViewModel.swift; sourceTree = "<group>"; };
+		187295572D3D0045004B4D18 /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
+		187295592D3D00FF004B4D18 /* TrackerStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreTests.swift; sourceTree = "<group>"; };
 		187FBB522CE4F9880079266A /* UndoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoButton.swift; sourceTree = "<group>"; };
 		187FBB542CE4FF900079266A /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		187FBB632CE5E82A0079266A /* TrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewModel.swift; sourceTree = "<group>"; };
@@ -292,6 +296,7 @@
 		187294E62D33C1C6004B4D18 /* TrackerTests */ = {
 			isa = PBXGroup;
 			children = (
+				187295562D3CF3FE004B4D18 /* DataStoreTests */,
 				187294F92D355ED7004B4D18 /* TrackersViewModel */,
 				187294EE2D33C1E2004B4D18 /* LoggerTests.swift */,
 				187294F22D33CA57004B4D18 /* MainTabBarControllerTests.swift */,
@@ -366,6 +371,15 @@
 				187295502D3BE863004B4D18 /* CategoryEditingViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		187295562D3CF3FE004B4D18 /* DataStoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				187295572D3D0045004B4D18 /* TestCoreDataStack.swift */,
+				187295592D3D00FF004B4D18 /* TrackerStoreTests.swift */,
+			);
+			path = DataStoreTests;
 			sourceTree = "<group>";
 		};
 		187FBB5D2CE545F30079266A /* ViewModel */ = {
@@ -772,8 +786,10 @@
 				187294FB2D355EEF004B4D18 /* MockTrackerStore.swift in Sources */,
 				187294FD2D3560F8004B4D18 /* TrackersViewModelTests.swift in Sources */,
 				187294F32D33CA57004B4D18 /* MainTabBarControllerTests.swift in Sources */,
+				1872955A2D3D00FF004B4D18 /* TrackerStoreTests.swift in Sources */,
 				187294EF2D33C1E2004B4D18 /* LoggerTests.swift in Sources */,
 				187294FF2D356501004B4D18 /* MockTrackerProvider.swift in Sources */,
+				187295582D3D0045004B4D18 /* TestCoreDataStack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

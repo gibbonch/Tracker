@@ -10,7 +10,7 @@ import CoreData
 // MARK: - TrackerCategoryStoring
 
 protocol TrackerCategoryStoring {
-    func createCategory(title: String)
+    func createCategory(title: String) -> TrackerCategoryCoreData?
     func fetchCategory(title: String) -> TrackerCategoryCoreData?
     func updateCategory(title: String, newTitle: String)
     func deleteCategory(title: String)
@@ -22,26 +22,25 @@ final class TrackerCategoryStore: DataStore, TrackerCategoryStoring {
     
     // MARK: - Initializer
         
-    override init(context: NSManagedObjectContext = CoreDataStack.shared.context) {
-        super.init()
+    override init(coreDataStack: CoreDataStack) {
+        super.init(coreDataStack: coreDataStack)
         createPinnedTrackerCategory()
     }
     
     // MARK: - Public Methods
     
-    func createCategory(title: String) {
+    @discardableResult
+    func createCategory(title: String) -> TrackerCategoryCoreData? {
         if let _ = fetchCategory(title: title) {
-            return
+            return nil
         }
         
         let categoryEntity = TrackerCategoryCoreData(context: context)
         categoryEntity.title = title
         
-        do {
-           try saveContext()
-        } catch {
-            Logger.error("Failed to create category: \(error.localizedDescription)")
-        }
+        coreDataStack.saveContext()
+        
+        return categoryEntity
     }
     
     func fetchCategory(title: String) -> TrackerCategoryCoreData? {
@@ -58,22 +57,16 @@ final class TrackerCategoryStore: DataStore, TrackerCategoryStoring {
         let categoryEntity = fetchCategory(title: title)
         categoryEntity?.title = newTitle
         
-        do {
-           try saveContext()
-        } catch {
-            Logger.error("Failed to update category: \(error.localizedDescription)")
-        }
+        categoryEntity?.trackers.forEach { $0.sectionTitle = newTitle }
+        
+        coreDataStack.saveContext()
     }
     
     func deleteCategory(title: String) {
         guard let categoryEntity = fetchCategory(title: title) else { return }
         context.delete(categoryEntity)
         
-        do {
-           try saveContext()
-        } catch {
-            Logger.error("Failed to delete category: \(error.localizedDescription)")
-        }
+        coreDataStack.saveContext()
     }
     
     // MARK: - Private Methods

@@ -10,18 +10,11 @@ import CoreData
 
 class DataStore: NSObject {    
     let context: NSManagedObjectContext
+    let coreDataStack: CoreDataStack
     
-    init(context: NSManagedObjectContext = CoreDataStack.shared.context) {
-        self.context = context
+    init(coreDataStack: CoreDataStack) {
+        self.coreDataStack = coreDataStack
+        context = coreDataStack.context
         super.init()
-    }
-    
-    func saveContext() throws {
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            throw error
-        }
     }
 }

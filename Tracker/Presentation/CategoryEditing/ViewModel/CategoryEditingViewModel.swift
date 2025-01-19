@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - CategoryEditingViewModel
+
 protocol CategoryEditingViewModel: AnyObject {
     var headerTitle: String { get }
     var title: String? { get }
@@ -16,7 +18,12 @@ protocol CategoryEditingViewModel: AnyObject {
     func createCategory(_ completion: @escaping () -> Void)
 }
 
+// MARK: - DefaultCategoryEditingViewModel
+
 final class DefaultCategoryEditingViewModel: CategoryEditingViewModel {
+    
+    // MARK: - Properties
+    
     let headerTitle: String
     var onTitleChangeState: ((String) -> Void)?
     private(set) var title: String?
@@ -28,6 +35,8 @@ final class DefaultCategoryEditingViewModel: CategoryEditingViewModel {
     var isCategoryCreationAllowed: Bool {
         return !(title?.isEmpty ?? true)
     }
+    
+    // MARK: Initializer
     
     init(title: String?, categoryStore: TrackerCategoryStoring) {
         self.title = title
@@ -43,6 +52,8 @@ final class DefaultCategoryEditingViewModel: CategoryEditingViewModel {
             self.originalTitle = nil
         }
     }
+    
+    // MARK: - Public Methods
     
     func titleDidChange(_ newTitle: String) {
         title = newTitle

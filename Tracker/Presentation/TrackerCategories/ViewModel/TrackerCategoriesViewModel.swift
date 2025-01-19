@@ -83,6 +83,13 @@ extension DefaultTrackerCategoriesViewModel: TrackerCategoryProviderDelegate {
             newCategories.contains(element) ? nil : index
         }
         
+        deletedIndices.forEach { index in
+            if oldCategories[index] == selectedCategory && !insertedIndices.isEmpty {
+                selectedCategory = newCategories[insertedIndices[0]]
+                onChangeSelectedCategory?(selectedCategory)
+            }
+        }
+        
         categoryTitles = categories
         
         onChangeExistingCategories?((insertedIndices, deletedIndices))
