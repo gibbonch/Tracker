@@ -32,7 +32,13 @@ final class AppCoordinator {
     // MARK: - Onboarding Flow
     
     func switchToOnboarding() {
-        let onboardingViewController = OnboardingViewController()
+        let switchToTrackersCompletion: () -> Void = { [weak self] in
+            UserDefaults.standard.set(true, forKey: Constants.didPresentOnboarding)
+            self?.switchToTrackers()
+        }
+        
+        let onboardingViewController = OnboardingViewController(completion: switchToTrackersCompletion)
+        
         window?.rootViewController = onboardingViewController
     }
     

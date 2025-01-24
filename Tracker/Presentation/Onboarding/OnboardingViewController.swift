@@ -13,6 +13,7 @@ final class OnboardingViewController: UIPageViewController {
     
     private var pages: [UIViewController] = []
     private var timer: Timer?
+    private let completion: () -> Void
     
     // MARK: - Subviews
     
@@ -27,15 +28,13 @@ final class OnboardingViewController: UIPageViewController {
     }()
     
     private lazy var continueButton = FilledButton(title: "Вот это технологии!") { [weak self] in
-        UserDefaults.standard.set(true, forKey: Constants.didPresentOnboarding)
-        let sceneDelegate = self?.view.window?.windowScene?.delegate as? SceneDelegate
-        let appCoordinator = sceneDelegate?.appCoordinator
-        appCoordinator?.switchToTrackers()
+        self?.completion()
     }
     
     // MARK: - Initializer
     
-    init() {
+    init(completion: @escaping () -> Void) {
+        self.completion = completion
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
         
         dataSource = self
