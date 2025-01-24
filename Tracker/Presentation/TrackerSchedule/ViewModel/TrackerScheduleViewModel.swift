@@ -11,7 +11,7 @@ import Foundation
 
 protocol TrackerScheduleViewModel {
     var schedule: [Weekday] { get }
-    func didSelectWeekday(at indexPath: IndexPath)
+    func didSelect(weekday: Weekday)
     func didEndScheduleEditing()
 }
 
@@ -30,21 +30,19 @@ final class DefaultTrackerScheduleViewModel: TrackerScheduleViewModel {
     weak var delegate: DefaultTrackerScheduleViewModelDelegate?
     
     private(set) var schedule: [Weekday] {
-        didSet { Utilities.bringScheduleIntoRuFormat(&schedule) }
+        didSet { Utilities.bringScheduleIntoLocaleFormat(&schedule) }
     }
     
     // MARK: - Initializer
     
     init(schedule: [Weekday]) {
         self.schedule = schedule
-        Utilities.bringScheduleIntoRuFormat(&self.schedule)
+        Utilities.bringScheduleIntoLocaleFormat(&self.schedule)
     }
     
     // MARK: - Public Methods
     
-    func didSelectWeekday(at indexPath: IndexPath) {
-        let rawValue = indexPath.row == 6 ? 0 : indexPath.row + 1
-        guard let weekday = Weekday(rawValue: rawValue) else { return }
+    func didSelect(weekday: Weekday) {
         if schedule.contains(weekday) {
             schedule.removeAll(where: { $0 == weekday })
         } else {

@@ -35,7 +35,7 @@ final class CategoryAndScheduleTableViewDataSource: NSObject, UITableViewDataSou
         } else {
             cell.textLabel?.text = NSLocalizedString("schedule", comment: "schedule section title")
             var schedule = viewModel.schedule
-            Utilities.bringScheduleIntoRuFormat(&schedule)
+            Utilities.bringScheduleIntoLocaleFormat(&schedule)
             if schedule.count == 7 {
                 cell.detailTextLabel?.text = NSLocalizedString("schedule.everydayReplacement", comment: "Everyday schedule replacement")
             } else {

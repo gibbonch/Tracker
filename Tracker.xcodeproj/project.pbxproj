@@ -35,6 +35,7 @@
 		187295582D3D0045004B4D18 /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187295572D3D0045004B4D18 /* TestCoreDataStack.swift */; };
 		1872955A2D3D00FF004B4D18 /* TrackerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187295592D3D00FF004B4D18 /* TrackerStoreTests.swift */; };
 		1872955D2D43CA8F004B4D18 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1872955B2D43CA8F004B4D18 /* Localizable.strings */; };
+		187295662D440255004B4D18 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 187295642D440255004B4D18 /* Localizable.stringsdict */; };
 		187FBB532CE4F9880079266A /* UndoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB522CE4F9880079266A /* UndoButton.swift */; };
 		187FBB552CE4FF900079266A /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB542CE4FF900079266A /* ScheduleTableViewCell.swift */; };
 		187FBB642CE5E82A0079266A /* TrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB632CE5E82A0079266A /* TrackersViewModel.swift */; };
@@ -128,6 +129,10 @@
 		187295612D43CB8F004B4D18 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		187295622D43CB94004B4D18 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		187295632D43CB95004B4D18 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		187295652D440255004B4D18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		187295672D4402EE004B4D18 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ar; path = ar.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		187295682D4402EF004B4D18 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		187295692D4402F1004B4D18 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		187FBB522CE4F9880079266A /* UndoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoButton.swift; sourceTree = "<group>"; };
 		187FBB542CE4FF900079266A /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		187FBB632CE5E82A0079266A /* TrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewModel.swift; sourceTree = "<group>"; };
@@ -231,6 +236,7 @@
 				180B5CB92CDBD78F003FDE88 /* LaunchScreen.storyboard */,
 				180B5CBC2CDBD78F003FDE88 /* Info.plist */,
 				1872955B2D43CA8F004B4D18 /* Localizable.strings */,
+				187295642D440255004B4D18 /* Localizable.stringsdict */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -711,6 +717,7 @@
 				1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */,
 				1872955D2D43CA8F004B4D18 /* Localizable.strings in Resources */,
 				180B5CB82CDBD78F003FDE88 /* Assets.xcassets in Resources */,
+				187295662D440255004B4D18 /* Localizable.stringsdict in Resources */,
 				180B5CBB2CDBD78F003FDE88 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -837,6 +844,17 @@
 				187295632D43CB95004B4D18 /* ru */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		187295642D440255004B4D18 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				187295652D440255004B4D18 /* en */,
+				187295672D4402EE004B4D18 /* ar */,
+				187295682D4402EF004B4D18 /* de */,
+				187295692D4402F1004B4D18 /* ru */,
+			);
+			name = Localizable.stringsdict;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -14,7 +14,7 @@ final class TrackerScheduleViewController: UIViewController {
     private let viewModel: TrackerScheduleViewModel
     private var weekdays = {
         var weekdays = Weekday.allCases
-        Utilities.bringScheduleIntoRuFormat(&weekdays)
+        Utilities.bringScheduleIntoLocaleFormat(&weekdays)
         return weekdays
     }()
     
@@ -141,7 +141,7 @@ extension TrackerScheduleViewController: UITableViewDataSource {
         let scheduleCell = ScheduleTableViewCell()
         let weekday = weekdays[indexPath.row]
         scheduleCell.setupCell(with: weekday, isSelected: viewModel.schedule.contains(weekday)) { [weak self] in
-            self?.viewModel.didSelectWeekday(at: indexPath)
+            self?.viewModel.didSelect(weekday: weekday)
         }
         
         return scheduleCell
