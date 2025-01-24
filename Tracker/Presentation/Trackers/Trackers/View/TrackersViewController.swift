@@ -9,15 +9,23 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
-    // MARK: - Type Aliases
+    // MARK: - DiffableDataSource
     
     private typealias DataSource = UICollectionViewDiffableDataSource<TrackerCategorySection, TrackerItem>
     private typealias Snapshot = NSDiffableDataSourceSnapshot<TrackerCategorySection, TrackerItem>
     
+    fileprivate enum TrackerCategorySection: Hashable {
+        case section(title: String)
+    }
+    
+    fileprivate struct TrackerItem: Hashable {
+        let tracker: Tracker
+        let isPinned: Bool
+    }
+    
     // MARK: - Properties
     
     private let trackersViewModel: TrackersViewModel
-    private var trackersCollectionViewDelegate: TrackersCollectionViewDelegate?
     private var trackersCollectionViewDataSource: DataSource?
     
     // MARK: - Subviews
@@ -58,22 +66,30 @@ final class TrackersViewController: UIViewController {
     
     private lazy var trackersCollectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: (view.frame.width - 32) / 2 - 4.5, height: 148)
+        let screenWidth = UIScreen.main.bounds.width
+        let hSectionInset = 16.0
+        let itemsPerLine = 2.0
+        let interItemSpacing = 9.0
+        layout.itemSize = CGSize(width: (screenWidth - hSectionInset * 2 - interItemSpacing) / itemsPerLine, height: 148)
         layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 9
+        layout.minimumInteritemSpacing = interItemSpacing
         layout.scrollDirection = .vertical
-        layout.headerReferenceSize = CGSize(width: (view.frame.width - 32) / 2, height: 40)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        layout.headerReferenceSize = CGSize(width: screenWidth - hSectionInset * 2, height: 40)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: hSectionInset, bottom: 0, right: hSectionInset)
         return layout
     }()
     
     private lazy var trackersCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: trackersCollectionViewFlowLayout)
+        collectionView.delegate = self
+        collectionView.register(TrackerCollectionViewCell.self,
+                                        forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier)
+        collectionView.register(TrackerHeaderView.self,
+                                        forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                        withReuseIdentifier: TrackerHeaderView.identifier)
         collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 24, right: 0)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        trackersCollectionViewDelegate = TrackersCollectionViewDelegate(viewModel: trackersViewModel, parentViewController: self)
-        collectionView.delegate = trackersCollectionViewDelegate
         return collectionView
     }()
     
@@ -83,7 +99,6 @@ final class TrackersViewController: UIViewController {
         self.trackersViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         tabBarItem = UITabBarItem(title: "Трекеры", image: .trackers, selectedImage: nil)
-        (trackersViewModel as? DefaultTrackersViewModel)?.delegate = self
     }
     
     @available(*, unavailable)
@@ -97,10 +112,9 @@ final class TrackersViewController: UIViewController {
         super.viewDidLoad()
         setupNavigationBar()
         setupView()
-        setConstraints()
-        registerReusableViews()
+        setupLayout()
         setupDataSource()
-        applySnapshot()
+        bind()
     }
     
     // MARK: - Private Methods
@@ -118,11 +132,20 @@ final class TrackersViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .whiteApp
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
         view.addSubviews(trackersCollectionView, placeholderView)
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        swipeLeft.direction = .left
+        view.addGestureRecognizer(swipeLeft)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        swipeRight.direction = .right
+        view.addGestureRecognizer(swipeRight)
     }
     
-    private func setConstraints() {
+    private func setupLayout() {
         NSLayoutConstraint.activate([
             trackersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -135,25 +158,13 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
-    private func registerReusableViews() {
-        trackersCollectionView.register(
-            TrackerCollectionViewCell.self,
-            forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier
-        )
-        
-        trackersCollectionView.register(
-            TrackerHeaderView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: TrackerHeaderView.identifier
-        )
-    }
-    
     private func setupDataSource() {
         trackersCollectionViewDataSource = DataSource(collectionView: trackersCollectionView) { [weak self] collectionView, indexPath, trackerItem in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCollectionViewCell.identifier, for: indexPath)
             guard let trackerCell = cell as? TrackerCollectionViewCell,
-                  let trackerCellViewModel = self?.trackersViewModel.createTrackerCellViewModel(tracker: trackerItem.tracker, isPinned: trackerItem.isPinned)
-            else { return cell }
+                  let trackerCellViewModel = self?.trackersViewModel.createTrackerCellViewModel(at: indexPath) else {
+                return cell
+            }
             
             trackerCell.setupCell(viewModel: trackerCellViewModel)
             return trackerCell
@@ -168,8 +179,9 @@ final class TrackersViewController: UIViewController {
             
             guard kind == UICollectionView.elementKindSectionHeader,
                   let headerView = supplementaryView as? TrackerHeaderView,
-                  let dataSource = self?.trackersCollectionViewDataSource
-            else { return supplementaryView }
+                  let dataSource = self?.trackersCollectionViewDataSource else {
+                return supplementaryView
+            }
             
             let snapshot = dataSource.snapshot()
             let category = snapshot.sectionIdentifiers[indexPath.section]
@@ -183,11 +195,17 @@ final class TrackersViewController: UIViewController {
         }
     }
     
-    private func applySnapshot(animatingDifferences: Bool = true) {
+    private func bind() {
+        trackersViewModel.onVisibleCategoriesChange = { [weak self] categories in
+            self?.applySnapshot(categories)
+        }
+    }
+    
+    private func applySnapshot(_ categories: [TrackerCategory]) {
         guard let trackersCollectionViewDataSource else { return }
         
         var snapshot = Snapshot()
-        for category in trackersViewModel.visibleCategories {
+        for category in categories {
             let section = TrackerCategorySection.section(title: category.title)
             let items = category.trackers.map { tracker in
                 TrackerItem(tracker: tracker, isPinned: category.title == Constants.pinnedCategoryTitle)
@@ -228,12 +246,109 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func datePickerValueChanged() {
-        trackersViewModel.date = Calendar.current.startOfDay(for: datePicker.date) 
+        let updatedDate = Calendar.current.startOfDay(for: datePicker.date)
+        trackersViewModel.didUpdate(date: updatedDate)
     }
     
     @objc private func dismissKeyboard() {
         searchController.searchBar.endEditing(true)
         searchController.dismiss(animated: true)
+    }
+    
+    @objc private func handleSwipeGesture(_ gesture: UISwipeGestureRecognizer) {
+        let calendar = Calendar.current
+        var updatedDate = Calendar.current.startOfDay(for: datePicker.date)
+        
+        if gesture.direction == .left {
+            updatedDate = calendar.date(byAdding: .day, value: 1, to: updatedDate) ?? updatedDate
+        } else if gesture.direction == .right {
+            updatedDate = calendar.date(byAdding: .day, value: -1, to: updatedDate) ?? updatedDate
+        }
+        
+        datePicker.setDate(updatedDate, animated: true)
+        trackersViewModel.didUpdate(date: updatedDate)
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension TrackersViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, 
+                        contextMenuConfigurationForItemsAt indexPaths: [IndexPath],
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        guard let indexPath = indexPaths.first,
+              let cell = collectionView.cellForItem(at: indexPath) as? TrackerCollectionViewCell else { return nil }
+        
+        return UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: { [weak self] in
+                self?.createPreviewController(for: cell)
+            },
+            actionProvider: { [weak self] _ in
+                guard let self else { return nil }
+                let actions = createContextMenuActions(for: cell, at: indexPath)
+                return UIMenu(children: actions)
+            }
+        )
+    }
+
+    private func createPreviewController(for cell: TrackerCollectionViewCell) -> UIViewController? {
+        guard let previewView = cell.trackerCardView.snapshotView(afterScreenUpdates: true) else { return nil }
+
+        let previewController = UIViewController()
+        previewController.view.addSubview(previewView)
+
+        previewController.preferredContentSize = previewView.bounds.size
+        previewView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            previewView.leadingAnchor.constraint(equalTo: previewController.view.leadingAnchor),
+            previewView.trailingAnchor.constraint(equalTo: previewController.view.trailingAnchor),
+            previewView.topAnchor.constraint(equalTo: previewController.view.topAnchor),
+            previewView.bottomAnchor.constraint(equalTo: previewController.view.bottomAnchor)
+        ])
+
+        return previewController
+    }
+
+    private func createContextMenuActions(for cell: TrackerCollectionViewCell, at indexPath: IndexPath) -> [UIAction] {
+        let snapshot = trackersCollectionViewDataSource?.snapshot()
+        let section = snapshot?.sectionIdentifiers[indexPath.section]
+        let isPinned = section == .section(title: Constants.pinnedCategoryTitle)
+        
+        let pinActionTitle = isPinned ? "Открепить" : "Закрепить"
+        let pinAction = UIAction(title: pinActionTitle) { [weak self] _ in
+            if isPinned {
+                self?.trackersViewModel.didUnpinTracker(at: indexPath)
+            } else {
+                self?.trackersViewModel.didPinTracker(at: indexPath)
+            }
+        }
+        
+        let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+            guard let self else { return }
+            
+            let trackerEditingViewModel = trackersViewModel.createTrackerEditingViewModel(at: indexPath)
+            let trackerEditingViewController = TrackerEditingViewController(title: "Редактирование привычки", viewModel: trackerEditingViewModel)
+            present(trackerEditingViewController, animated: true)
+        }
+        
+        let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+            self?.presentDeleteTrackerAlert(indexPath: indexPath)
+        }
+        
+        return [pinAction, editAction, deleteAction]
+    }
+    
+    private func presentDeleteTrackerAlert(indexPath: IndexPath) {
+        let alert = UIAlertController(title: nil, message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            self?.trackersViewModel.didDeleteTracker(at: indexPath)
+        }
+        let cancelAction = UIAlertAction(title: "Отменить", style: .cancel) { _ in }
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
     }
 }
 
@@ -241,14 +356,6 @@ final class TrackersViewController: UIViewController {
 
 extension TrackersViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        trackersViewModel.searchText = searchText
-    }
-}
-
-// MARK: - DefaultTrackersViewModelDelegate
-
-extension TrackersViewController: DefaultTrackersViewModelDelegate {
-    func didUpdateVisibleCategories() {
-        applySnapshot()
+        trackersViewModel.didUpdate(searchText: searchText)
     }
 }

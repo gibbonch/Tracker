@@ -67,8 +67,10 @@ final class TrackerCreationViewController: UIViewController {
     }
     
     private func presentTrackerEditingViewController(trackerType: TrackerType) {
-        let trackerEditingViewModel = DefaultTrackerEditingViewModel(trackerType: trackerType, store: TrackerStore())
-        let trackerEditingViewController = TrackerEditingViewController(viewModel: trackerEditingViewModel)
+        let trackerStore = TrackerStore(coreDataStack: CoreDataStack.shared)
+        let trackerEditingViewModel = DefaultTrackerEditingViewModel(trackerStore: trackerStore, trackerType: trackerType)
+        let trackerEditingViewController = TrackerEditingViewController(title: trackerType == .regular ? "Новая привычка" : "Новое нерегулярное событие",
+                                                                        viewModel: trackerEditingViewModel)
         present(trackerEditingViewController, animated: true)
     }
 }

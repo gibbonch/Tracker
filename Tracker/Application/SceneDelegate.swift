@@ -9,15 +9,21 @@ import UIKit
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-
+    var appCoordinator: AppCoordinator?
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
         window = UIWindow(windowScene: windowScene)
+        appCoordinator = AppCoordinator(window: window)
         
-        let trackersViewModel = DefaultTrackersViewModel(trackerStore: TrackerStore())
-        let trackersViewController = TrackersViewController(viewModel: trackersViewModel)
-        let statisticsViewController = StatisticsViewController()
-        window?.rootViewController = MainTabBarController(viewControllers: [trackersViewController, statisticsViewController])
+        let didPresentOnboarding = UserDefaults.standard.bool(forKey: Constants.didPresentOnboarding)
+        
+        if didPresentOnboarding {
+            appCoordinator?.switchToTrackers()
+            
+        } else {
+            appCoordinator?.switchToOnboarding()
+        }
         
         window?.makeKeyAndVisible()
     }

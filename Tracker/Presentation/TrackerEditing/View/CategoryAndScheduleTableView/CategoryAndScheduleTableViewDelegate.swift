@@ -26,7 +26,11 @@ final class CategoryAndScheduleTableViewDelegate: NSObject, UITableViewDelegate 
         guard let viewModel else { return }
         
         if indexPath.row == 0 {
-            // ...
+            let cell = tableView.cellForRow(at: indexPath)
+            let title = cell?.detailTextLabel?.text
+            let trackerCategoriesViewModel = viewModel.createTrackerCategoriesViewModel(title)
+            let trackerCategoriesViewController = TrackerCategoriesViewController(viewModel: trackerCategoriesViewModel)
+            parentViewController?.present(trackerCategoriesViewController, animated: true)
         } else {
             let trackerScheduleViewModel = viewModel.createTrackerScheduleViewModel()
             let trackerScheduleViewController = TrackerScheduleViewController(viewModel: trackerScheduleViewModel)

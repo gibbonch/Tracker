@@ -6,29 +6,22 @@
 //
 
 import Foundation
-import Combine
 
 // MARK: - TrackersViewModel
 
 protocol TrackersViewModel: AnyObject {
-    var date: Date { get set }
-    var searchText: String { get set }
-    var filter: TrackerFilter { get set }
+    var onVisibleCategoriesChange: Binding<[TrackerCategory]>? { get set }
     
-    var visibleCategories: [TrackerCategory] { get }
+    func didUpdate(date: Date)
+    func didUpdate(searchText: String)
+    func didUpdate(filter: TrackerFilter)
     
-    func performDeleteAction(at indexPath: IndexPath)
-    func performPinAction(at indexPath: IndexPath)
-    func performUnpinAction(at indexPath: IndexPath)
+    func didDeleteTracker(at indexPath: IndexPath)
+    func didPinTracker(at indexPath: IndexPath)
+    func didUnpinTracker(at indexPath: IndexPath)
     
-    func createTrackerEditingViewModel(at indexPath: IndexPath, completionsCount: Int) -> any TrackerEditingViewModel
-    func createTrackerCellViewModel(tracker: Tracker, isPinned: Bool) -> any TrackerCellViewModel
-}
-
-// MARK: - DefaultTrackersViewModelDelegate
-
-protocol DefaultTrackersViewModelDelegate: AnyObject {
-    func didUpdateVisibleCategories()
+    func createTrackerEditingViewModel(at indexPath: IndexPath) -> any TrackerEditingViewModel
+    func createTrackerCellViewModel(at indexPath: IndexPath) -> any TrackerCellViewModel
 }
 
 // MARK: - DefaultTrackersViewModel
@@ -37,27 +30,18 @@ final class DefaultTrackersViewModel: TrackersViewModel {
     
     // MARK: - Properties
     
-    weak var delegate: DefaultTrackersViewModelDelegate?
-    
-    var date: Date = Calendar.current.startOfDay(for: Date()) {
-        didSet {
-            trackerProvider?.updateTrackerQuery(trackerQuery)
-            NotificationCenter.default.post(name: Notification.Name("dateChanged"), object: date)
-        }
+    var onVisibleCategoriesChange: Binding<[TrackerCategory]>? {
+        didSet { trackerProvider.updateTrackerQuery(trackerQuery) }
     }
     
-    var searchText: String = "" {
-        didSet { trackerProvider?.updateTrackerQuery(trackerQuery) }
-    }
+    private var visibleCategories: [TrackerCategory] = []
     
-    var filter: TrackerFilter = .all {
-        didSet { trackerProvider?.updateTrackerQuery(trackerQuery) }
-    }
-    
-    private(set) var visibleCategories: [TrackerCategory] = [] 
+    private var date: Date
+    private var searchText: String
+    private var filter: TrackerFilter
     
     private let trackerStore: TrackerStoring
-    private var trackerProvider: TrackerProvider?
+    private var trackerProvider: TrackerProviding
     
     private var trackerQuery: TrackerQuery {
         TrackerQuery(title: searchText, date: date, filter: filter)
@@ -65,51 +49,71 @@ final class DefaultTrackersViewModel: TrackersViewModel {
     
     // MARK: - Initializer
     
-    init(trackerStore: TrackerStoring) {
+    init(trackerStore: TrackerStoring, trackerProvider: TrackerProviding) {
         self.trackerStore = trackerStore
-        
-        trackerProvider = TrackerProvider(store: trackerStore)
-        trackerProvider?.delegate = self
-        trackerProvider?.updateTrackerQuery(trackerQuery)
+        self.trackerProvider = trackerProvider
+        date = Calendar.current.startOfDay(for: Date())
+        searchText = ""
+        filter = .all
+        self.trackerProvider.delegate = self
     }
     
     // MARK: - Public Methods
     
-    func performDeleteAction(at indexPath: IndexPath) {
+    func didUpdate(date: Date) {
+        self.date = date
+        NotificationCenter.default.post(name: Notification.dateDidChange, object: date)
+        trackerProvider.updateTrackerQuery(trackerQuery)
+    }
+    
+    func didUpdate(searchText: String) {
+        self.searchText = searchText
+        trackerProvider.updateTrackerQuery(trackerQuery)
+    }
+    
+    func didUpdate(filter: TrackerFilter) {
+        self.filter = filter
+        trackerProvider.updateTrackerQuery(trackerQuery)
+    }
+    
+    func didDeleteTracker(at indexPath: IndexPath) {
         let category = visibleCategories[indexPath.section]
         let tracker = category.trackers[indexPath.row]
         trackerStore.delete(tracker: tracker)
     }
     
-    func performPinAction(at indexPath: IndexPath) {
+    func didPinTracker(at indexPath: IndexPath) {
         let category = visibleCategories[indexPath.section]
         let tracker = category.trackers[indexPath.row]
         trackerStore.pin(tracker: tracker)
     }
     
-    func performUnpinAction(at indexPath: IndexPath) {
+    func didUnpinTracker(at indexPath: IndexPath) {
         let category = visibleCategories[indexPath.section]
         let tracker = category.trackers[indexPath.row]
         trackerStore.unpin(tracker: tracker)
     }
     
-    func createTrackerCellViewModel(tracker: Tracker, isPinned: Bool) -> any TrackerCellViewModel {
-        DefaultTrackerCellViewModel(
-            store: TrackerRecordStore(),
-            date: date,
-            tracker: tracker,
-            isPinned: isPinned
-        )
+    func createTrackerCellViewModel(at indexPath: IndexPath) -> any TrackerCellViewModel {        
+        let category = visibleCategories[indexPath.section]
+        return DefaultTrackerCellViewModel(store: TrackerRecordStore(coreDataStack: CoreDataStack.shared),
+                                           date: date,
+                                           tracker: category.trackers[indexPath.row],
+                                           isPinned: category.title == Constants.pinnedCategoryTitle)
     }
     
-    func createTrackerEditingViewModel(at indexPath: IndexPath, completionsCount: Int) -> any TrackerEditingViewModel {
+    func createTrackerEditingViewModel(at indexPath: IndexPath) -> any TrackerEditingViewModel {
         let category = visibleCategories[indexPath.section]
         let tracker = category.trackers[indexPath.row]
-        return DefaultTrackerEditingViewModel(
-            store: TrackerStore(),
-            tracker: tracker,
-            completionsCount: completionsCount
-        )
+        
+        let recordStore = TrackerRecordStore(coreDataStack: CoreDataStack.shared)
+        let completionsCount = recordStore.fetchRecordsAmount(for: tracker)
+        let categoryTitle = trackerStore.fetchCategoryTitle(tracker: tracker)
+        
+        return DefaultTrackerEditingViewModel(trackerStore: trackerStore,
+                                              tracker: tracker,
+                                              completionsCount: completionsCount,
+                                              categoryTitle: categoryTitle)
     }
 }
 
@@ -118,6 +122,12 @@ final class DefaultTrackersViewModel: TrackersViewModel {
 extension DefaultTrackersViewModel: TrackerProviderDelegate {
     func didUpdateFetchedTrackers(_ categories: [TrackerCategory]) {
         visibleCategories = categories
-        delegate?.didUpdateVisibleCategories()
+        onVisibleCategoriesChange?(visibleCategories)
     }
+}
+
+// MARK: - Notification dateDidChange
+
+extension Notification {
+    static let dateDidChange = Notification.Name("dateDidChange")
 }

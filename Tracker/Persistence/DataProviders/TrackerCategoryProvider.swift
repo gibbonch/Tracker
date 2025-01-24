@@ -19,7 +19,12 @@ final class TrackerCategoryProvider: NSObject {
     
     // MARK: - Properties
     
-    weak var delegate: TrackerCategoryProviderDelegate?
+    weak var delegate: TrackerCategoryProviderDelegate? {
+        didSet {
+            try? fetchedResultsController.performFetch()
+            delegate?.didUpdateFetchedCategories(fetchedCategories ?? [])
+        }
+    }
     private let context: NSManagedObjectContext
     
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
@@ -35,7 +40,6 @@ final class TrackerCategoryProvider: NSObject {
         )
         
         controller.delegate = self
-        try? controller.performFetch()
         
         return controller
     }()
@@ -47,11 +51,9 @@ final class TrackerCategoryProvider: NSObject {
     
     // MARK: - Initializer
     
-    init(store: DataStore, delegate: TrackerCategoryProviderDelegate) {
+    init(store: DataStore) {
         self.context = store.context
-        self.delegate = delegate
         super.init()
-        delegate.didUpdateFetchedCategories(fetchedCategories ?? [])
     }
 }
 

@@ -9,12 +9,13 @@ import CoreData
 
 // MARK: - TrackerStoring
 
-protocol TrackerStoring: DataStore {
-    func create(tracker: Tracker, in categoryTitle: String)
+protocol TrackerStoring {
+    func create(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData?
     func fetchTracker(with id: UUID) -> TrackerCoreData?
     func fetchCategoryTitle(tracker: Tracker) -> String
     func delete(tracker: Tracker)
-    func update(tracker: Tracker, in categoryTitle: String)
+    func update(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData?
+    func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) -> TrackerCoreData?
     func pin(tracker: Tracker)
     func unpin(tracker: Tracker)
 }
@@ -25,9 +26,13 @@ final class TrackerStore: DataStore, TrackerStoring {
     
     // MARK: - Public Methods
     
-    func create(tracker: Tracker, in categoryTitle: String) {
-        let trackerCategoryStore = TrackerCategoryStore(context: context)
-        guard let categoryEntity = trackerCategoryStore.fetchCategory(title: categoryTitle) else { return }
+    @discardableResult
+    func create(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData? {
+        let trackerCategoryStore = TrackerCategoryStore(coreDataStack: coreDataStack)
+        guard let categoryEntity = trackerCategoryStore.fetchCategory(title: categoryTitle) else {
+            Logger.error("Failed to load category entity")
+            return nil
+        }
         
         let trackerEntity = TrackerCoreData(context: context)
         trackerEntity.trackerID = tracker.id
@@ -39,11 +44,9 @@ final class TrackerStore: DataStore, TrackerStoring {
         trackerEntity.sectionTitle = categoryTitle
         categoryEntity.addToTrackers(trackerEntity)
         
-        do {
-           try saveContext()
-        } catch {
-            Logger.error("Failed to create tracker: \(error.localizedDescription)")
-        }
+        coreDataStack.saveContext()
+        
+        return trackerEntity
     }
     
     func fetchTracker(with id: UUID) -> TrackerCoreData? {
@@ -60,15 +63,28 @@ final class TrackerStore: DataStore, TrackerStoring {
         let categoryEntity = trackerEntity?.categories.first(where: { $0.title != Constants.pinnedCategoryTitle })
         return categoryEntity?.title ?? ""
     }
-    
-    func update(tracker: Tracker, in categoryTitle: String) {
-        let trackerCategoryStore = TrackerCategoryStore(context: context)
+
+    @discardableResult
+    func update(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData? {
+        let trackerCategoryStore = TrackerCategoryStore(coreDataStack: coreDataStack)
         guard let categoryEntity = trackerCategoryStore.fetchCategory(title: categoryTitle),
-              let trackerEntity = fetchTracker(with: tracker.id) else { return }
+              let trackerEntity = fetchTracker(with: tracker.id) else {
+            return nil
+        }
         
         trackerEntity.title = tracker.title
         trackerEntity.emoji = tracker.emoji
         trackerEntity.color = tracker.color
+        
+        if Set(trackerEntity.schedule) != Set(tracker.schedule) {
+            let deletedWeekdays = trackerEntity.schedule.filter { oldWeekday in
+                !tracker.schedule.contains(where: { $0 == oldWeekday })
+            }
+            
+            let recordStore = TrackerRecordStore(coreDataStack: coreDataStack)
+            deletedWeekdays.forEach{ recordStore.deleteRecord(tracker: tracker, weekday: $0) }
+        }
+        
         trackerEntity.schedule = tracker.schedule
         
         if !trackerEntity.categories.contains(categoryEntity) {
@@ -76,26 +92,55 @@ final class TrackerStore: DataStore, TrackerStoring {
             trackerEntity.categories.insert(categoryEntity)
         }
         
-        do {
-           try saveContext()
-        } catch {
-            Logger.error("Failed to update tracker: \(error.localizedDescription)")
-        }
+        coreDataStack.saveContext()
+        return trackerEntity
     }
     
+    @discardableResult
+    func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) -> TrackerCoreData? {
+        let trackerCategoryStore = TrackerCategoryStore(coreDataStack: coreDataStack)
+        guard let originalCategoryEntity = trackerCategoryStore.fetchCategory(title: originalCategoryTitle),
+              let newCategoryEntity = trackerCategoryStore.fetchCategory(title: newCategoryTitle),
+              let trackerEntity = fetchTracker(with: tracker.id) else {
+            return nil
+        }
+        
+        trackerEntity.title = tracker.title
+        trackerEntity.emoji = tracker.emoji
+        trackerEntity.color = tracker.color
+        trackerEntity.sectionTitle = newCategoryTitle
+        
+        if Set(trackerEntity.schedule) != Set(tracker.schedule) {
+            let deletedWeekdays = trackerEntity.schedule.filter { oldWeekday in
+                !tracker.schedule.contains(where: { $0 == oldWeekday })
+            }
+            
+            let recordStore = TrackerRecordStore(coreDataStack: coreDataStack)
+            deletedWeekdays.forEach{ recordStore.deleteRecord(tracker: tracker, weekday: $0) }
+        }
+        
+        trackerEntity.schedule = tracker.schedule
+
+        if trackerEntity.categories.contains(originalCategoryEntity) {
+            trackerEntity.categories.remove(originalCategoryEntity)
+            originalCategoryEntity.removeFromTrackers(trackerEntity)
+        }
+        
+        trackerEntity.categories.insert(newCategoryEntity)
+        
+        coreDataStack.saveContext()
+        return trackerEntity
+    }
+
     func delete(tracker: Tracker) {
         guard let trackerEntity = fetchTracker(with: tracker.id) else { return }
         context.delete(trackerEntity)
         
-        do {
-           try saveContext()
-        } catch {
-            Logger.error("Failed to delete tracker: \(error.localizedDescription)")
-        }
+        coreDataStack.saveContext()
     }
     
     func pin(tracker: Tracker) {
-        let trackerCategoryStore = TrackerCategoryStore(context: context)
+        let trackerCategoryStore = TrackerCategoryStore(coreDataStack: coreDataStack)
         
         guard let pinnedCategoryEntity = trackerCategoryStore.fetchCategory(title: Constants.pinnedCategoryTitle),
               let trackerEntity = fetchTracker(with: tracker.id) else { return }
@@ -103,15 +148,11 @@ final class TrackerStore: DataStore, TrackerStoring {
         trackerEntity.categories.insert(pinnedCategoryEntity)
         trackerEntity.sectionTitle = Constants.pinnedCategoryTitle
         
-        do {
-           try saveContext()
-        } catch {
-            Logger.error("Failed to pin tracker: \(error.localizedDescription)")
-        }
+        coreDataStack.saveContext()
     }
     
     func unpin(tracker: Tracker) {
-        let trackerCategoryStore = TrackerCategoryStore(context: context)
+        let trackerCategoryStore = TrackerCategoryStore(coreDataStack: coreDataStack)
         
         guard let pinnedCategoryEntity = trackerCategoryStore.fetchCategory(title: Constants.pinnedCategoryTitle),
               let trackerEntity = fetchTracker(with: tracker.id) else { return }
@@ -119,10 +160,6 @@ final class TrackerStore: DataStore, TrackerStoring {
         pinnedCategoryEntity.trackers.remove(trackerEntity)
         trackerEntity.sectionTitle = trackerEntity.categories.first?.title ?? ""
         
-        do {
-           try saveContext()
-        } catch {
-            Logger.error("Failed to unpin tracker: \(error.localizedDescription)")
-        }
+        coreDataStack.saveContext()
     }
 }
