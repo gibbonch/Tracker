@@ -63,16 +63,16 @@ final class TrackerEditingViewController: UIViewController {
         let textField = TitleTextField()
         textField.delegate = trackerTitleTextFieldDelegate
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        
         textField.text = viewModel.title
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("trackerTitle.placeholder", comment: "Text displayed on text field placeholder")
+        textField.textAlignment = Utilities.isCurrentLanguageRTL() ? .right : .left
         
         return textField
     }()
     
     private lazy var warningLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ограничение 38 символов"
+        label.text = NSLocalizedString("trackerTitle.warning", comment: "Text displayed on title limit warning")
         label.font = .systemFont(ofSize: 17, weight: .regular)
         label.textColor = .redApp
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -146,7 +146,7 @@ final class TrackerEditingViewController: UIViewController {
         self?.dismiss(animated: true)
     }
     
-    private lazy var dismissButton = UndoButton(title: "Отменить") { [weak self] in
+    private lazy var dismissButton = UndoButton(title: NSLocalizedString("cancel", comment: "Text displayed on cancel button")) { [weak self] in
         self?.dismiss(animated: true)
     }
     

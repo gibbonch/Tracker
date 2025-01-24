@@ -14,7 +14,7 @@ final class StatisticsViewController: UIViewController {
     private lazy var placeholderView: PlaceholderView = {
         let placeholder = PlaceholderView()
         placeholder.setImage(.statisticsPlaceholder)
-        placeholder.setTitle("Анализировать пока нечего")
+        placeholder.setTitle(NSLocalizedString("emptyStatsState.title", comment: "Text displayed on placeholder"))
         placeholder.translatesAutoresizingMaskIntoConstraints = false
         return placeholder
     }()
@@ -23,7 +23,7 @@ final class StatisticsViewController: UIViewController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        tabBarItem = UITabBarItem(title: "Статистка", image: .stats, selectedImage: nil)
+        tabBarItem = UITabBarItem(title: NSLocalizedString("statistics", comment: "Statistics title"), image: .stats, selectedImage: nil)
     }
     
     @available(*, unavailable)
@@ -43,7 +43,7 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Private Methods
     
     private func setupNavigationBar() {
-        title = "Статистика"
+        title = NSLocalizedString("statistics", comment: "Statistics title")
     }
 
     private func setupView() {

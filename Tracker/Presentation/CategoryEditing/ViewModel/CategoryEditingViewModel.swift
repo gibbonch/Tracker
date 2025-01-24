@@ -43,11 +43,11 @@ final class DefaultCategoryEditingViewModel: CategoryEditingViewModel {
         self.categoryStore = categoryStore
         
         if let title = title {
-            self.headerTitle = "Редактирование категории"
+            self.headerTitle = NSLocalizedString("title.editCategory", comment: "Edit category title")
             self.isNewCategory = false
             self.originalTitle = title
         } else {
-            self.headerTitle = "Новая категория"
+            self.headerTitle = NSLocalizedString("title.newCategory", comment: "New category title")
             self.isNewCategory = true
             self.originalTitle = nil
         }

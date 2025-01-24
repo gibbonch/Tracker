@@ -53,7 +53,7 @@ final class ColorCollectionViewDataSource: NSObject, UICollectionViewDataSource 
               kind == UICollectionView.elementKindSectionHeader
         else { return UICollectionReusableView() }
         
-        colorHeaderView.textLabel.text = "Цвет"
+        colorHeaderView.textLabel.text = NSLocalizedString("color", comment: "Color section title")
         return colorHeaderView
     }
 }

@@ -30,14 +30,14 @@ final class CategoryAndScheduleTableViewDataSource: NSObject, UITableViewDataSou
         let cell = prepareCell()
         
         if indexPath.row == 0 {
-            cell.textLabel?.text = "Категория"
+            cell.textLabel?.text = NSLocalizedString("category", comment: "Category section title")
             cell.detailTextLabel?.text = viewModel.category
         } else {
-            cell.textLabel?.text = "Расписание"
+            cell.textLabel?.text = NSLocalizedString("schedule", comment: "schedule section title")
             var schedule = viewModel.schedule
             Utilities.bringScheduleIntoRuFormat(&schedule)
             if schedule.count == 7 {
-                cell.detailTextLabel?.text = "Каждый день"
+                cell.detailTextLabel?.text = NSLocalizedString("schedule.everydayReplacement", comment: "Everyday schedule replacement")
             } else {
                 cell.detailTextLabel?.text = schedule.map { $0.toShortString() }.joined(separator: ", ")
             }

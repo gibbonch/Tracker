@@ -99,7 +99,7 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
         self.color = tracker.color
         
         self.isNewTracker = false
-        self.applyButtonText = "Сохранить"
+        self.applyButtonText = NSLocalizedString("save", comment: "Save action text")
         self.isApplyButtonEnabled = true
         self.completionsCount = completionsCount
     }
@@ -116,7 +116,7 @@ final class DefaultTrackerEditingViewModel: TrackerEditingViewModel {
         self.color = .clear
 
         self.isNewTracker = true
-        self.applyButtonText = "Создать"
+        self.applyButtonText = NSLocalizedString("create", comment: "Create action text")
         self.isApplyButtonEnabled = false
         self.completionsCount = nil
         self.schedule = trackerType == .regular ? [] : Weekday.allCases

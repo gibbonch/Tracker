@@ -30,13 +30,14 @@ final class CategoryEditingViewController: UIViewController {
         let textField = TitleTextField()
         textField.text = viewModel.title
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        textField.placeholder = "Введите название категории"
+        textField.placeholder = NSLocalizedString("categoryTitle.placeholder", comment: "Text displayed on text field as a placeholder")
+        textField.textAlignment = Utilities.isCurrentLanguageRTL() ? .right : .left
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     
     private lazy var acceptButton: FilledButton = {
-        let button = FilledButton(title: "Готово", isEnabled: viewModel.isCategoryCreationAllowed) { [weak self] in
+        let button = FilledButton(title: NSLocalizedString("done", comment: "Done actino text"), isEnabled: viewModel.isCategoryCreationAllowed) { [weak self] in
             self?.viewModel.createCategory { [weak self] in
                 self?.dismiss(animated: true)
             }
@@ -71,7 +72,7 @@ final class CategoryEditingViewController: UIViewController {
     // MARK: - Private Methods
     
     private func setupView() {
-        view.backgroundColor = UIColor(named: "whiteApp") ?? .white
+        view.backgroundColor = .whiteApp
         view.addSubview(headerLabel)
         view.addSubview(titleTextField)
         view.addSubview(acceptButton)

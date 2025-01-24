@@ -5,7 +5,7 @@
 //  Created by Александр Торопов on 10.12.2024.
 //
 
-import Foundation
+import UIKit
 
 final class Utilities {
     static func dayWord(for count: Int) -> String {
@@ -22,5 +22,9 @@ final class Utilities {
             let sunday = schedule.remove(at: index)
             schedule.append(sunday)
         }
+    }
+    
+    static func isCurrentLanguageRTL() -> Bool {
+        return Locale.characterDirection(forLanguage: Locale.current.languageCode ?? "") == .rightToLeft
     }
 }

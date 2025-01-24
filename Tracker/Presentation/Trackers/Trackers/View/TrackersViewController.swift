@@ -38,7 +38,6 @@ final class TrackersViewController: UIViewController {
     
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
-        datePicker.locale = Locale(identifier: "ru-RU")
         datePicker.calendar.firstWeekday = 2
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
@@ -50,8 +49,8 @@ final class TrackersViewController: UIViewController {
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
         searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.setValue("Отменить", forKey: "cancelButtonText")
-        searchController.searchBar.placeholder = "Поиск"
+        searchController.searchBar.setValue(NSLocalizedString("cancel", comment: "Text displayed on search cancel button"), forKey: "cancelButtonText")
+        searchController.searchBar.placeholder = NSLocalizedString("search", comment: "Search placeholder")
         searchController.searchBar.searchTextField.clearButtonMode = .never
         searchController.searchBar.delegate = self
         return searchController
@@ -98,7 +97,7 @@ final class TrackersViewController: UIViewController {
     init(viewModel: TrackersViewModel) {
         self.trackersViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        tabBarItem = UITabBarItem(title: "Трекеры", image: .trackers, selectedImage: nil)
+        tabBarItem = UITabBarItem(title: NSLocalizedString("trackers", comment: "Trackers title"), image: .trackers, selectedImage: nil)
     }
     
     @available(*, unavailable)
@@ -120,7 +119,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Private Methods
     
     private func setupNavigationBar() {
-        title = "Трекеры"
+        title = NSLocalizedString("trackers", comment: "Trackers title")
         navigationItem.leftBarButtonItem = addTrackerBarButtonItem
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         navigationItem.searchController = searchController
@@ -234,7 +233,13 @@ final class TrackersViewController: UIViewController {
     private func showPlaceholderView() {
         trackersCollectionView.isHidden = true
         placeholderView.setImage(searchController.searchBar.text?.isEmpty == true ? .trackersPlaceholder : .searchPlaceholder)
-        placeholderView.setTitle(searchController.searchBar.text?.isEmpty == true ? "Что будем отслеживать?" : "Ничего не найдено")
+        
+        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+            placeholderView.setTitle(NSLocalizedString("emptyState.searchTitle", comment: "Text displayed on empty search state"))
+        } else {
+            placeholderView.setTitle(NSLocalizedString("emptyState.title", comment: "Text displayed on empty state"))
+        }
+        
         placeholderView.isHidden = false
     }
     
@@ -316,7 +321,7 @@ extension TrackersViewController: UICollectionViewDelegate {
         let section = snapshot?.sectionIdentifiers[indexPath.section]
         let isPinned = section == .section(title: Constants.pinnedCategoryTitle)
         
-        let pinActionTitle = isPinned ? "Открепить" : "Закрепить"
+        let pinActionTitle = isPinned ? NSLocalizedString("unpin", comment: "Unpin action text") : NSLocalizedString("pin", comment: "Pin action text")
         let pinAction = UIAction(title: pinActionTitle) { [weak self] _ in
             if isPinned {
                 self?.trackersViewModel.didUnpinTracker(at: indexPath)
@@ -325,15 +330,15 @@ extension TrackersViewController: UICollectionViewDelegate {
             }
         }
         
-        let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+        let editAction = UIAction(title: NSLocalizedString("edit", comment: "Edit action text")) { [weak self] _ in
             guard let self else { return }
             
             let trackerEditingViewModel = trackersViewModel.createTrackerEditingViewModel(at: indexPath)
-            let trackerEditingViewController = TrackerEditingViewController(title: "Редактирование привычки", viewModel: trackerEditingViewModel)
+            let trackerEditingViewController = TrackerEditingViewController(title: NSLocalizedString("title.existingTracker", comment: "Existing tracker title"), viewModel: trackerEditingViewModel)
             present(trackerEditingViewController, animated: true)
         }
         
-        let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+        let deleteAction = UIAction(title: NSLocalizedString("delete", comment: "Delete action text"), attributes: .destructive) { [weak self] _ in
             self?.presentDeleteTrackerAlert(indexPath: indexPath)
         }
         
@@ -341,11 +346,15 @@ extension TrackersViewController: UICollectionViewDelegate {
     }
     
     private func presentDeleteTrackerAlert(indexPath: IndexPath) {
-        let alert = UIAlertController(title: nil, message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let alert = UIAlertController(title: nil,
+                                      message:  NSLocalizedString("deleteTracker.confirmation", comment: "Text displayed on delete alert"),
+                                      preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title:  NSLocalizedString("delete", comment: "Delete action text"),
+                                         style: .destructive) { [weak self] _ in
             self?.trackersViewModel.didDeleteTracker(at: indexPath)
         }
-        let cancelAction = UIAlertAction(title: "Отменить", style: .cancel) { _ in }
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: "Cancel action text"),
+                                         style: .cancel)
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
         present(alert, animated: true)

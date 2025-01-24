@@ -1,0 +1,68 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Александр Торопов on 24.01.2025.
+  
+*/
+
+// MARK: - Onboarding
+
+"blueView.message" = "Отслеживайте только то, что хотите";
+"redView.message" = "Даже если это не литры воды и йога";
+"skip" = "Вот это технологии!";
+
+// MARK: - Trackers
+
+"trackers" = "Трекеры";
+"search" = "Поиск";
+"emptyState.title" = "Что будем отслеживать?";
+"emptyState.searchTitle" = "Ничего не найдено";
+"pinnedCategory.title" = "Закрепленные";
+"deleteTracker.confirmation" = "Уверены что хотите удалить трекер?";
+
+// MARK: - Statistics
+
+"statistics" = "Статистика";
+"emptyStatsState.title" = "Анализировать пока нечего";
+
+// MARK: - Tracker Creation
+
+"trackerCreation.title" = "Создание трекера";
+"habit" = "Привычка";
+"irregularEvent" = "Нерегулярное событие";
+
+// MARK: - Tracker Editing
+
+"title.newTracker" = "Новая привычка";
+"title.newIrregularTracker" = "Новое нерегулярное событие";
+"title.existingTracker" = "Редактирование привычки";
+"trackerTitle.placeholder" = "Введите название трекера";
+"trackerTitle.warning" = "Ограничение 38 символов";
+"category" = "Категория";
+"schedule" = "Расписание";
+"schedule.everydayReplacement" = "Каждый день";
+"color" = "Цвет";
+
+// MARK: - Tracker Categories
+
+"emptyCategoryState.title" = "Привычки и события можно объединить по смыслу";
+"addCategory" = "Добавить категорию";
+"deleteCategory.confirmation" = "Эта категория точно не нужна?";
+
+// MARK: - Tracker Category Editing
+
+"categoryTitle.placeholder" = "Введите название категории";
+"title.newCategory" = "Новая категория";
+"title.editCategory" = "Редактирование категории";
+
+// MARK: - Actions
+
+"pin" = "Закрепить";
+"unpin" = "Открепить";
+"edit" = "Редактировать";
+"delete" = "Удалить";
+"cancel" = "Отменить";
+"save" = "Сохранить";
+"create" = "Создать";
+"done" = "Готово";

@@ -18,7 +18,7 @@ final class TrackerCategoriesViewController: UIViewController {
     
     private lazy var headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = NSLocalizedString("category", comment: "Category title")
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .blackApp
         label.textAlignment = .center
@@ -45,7 +45,7 @@ final class TrackerCategoriesViewController: UIViewController {
     private lazy var placeholderView: PlaceholderView = {
         let placeholder = PlaceholderView()
         placeholder.setImage(.trackersPlaceholder)
-        placeholder.setTitle("Привычки и события можно\nобъединить по смыслу")
+        placeholder.setTitle(NSLocalizedString("emptyCategoryState.title", comment: "Placeholder text"))
         placeholder.isHidden = viewModel.categoryTitles.count != 0
         placeholder.translatesAutoresizingMaskIntoConstraints = false
         return placeholder
@@ -69,7 +69,7 @@ final class TrackerCategoriesViewController: UIViewController {
         return tableView
     }()
     
-    private lazy var createCategoryButton = FilledButton(title: "Добавить категорию") { [weak self] in
+    private lazy var createCategoryButton = FilledButton(title: NSLocalizedString("addCategory", comment: "Text displayed on add category button")) { [weak self] in
         guard let self else { return }
         
         let categoryEditingViewModel = viewModel.createCategoryEditingViewModel(indexPath: nil)
@@ -231,13 +231,13 @@ extension TrackerCategoriesViewController: UITableViewDelegate {
                    contextMenuConfigurationForRowAt indexPath: IndexPath,
                    point: CGPoint) -> UIContextMenuConfiguration? {
         UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+            let editAction = UIAction(title: NSLocalizedString("edit", comment: "Edit action text")) { [weak self] _ in
                 guard let self else { return }
                 let categoryEditingViewModel = viewModel.createCategoryEditingViewModel(indexPath: indexPath)
                 present(CategoryEditingViewController(viewModel: categoryEditingViewModel), animated: true)
             }
             
-            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+            let deleteAction = UIAction(title: NSLocalizedString("delete", comment: "Delete action text"), attributes: .destructive) { [weak self] _ in
                 self?.presentDeletionAlertForCell(at: indexPath)
             }
             
@@ -246,11 +246,11 @@ extension TrackerCategoriesViewController: UITableViewDelegate {
     }
     
     private func presentDeletionAlertForCell(at indexPath: IndexPath) {
-        let alert = UIAlertController(title: "Эта категория точно не нужна?", message: nil, preferredStyle: .actionSheet)
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let alert = UIAlertController(title: NSLocalizedString("deleteCategory.confirmation", comment: "Delete confirmation message"), message: nil, preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: NSLocalizedString("delete", comment: "Delete action text"), style: .destructive) { [weak self] _ in
             self?.viewModel.deleteCategory(at: indexPath)
         }
-        let cancelAction = UIAlertAction(title: "Отменить", style: .cancel) { _ in }
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: "Cancel action text"), style: .cancel) { _ in }
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
         present(alert, animated: true)

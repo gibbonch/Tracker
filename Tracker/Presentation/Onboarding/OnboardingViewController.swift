@@ -27,7 +27,7 @@ final class OnboardingViewController: UIPageViewController {
         return pageControl
     }()
     
-    private lazy var continueButton = FilledButton(title: "Вот это технологии!") { [weak self] in
+    private lazy var continueButton = FilledButton(title: NSLocalizedString("skip", comment: "Text displayed on button")) { [weak self] in
         self?.completion()
     }
     
@@ -82,8 +82,8 @@ final class OnboardingViewController: UIPageViewController {
     }
     
     private func setupPages() {
-        let page1 = createPage(text: "Отслеживайте только то, что хотите", image: .onboardingBackground1)
-        let page2 = createPage(text: "Даже если это не литры воды и йога", image: .onboardingBackground2)
+        let page1 = createPage(text: NSLocalizedString("blueView.message", comment: "Text displayed on blue view"), image: .onboardingBackground1)
+        let page2 = createPage(text: NSLocalizedString("redView.message", comment: "Text displayed on red view"), image: .onboardingBackground2)
         pages = [page1, page2]
     }
     

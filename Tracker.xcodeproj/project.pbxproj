@@ -34,6 +34,7 @@
 		187295512D3BE863004B4D18 /* CategoryEditingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187295502D3BE863004B4D18 /* CategoryEditingViewModel.swift */; };
 		187295582D3D0045004B4D18 /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187295572D3D0045004B4D18 /* TestCoreDataStack.swift */; };
 		1872955A2D3D00FF004B4D18 /* TrackerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187295592D3D00FF004B4D18 /* TrackerStoreTests.swift */; };
+		1872955D2D43CA8F004B4D18 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1872955B2D43CA8F004B4D18 /* Localizable.strings */; };
 		187FBB532CE4F9880079266A /* UndoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB522CE4F9880079266A /* UndoButton.swift */; };
 		187FBB552CE4FF900079266A /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB542CE4FF900079266A /* ScheduleTableViewCell.swift */; };
 		187FBB642CE5E82A0079266A /* TrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187FBB632CE5E82A0079266A /* TrackersViewModel.swift */; };
@@ -120,6 +121,13 @@
 		187295502D3BE863004B4D18 /* CategoryEditingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditingViewModel.swift; sourceTree = "<group>"; };
 		187295572D3D0045004B4D18 /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
 		187295592D3D00FF004B4D18 /* TrackerStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreTests.swift; sourceTree = "<group>"; };
+		1872955C2D43CA8F004B4D18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1872955E2D43CB83004B4D18 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1872955F2D43CB83004B4D18 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		187295602D43CB8F004B4D18 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		187295612D43CB8F004B4D18 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		187295622D43CB94004B4D18 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		187295632D43CB95004B4D18 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		187FBB522CE4F9880079266A /* UndoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoButton.swift; sourceTree = "<group>"; };
 		187FBB542CE4FF900079266A /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		187FBB632CE5E82A0079266A /* TrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewModel.swift; sourceTree = "<group>"; };
@@ -222,6 +230,7 @@
 				180B5CB72CDBD78F003FDE88 /* Assets.xcassets */,
 				180B5CB92CDBD78F003FDE88 /* LaunchScreen.storyboard */,
 				180B5CBC2CDBD78F003FDE88 /* Info.plist */,
+				1872955B2D43CA8F004B4D18 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -679,6 +688,9 @@
 			knownRegions = (
 				en,
 				Base,
+				ar,
+				de,
+				ru,
 			);
 			mainGroup = 180B5CA22CDBD78E003FDE88;
 			productRefGroup = 180B5CAC2CDBD78E003FDE88 /* Products */;
@@ -697,6 +709,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */,
+				1872955D2D43CA8F004B4D18 /* Localizable.strings in Resources */,
 				180B5CB82CDBD78F003FDE88 /* Assets.xcassets in Resources */,
 				180B5CBB2CDBD78F003FDE88 /* Base in Resources */,
 			);
@@ -808,8 +821,22 @@
 			isa = PBXVariantGroup;
 			children = (
 				180B5CBA2CDBD78F003FDE88 /* Base */,
+				1872955E2D43CB83004B4D18 /* ar */,
+				187295602D43CB8F004B4D18 /* de */,
+				187295622D43CB94004B4D18 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		1872955B2D43CA8F004B4D18 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1872955C2D43CA8F004B4D18 /* en */,
+				1872955F2D43CB83004B4D18 /* ar */,
+				187295612D43CB8F004B4D18 /* de */,
+				187295632D43CB95004B4D18 /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -820,6 +847,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -883,6 +911,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

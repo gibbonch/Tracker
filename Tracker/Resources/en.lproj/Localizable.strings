@@ -1,0 +1,69 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Александр Торопов on 24.01.2025.
+  
+*/
+
+// MARK: - Onboarding
+
+"blueView.message" = "Track only what you want";
+"redView.message" = "Even if it's not liters of water and yoga";
+"skip" = "What a technology!";
+
+// MARK: - Trackers
+
+"trackers" = "Trackers";
+"search" = "Search";
+"emptyState.title" = "What shall we track?";
+"emptyState.searchTitle" = "Nothing found";
+"pinnedCategory.title" = "Pinned";
+"deleteTracker.confirmation" = "Are you sure you want to delete the tracker?";
+
+// MARK: - Statistics
+
+"statistics" = "Statistics";
+"emptyStatsState.title" = "Nothing to analyze yet";
+
+// MARK: - Tracker Creation
+
+"trackerCreation.title" = "Tracker Creation";
+"habit" = "Habit";
+"irregularEvent" = "Irregular Event";
+
+// MARK: - Tracker Editing
+
+"title.newTracker" = "New Habit";
+"title.newIrregularTracker" = "New Irregular Event";
+"title.existingTracker" = "Edit Habit";
+"trackerTitle.placeholder" = "Enter tracker name";
+"trackerTitle.warning" = "Limit of 38 characters";
+"category" = "Category";
+"schedule" = "Schedule";
+"schedule.everydayReplacement" = "Every day";
+"color" = "Color";
+
+// MARK: - Tracker Categories
+
+"emptyCategoryState.title" = "Habits and events can be grouped meaningfully";
+"addCategory" = "Add Category";
+"deleteCategory.confirmation" = "Are you sure this category is not needed?";
+
+// MARK: - Tracker Category Editing
+
+"categoryTitle.placeholder" = "Enter category name";
+"title.newCategory" = "New Category";
+"title.editCategory" = "Edit Category";
+
+// MARK: - Actions
+
+"pin" = "Pin";
+"unpin" = "Unpin";
+"edit" = "Edit";
+"delete" = "Delete";
+"cancel" = "Cancel";
+"save" = "Save";
+"create" = "Create";
+"done" = "Done";
+

@@ -1,0 +1,69 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Александр Торопов on 24.01.2025.
+  
+*/
+
+// MARK: - Onboarding
+
+"blueView.message" = "تتبع فقط ما تريد";
+"redView.message" = "حتى لو لم يكن لترات الماء واليوغا";
+"skip" = "يا لها من تقنية!";
+
+// MARK: - Trackers
+
+"trackers" = "المتعقبات";
+"search" = "بحث";
+"emptyState.title" = "ماذا سنتعقب؟";
+"emptyState.searchTitle" = "لم يتم العثور على شيء";
+"pinnedCategory.title" = "المثبّتة";
+"deleteTracker.confirmation" = "هل أنت متأكد أنك تريد حذف المتعقب؟";
+
+// MARK: - Statistics
+
+"statistics" = "الإحصائيات";
+"emptyStatsState.title" = "لا يوجد شيء لتحليله حتى الآن";
+
+// MARK: - Tracker Creation
+
+"trackerCreation.title" = "إنشاء متعقب";
+"habit" = "عادة";
+"irregularEvent" = "حدث غير منتظم";
+
+// MARK: - Tracker Editing
+
+"title.newTracker" = "عادة جديدة";
+"title.newIrregularTracker" = "حدث غير منتظم جديد";
+"title.existingTracker" = "تعديل العادة";
+"trackerTitle.placeholder" = "أدخل اسم المتعقب";
+"trackerTitle.warning" = "الحد الأقصى ٣٨ حرفًا";
+"category" = "فئة";
+"schedule" = "الجدول";
+"schedule.everydayReplacement" = "كل يوم";
+"color" = "اللون";
+
+// MARK: - Tracker Categories
+
+"emptyCategoryState.title" = "يمكن جمع العادات والأحداث بشكل منطقي";
+"addCategory" = "إضافة فئة";
+"deleteCategory.confirmation" = "هل أنت متأكد أنك لا تحتاج هذه الفئة؟";
+
+// MARK: - Tracker Category Editing
+
+"categoryTitle.placeholder" = "أدخل اسم الفئة";
+"title.newCategory" = "فئة جديدة";
+"title.editCategory" = "تعديل الفئة";
+
+// MARK: - Actions
+
+"pin" = "تثبيت";
+"unpin" = "إلغاء التثبيت";
+"edit" = "تعديل";
+"delete" = "حذف";
+"cancel" = "إلغاء";
+"save" = "حفظ";
+"create" = "إنشاء";
+"done" = "تم";
+

@@ -22,7 +22,7 @@ final class TrackerScheduleViewController: UIViewController {
     
     private lazy var headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = NSLocalizedString("schedule", comment: "Schedule title")
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .blackApp
         label.textAlignment = .center
@@ -60,7 +60,7 @@ final class TrackerScheduleViewController: UIViewController {
         return tableView
     }()
     
-    private lazy var applyButton = FilledButton(title: "Готово") { [weak self] in
+    private lazy var applyButton = FilledButton(title: NSLocalizedString("done", comment: "Done action text")) { [weak self] in
         self?.viewModel.didEndScheduleEditing()
         self?.dismiss(animated: true)
     }

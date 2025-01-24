@@ -13,18 +13,18 @@ final class TrackerCreationViewController: UIViewController {
     
     private lazy var headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Создание трекера"
+        label.text = NSLocalizedString("trackerCreation.title", comment: "Text displayed as title")
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var regularEventButton = FilledButton(title: "Привычка") { [weak self] in
+    private lazy var regularEventButton = FilledButton(title: NSLocalizedString("habit", comment: "Habit text")) { [weak self] in
         self?.presentTrackerEditingViewController(trackerType: .regular)
     }
     
-    private lazy var singleEventButton = FilledButton(title: "Нерегулярное событие") { [weak self] in
+    private lazy var singleEventButton = FilledButton(title: NSLocalizedString("irregularEvent", comment: "Irregular event text")) { [weak self] in
         self?.presentTrackerEditingViewController(trackerType: .single)
     }
     
@@ -69,8 +69,9 @@ final class TrackerCreationViewController: UIViewController {
     private func presentTrackerEditingViewController(trackerType: TrackerType) {
         let trackerStore = TrackerStore(coreDataStack: CoreDataStack.shared)
         let trackerEditingViewModel = DefaultTrackerEditingViewModel(trackerStore: trackerStore, trackerType: trackerType)
-        let trackerEditingViewController = TrackerEditingViewController(title: trackerType == .regular ? "Новая привычка" : "Новое нерегулярное событие",
-                                                                        viewModel: trackerEditingViewModel)
+        let trackerEditingViewController = TrackerEditingViewController(
+            title: trackerType == .regular ? NSLocalizedString("title.newTracker", comment: "New tracker title") : NSLocalizedString("title.newIrregularTracker", comment: "New irregular tracker title"),
+            viewModel: trackerEditingViewModel)
         present(trackerEditingViewController, animated: true)
     }
 }
