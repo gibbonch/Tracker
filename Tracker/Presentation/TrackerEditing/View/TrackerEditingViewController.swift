@@ -55,7 +55,8 @@ final class TrackerEditingViewController: UIViewController {
         label.textAlignment = .center
         label.baselineAdjustment = .alignCenters
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "\(viewModel.completionsCount ?? 0) \(Utilities.dayWord(for: viewModel.completionsCount ?? 0))"
+        let cnt = viewModel.completionsCount ?? 0
+        label.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: "Number of tracked days"), cnt)
         return label
     }()
     

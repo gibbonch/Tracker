@@ -103,7 +103,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     private func updateCompletionsCount(with cnt: Int) {
-        dayLabel.text = "\(cnt) \(Utilities.dayWord(for: cnt))"
+        dayLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: "Number of tracked days"), cnt)
     }
     
     private func updateButtonAppearance(isCompleted: Bool) {
