@@ -20,6 +20,14 @@
 "emptyState.searchTitle" = "Ничего не найдено";
 "pinnedCategory.title" = "Закрепленные";
 "deleteTracker.confirmation" = "Уверены что хотите удалить трекер?";
+"filters" = "Фильтры";
+
+// MARK: - Filters
+
+"filter.all" = "Все трекеры";
+"filter.today" = "Трекеры на сегодня";
+"filter.completed" = "Завершенные";
+"filter.active" = "Не завершенные";
 
 // MARK: - Statistics
 

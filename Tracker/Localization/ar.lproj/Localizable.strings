@@ -20,6 +20,14 @@
 "emptyState.searchTitle" = "لم يتم العثور على شيء";
 "pinnedCategory.title" = "المثبّتة";
 "deleteTracker.confirmation" = "هل أنت متأكد أنك تريد حذف المتعقب؟";
+"filters" = "الفلاتر";
+
+// MARK: - Filters
+
+"filter.all" = "جميع أجهزة التتبع";
+"filter.today" = "بتتبع لهذا اليوم";
+"filter.completed" = "اكتمل";
+"filter.active" = "غير مكتمل";
 
 // MARK: - Statistics
 

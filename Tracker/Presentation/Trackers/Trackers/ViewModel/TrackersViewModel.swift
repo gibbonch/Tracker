@@ -22,6 +22,7 @@ protocol TrackersViewModel: AnyObject {
     
     func createTrackerEditingViewModel(at indexPath: IndexPath) -> any TrackerEditingViewModel
     func createTrackerCellViewModel(at indexPath: IndexPath) -> any TrackerCellViewModel
+    func createFiltersViewModel() -> any FiltersViewModel
 }
 
 // MARK: - DefaultTrackersViewModel
@@ -72,8 +73,7 @@ final class DefaultTrackersViewModel: TrackersViewModel {
     }
     
     func didUpdate(filter: TrackerFilter) {
-        self.filter = filter
-        trackerProvider.updateTrackerQuery(trackerQuery)
+        
     }
     
     func didDeleteTracker(at indexPath: IndexPath) {
@@ -114,6 +114,18 @@ final class DefaultTrackersViewModel: TrackersViewModel {
                                               tracker: tracker,
                                               completionsCount: completionsCount,
                                               categoryTitle: categoryTitle)
+    }
+    
+    func createFiltersViewModel() -> any FiltersViewModel {
+        let viewModel = DefaultFiltersViewModel(filter: filter)
+        viewModel.onChangeSelectedFilter = { [weak self] filter in
+            guard let self else {
+                return
+            }
+            self.filter = filter
+            trackerProvider.updateTrackerQuery(trackerQuery)
+        }
+        return viewModel
     }
 }
 

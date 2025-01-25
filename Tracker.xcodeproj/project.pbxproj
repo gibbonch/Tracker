@@ -16,6 +16,8 @@
 		181F9F1E2D04692C00B0F835 /* TrackerCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F9F1D2D04692C00B0F835 /* TrackerCellViewModel.swift */; };
 		181F9F752D07759100B0F835 /* TrackerCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F9F722D07759100B0F835 /* TrackerCreationViewController.swift */; };
 		1833F4D92D44E75200CA7A48 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1833F4D72D44E75200CA7A48 /* InfoPlist.strings */; };
+		1833F4F32D450C4000CA7A48 /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F4F22D450C4000CA7A48 /* FiltersViewController.swift */; };
+		1833F4F52D4510DB00CA7A48 /* FiltersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F4F42D4510DB00CA7A48 /* FiltersViewModel.swift */; };
 		1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1841E4B02D2AA55D00EC7933 /* Emojis.plist */; };
 		1841E4B32D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */; };
 		1847BBAE2CE9D13200092A7A /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */; };
@@ -107,6 +109,8 @@
 		1833F4DA2D44E77500CA7A48 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1833F4DB2D44E77600CA7A48 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1833F4DC2D44E77700CA7A48 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1833F4F22D450C4000CA7A48 /* FiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
+		1833F4F42D4510DB00CA7A48 /* FiltersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewModel.swift; sourceTree = "<group>"; };
 		1841E4B02D2AA55D00EC7933 /* Emojis.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Emojis.plist; sourceTree = "<group>"; };
 		1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -311,6 +315,31 @@
 				1833F4D72D44E75200CA7A48 /* InfoPlist.strings */,
 			);
 			path = Localization;
+			sourceTree = "<group>";
+		};
+		1833F4EF2D450BEC00CA7A48 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				1833F4F02D450BFF00CA7A48 /* View */,
+				1833F4F12D450C0E00CA7A48 /* ViewModel */,
+			);
+			path = Filters;
+			sourceTree = "<group>";
+		};
+		1833F4F02D450BFF00CA7A48 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1833F4F22D450C4000CA7A48 /* FiltersViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1833F4F12D450C0E00CA7A48 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1833F4F42D4510DB00CA7A48 /* FiltersViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		1841E4B42D2AA78900EC7933 /* ColorCollectionView */ = {
@@ -576,6 +605,7 @@
 				187295312D39665C004B4D18 /* Onboarding */,
 				181F9F5A2D05E38700B0F835 /* TabBar */,
 				18D20E562CE27E7C007E9083 /* Trackers */,
+				1833F4EF2D450BEC00CA7A48 /* Filters */,
 				18D20E2F2CDD22A1007E9083 /* Statistics */,
 				18D20E592CE27F73007E9083 /* TrackerCreation */,
 				18CB89FC2D07799100BE9F71 /* TrackerEditing */,
@@ -761,6 +791,7 @@
 				187294F52D343A78004B4D18 /* Binding.swift in Sources */,
 				180B5CAF2CDBD78E003FDE88 /* AppDelegate.swift in Sources */,
 				189AC1CF2D11BC3D00717D6F /* DataStore.swift in Sources */,
+				1833F4F52D4510DB00CA7A48 /* FiltersViewModel.swift in Sources */,
 				18D20E3F2CDE54AE007E9083 /* TrackerCardView.swift in Sources */,
 				189AC19F2D1001DA00717D6F /* TrackerStore.swift in Sources */,
 				189AC1C72D11A72C00717D6F /* UIColorTransformer.swift in Sources */,
@@ -791,6 +822,7 @@
 				18CB8A2F2D0C449700BE9F71 /* PickerHeaderReusableView.swift in Sources */,
 				18CB8A022D077A0F00BE9F71 /* TrackerEditingViewModel.swift in Sources */,
 				181F9EC42CFDE76B00B0F835 /* TrackerQuery.swift in Sources */,
+				1833F4F32D450C4000CA7A48 /* FiltersViewController.swift in Sources */,
 				189AC1392D0C59FE00717D6F /* ColorCollectionViewDataSource.swift in Sources */,
 				18D20DED2CDBF6A6007E9083 /* PlaceholderView.swift in Sources */,
 				187FBB532CE4F9880079266A /* UndoButton.swift in Sources */,

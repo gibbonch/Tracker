@@ -20,6 +20,14 @@
 "emptyState.searchTitle" = "Nichts gefunden";
 "pinnedCategory.title" = "Angeheftet";
 "deleteTracker.confirmation" = "Sind Sie sicher, dass Sie den Tracker löschen möchten?";
+"filters" = "Preisauswahl";
+
+// MARK: - Filters
+
+"filter.all" = "Alle Tracker";
+"filter.today" = "Tracker für heute";
+"filter.completed" = "Abgeschlossene";
+"filter.active" = "Unvollendete";
 
 // MARK: - Statistics
 

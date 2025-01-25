@@ -20,6 +20,14 @@
 "emptyState.searchTitle" = "Nothing found";
 "pinnedCategory.title" = "Pinned";
 "deleteTracker.confirmation" = "Are you sure you want to delete the tracker?";
+"filters" = "Filters";
+
+// MARK: - Filters
+
+"filter.all" = "All trackers";
+"filter.today" = "Trackers for today";
+"filter.completed" = "Completed";
+"filter.active" = "Uncompleted";
 
 // MARK: - Statistics
 

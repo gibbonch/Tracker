@@ -86,10 +86,22 @@ final class TrackersViewController: UIViewController {
         collectionView.register(TrackerHeaderView.self,
                                         forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                         withReuseIdentifier: TrackerHeaderView.identifier)
-        collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 24, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 90, right: 0)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
+    }()
+    
+    private lazy var filterButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(NSLocalizedString("filters", comment: "Text displayed on filter button"), for: .normal)
+        button.backgroundColor = .blueApp
+        button.layer.cornerRadius = 16
+        button.titleLabel?.textColor = .white
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
+        button.addTarget(self, action: #selector(didTapFilterButton), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     // MARK: - Initializer
@@ -131,7 +143,7 @@ final class TrackersViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .whiteApp
-        view.addSubviews(trackersCollectionView, placeholderView)
+        view.addSubviews(trackersCollectionView, placeholderView, filterButton)
         
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
         
@@ -154,6 +166,11 @@ final class TrackersViewController: UIViewController {
             placeholderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             placeholderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
     
@@ -272,6 +289,12 @@ final class TrackersViewController: UIViewController {
         
         datePicker.setDate(updatedDate, animated: true)
         trackersViewModel.didUpdate(date: updatedDate)
+    }
+    
+    @objc private func didTapFilterButton() {
+        let filtersViewModel = trackersViewModel.createFiltersViewModel()
+        let filterViewController = FiltersViewController(viewModel: filtersViewModel)
+        present(filterViewController, animated: true)
     }
 }
 
