@@ -15,6 +15,7 @@
 		181F9EC42CFDE76B00B0F835 /* TrackerQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F9EC32CFDE76B00B0F835 /* TrackerQuery.swift */; };
 		181F9F1E2D04692C00B0F835 /* TrackerCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F9F1D2D04692C00B0F835 /* TrackerCellViewModel.swift */; };
 		181F9F752D07759100B0F835 /* TrackerCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181F9F722D07759100B0F835 /* TrackerCreationViewController.swift */; };
+		1833F4D92D44E75200CA7A48 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1833F4D72D44E75200CA7A48 /* InfoPlist.strings */; };
 		1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1841E4B02D2AA55D00EC7933 /* Emojis.plist */; };
 		1841E4B32D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */; };
 		1847BBAE2CE9D13200092A7A /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */; };
@@ -102,6 +103,10 @@
 		181F9EC32CFDE76B00B0F835 /* TrackerQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerQuery.swift; sourceTree = "<group>"; };
 		181F9F1D2D04692C00B0F835 /* TrackerCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCellViewModel.swift; sourceTree = "<group>"; };
 		181F9F722D07759100B0F835 /* TrackerCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerCreationViewController.swift; sourceTree = "<group>"; };
+		1833F4D82D44E75200CA7A48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1833F4DA2D44E77500CA7A48 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1833F4DB2D44E77600CA7A48 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1833F4DC2D44E77700CA7A48 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1841E4B02D2AA55D00EC7933 /* Emojis.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Emojis.plist; sourceTree = "<group>"; };
 		1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -225,6 +230,7 @@
 				1898D6602D218F7A00EDCD42 /* Logging */,
 				18D20E302CDD22ED007E9083 /* Common */,
 				180B5CC22CDBD90A003FDE88 /* Resources */,
+				1833F4D62D44E72F00CA7A48 /* Localization */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -235,8 +241,6 @@
 				180B5CB72CDBD78F003FDE88 /* Assets.xcassets */,
 				180B5CB92CDBD78F003FDE88 /* LaunchScreen.storyboard */,
 				180B5CBC2CDBD78F003FDE88 /* Info.plist */,
-				1872955B2D43CA8F004B4D18 /* Localizable.strings */,
-				187295642D440255004B4D18 /* Localizable.stringsdict */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -297,6 +301,16 @@
 				187294F42D343A78004B4D18 /* Binding.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		1833F4D62D44E72F00CA7A48 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				1872955B2D43CA8F004B4D18 /* Localizable.strings */,
+				187295642D440255004B4D18 /* Localizable.stringsdict */,
+				1833F4D72D44E75200CA7A48 /* InfoPlist.strings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		1841E4B42D2AA78900EC7933 /* ColorCollectionView */ = {
@@ -715,6 +729,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */,
+				1833F4D92D44E75200CA7A48 /* InfoPlist.strings in Resources */,
 				1872955D2D43CA8F004B4D18 /* Localizable.strings in Resources */,
 				180B5CB82CDBD78F003FDE88 /* Assets.xcassets in Resources */,
 				187295662D440255004B4D18 /* Localizable.stringsdict in Resources */,
@@ -833,6 +848,17 @@
 				187295622D43CB94004B4D18 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		1833F4D72D44E75200CA7A48 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1833F4D82D44E75200CA7A48 /* en */,
+				1833F4DA2D44E77500CA7A48 /* ar */,
+				1833F4DB2D44E77600CA7A48 /* de */,
+				1833F4DC2D44E77700CA7A48 /* ru */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		1872955B2D43CA8F004B4D18 /* Localizable.strings */ = {
