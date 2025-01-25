@@ -10,7 +10,9 @@ import CoreData
 // MARK: - TrackerCategoryStoring
 
 protocol TrackerCategoryStoring {
+    @discardableResult
     func createCategory(title: String) -> TrackerCategoryCoreData?
+    
     func fetchCategory(title: String) -> TrackerCategoryCoreData?
     func updateCategory(title: String, newTitle: String)
     func deleteCategory(title: String)
@@ -72,9 +74,27 @@ final class TrackerCategoryStore: DataStore, TrackerCategoryStoring {
     // MARK: - Private Methods
     
     private func createPinnedTrackerCategory() {
-        if let _ = fetchCategory(title: Constants.pinnedCategoryTitle) {
-            return
+        let pinnedCategoryTitleForCurrentLocale = Constants.pinnedCategoryTitle
+        let locales = Bundle.main.localizations
+        
+        let key = "pinnedCategory.title"
+        
+        for locale in locales {
+            guard let path = Bundle.main.path(forResource: locale, ofType: "lproj"),
+                  let bundle = Bundle(path: path) else {
+                continue
+            }
+            
+            let title = bundle.localizedString(forKey: key, value: nil, table: nil)
+            
+            if let _ = fetchCategory(title: title) {
+                if pinnedCategoryTitleForCurrentLocale != title {
+                    updateCategory(title: title, newTitle: pinnedCategoryTitleForCurrentLocale)
+                }
+                return
+            }
         }
+        
         createCategory(title: Constants.pinnedCategoryTitle)
     }
 }

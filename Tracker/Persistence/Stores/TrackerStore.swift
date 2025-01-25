@@ -10,12 +10,18 @@ import CoreData
 // MARK: - TrackerStoring
 
 protocol TrackerStoring {
+    @discardableResult
     func create(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData?
+    
+    @discardableResult
+    func update(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData?
+    
+    @discardableResult
+    func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) -> TrackerCoreData?
+    
     func fetchTracker(with id: UUID) -> TrackerCoreData?
     func fetchCategoryTitle(tracker: Tracker) -> String
     func delete(tracker: Tracker)
-    func update(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData?
-    func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) -> TrackerCoreData?
     func pin(tracker: Tracker)
     func unpin(tracker: Tracker)
 }
@@ -23,6 +29,15 @@ protocol TrackerStoring {
 // MARK: - TrackerStore
 
 final class TrackerStore: DataStore, TrackerStoring {
+    
+    // MARK: - Initializer
+    
+    override init(coreDataStack: CoreDataStack) {
+        super.init(coreDataStack: coreDataStack)
+        
+        // Correct localization of the pinned category
+        let _ = TrackerCategoryStore(coreDataStack: coreDataStack)
+    }
     
     // MARK: - Public Methods
     
