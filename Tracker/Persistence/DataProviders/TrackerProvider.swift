@@ -76,6 +76,8 @@ final class TrackerProvider: NSObject, TrackerProviding {
     // MARK: - Public Methods
     
     func updateTrackerQuery(_ trackerQuery: TrackerQuery) {
+        var predicates: [NSPredicate] = []
+        
         let schedulePredicate = NSPredicate(
             format: "%K & %@ != 0 OR %K == %@",
             #keyPath(TrackerCoreData.scheduleMask), NSNumber(value: trackerQuery.date.weekday?.bitMask ?? 0),
@@ -89,14 +91,32 @@ final class TrackerProvider: NSObject, TrackerProviding {
         )
         
         let completionsPredicate = NSPredicate(
-            format: "(%K == %@ AND (ANY %K.date == %@ OR NONE %K.date != nil)) OR %K == %@",
+            format: "((%K == %@ AND (ANY %K.date == %@ OR NONE %K.date != nil)) OR %K == %@)",
             #keyPath(TrackerCoreData.type), TrackerType.single.rawValue,
             #keyPath(TrackerCoreData.records), trackerQuery.date as NSDate,
             #keyPath(TrackerCoreData.records),
             #keyPath(TrackerCoreData.type), TrackerType.regular.rawValue
         )
         
-        let trackersPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [schedulePredicate, searchTextPredicate, completionsPredicate])
+        predicates.append(contentsOf: [schedulePredicate, searchTextPredicate, completionsPredicate])
+        
+        if trackerQuery.filter == .active {
+            let activeTrackersPredicate = NSPredicate(
+                format: "SUBQUERY(%K, $record, $record.date == %@).@count == 0",
+                #keyPath(TrackerCoreData.records), trackerQuery.date as NSDate
+            )
+            
+            predicates.append(activeTrackersPredicate)
+        } else if trackerQuery.filter == .completed {
+            let completedTrackersPredicate = NSPredicate(
+                format: "ANY %K.date == %@",
+                #keyPath(TrackerCoreData.records), trackerQuery.date as NSDate
+            )
+            
+            predicates.append(completedTrackersPredicate)
+        }
+        
+        let trackersPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         fetchedResultsController.fetchRequest.predicate = trackersPredicate
         
         try? fetchedResultsController.performFetch()

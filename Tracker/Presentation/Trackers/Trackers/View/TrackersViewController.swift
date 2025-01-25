@@ -212,8 +212,15 @@ final class TrackersViewController: UIViewController {
     }
     
     private func bind() {
-        trackersViewModel.onVisibleCategoriesChange = { [weak self] categories in
+        trackersViewModel.onVisibleCategoriesChange = { [weak self] categories, isFilterButtonHidden in
             self?.applySnapshot(categories)
+            self?.filterButton.isHidden = isFilterButtonHidden
+        }
+        
+        trackersViewModel.onTodayFilterApply = { [weak self] in
+            let date = Calendar.current.startOfDay(for: Date())
+            self?.datePicker.setDate(date, animated: true)
+            self?.trackersViewModel.didUpdate(date: date)
         }
     }
     
@@ -249,9 +256,9 @@ final class TrackersViewController: UIViewController {
     
     private func showPlaceholderView() {
         trackersCollectionView.isHidden = true
-        placeholderView.setImage(searchController.searchBar.text?.isEmpty == true ? .trackersPlaceholder : .searchPlaceholder)
+        placeholderView.setImage(trackersViewModel.totalTrackersAmount == 0 ? .trackersPlaceholder : .searchPlaceholder)
         
-        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+        if trackersViewModel.totalTrackersAmount != 0 {
             placeholderView.setTitle(NSLocalizedString("emptyState.searchTitle", comment: "Text displayed on empty search state"))
         } else {
             placeholderView.setTitle(NSLocalizedString("emptyState.title", comment: "Text displayed on empty state"))

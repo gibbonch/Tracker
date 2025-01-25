@@ -83,6 +83,7 @@ final class TrackerRecordStore: DataStore, TrackerRecordStoring {
         do {
             let recordEntities = try context.fetch(request)
             recordEntities.forEach { context.delete($0) }
+            coreDataStack.saveContext()
         } catch {
             Logger.error("Failed to delete record: \(error.localizedDescription)")
         }

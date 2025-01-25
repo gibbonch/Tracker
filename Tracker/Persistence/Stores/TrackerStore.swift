@@ -20,6 +20,7 @@ protocol TrackerStoring {
     func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) -> TrackerCoreData?
     
     func fetchTracker(with id: UUID) -> TrackerCoreData?
+    func fetchTrackersCount() -> Int
     func fetchCategoryTitle(tracker: Tracker) -> String
     func delete(tracker: Tracker)
     func pin(tracker: Tracker)
@@ -77,6 +78,17 @@ final class TrackerStore: DataStore, TrackerStoring {
         let trackerEntity = fetchTracker(with: tracker.id)
         let categoryEntity = trackerEntity?.categories.first(where: { $0.title != Constants.pinnedCategoryTitle })
         return categoryEntity?.title ?? ""
+    }
+    
+    func fetchTrackersCount() -> Int {
+        let request = TrackerCoreData.fetchRequest()
+        do {
+            let entities = try context.fetch(request)
+            return entities.count
+        } catch {
+            Logger.error("Failed to fetch trackers count")
+            return 0
+        }
     }
 
     @discardableResult

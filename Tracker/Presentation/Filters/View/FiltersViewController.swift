@@ -126,6 +126,7 @@ extension FiltersViewController: UITableViewDelegate {
         let selectedCell = tableView.cellForRow(at: indexPath)
         selectedCell?.accessoryType = .checkmark
         viewModel.didSelectCell(at: indexPath)
+        dismiss(animated: true)
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
