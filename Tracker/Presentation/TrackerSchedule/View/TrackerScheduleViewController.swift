@@ -52,6 +52,8 @@ final class TrackerScheduleViewController: UIViewController {
         tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: ScheduleTableViewCell.identifier)
         tableView.isUserInteractionEnabled = true
         tableView.allowsSelection = true
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = .grayApp
         tableView.layer.masksToBounds = true
         tableView.layer.cornerRadius = 16
         tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]

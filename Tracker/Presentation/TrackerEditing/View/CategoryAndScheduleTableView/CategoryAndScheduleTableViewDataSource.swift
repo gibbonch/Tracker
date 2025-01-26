@@ -55,7 +55,7 @@ final class CategoryAndScheduleTableViewDataSource: NSObject, UITableViewDataSou
         cell.textLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         cell.detailTextLabel?.textColor = .grayApp
-        cell.backgroundColor = UIColor.lightGrayApp.withAlphaComponent(0.3)
+        cell.backgroundColor = UIColor.backgroundApp
         return cell
     }
 }

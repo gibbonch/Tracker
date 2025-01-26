@@ -43,7 +43,7 @@ final class CategoryTableViewCell: UITableViewCell {
     // MARK: - Private Methods
     
     private func setupContentView() {
-        backgroundColor = UIColor.lightGrayApp.withAlphaComponent(0.3)
+        backgroundColor = UIColor.backgroundApp
         selectionStyle = .none
         contentView.addSubviews(categoryLabel)
     }

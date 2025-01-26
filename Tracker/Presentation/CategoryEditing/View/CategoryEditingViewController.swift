@@ -19,7 +19,7 @@ final class CategoryEditingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.headerTitle
         label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.textColor = UIColor(named: "blackApp") ?? .black
+        label.textColor = .blackApp
         label.textAlignment = .center
         label.baselineAdjustment = .alignCenters
         label.translatesAutoresizingMaskIntoConstraints = false

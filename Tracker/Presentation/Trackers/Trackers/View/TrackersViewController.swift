@@ -50,7 +50,12 @@ final class TrackersViewController: UIViewController {
         let searchController = UISearchController()
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.setValue(NSLocalizedString("cancel", comment: "Text displayed on search cancel button"), forKey: "cancelButtonText")
-        searchController.searchBar.placeholder = NSLocalizedString("search", comment: "Search placeholder")
+        
+        let placeholderColor = traitCollection.userInterfaceStyle == .dark ? UIColor(rgb: 0xEBEBF5) : UIColor(rgb: 0xAEAFB4)
+        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("search", comment: "Search placeholder"),
+            attributes: [NSAttributedString.Key.foregroundColor: placeholderColor]
+        )
         searchController.searchBar.searchTextField.clearButtonMode = .never
         searchController.searchBar.delegate = self
         return searchController
@@ -86,6 +91,7 @@ final class TrackersViewController: UIViewController {
         collectionView.register(TrackerHeaderView.self,
                                         forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                         withReuseIdentifier: TrackerHeaderView.identifier)
+        collectionView.backgroundColor = .clear
         collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 90, right: 0)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -126,6 +132,19 @@ final class TrackersViewController: UIViewController {
         setupLayout()
         setupDataSource()
         bind()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if #available(iOS 13.0, *),
+           traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            
+            let placeholderColor = traitCollection.userInterfaceStyle == .dark ? UIColor(rgb: 0xEBEBF5) : UIColor(rgb: 0xAEAFB4)
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+                string: NSLocalizedString("search", comment: "Search placeholder"),
+                attributes: [NSAttributedString.Key.foregroundColor: placeholderColor]
+            )
+        }
     }
     
     // MARK: - Private Methods

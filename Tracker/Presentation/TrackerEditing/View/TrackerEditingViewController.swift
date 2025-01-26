@@ -65,9 +65,11 @@ final class TrackerEditingViewController: UIViewController {
         textField.delegate = trackerTitleTextFieldDelegate
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         textField.text = viewModel.title
-        textField.placeholder = NSLocalizedString("trackerTitle.placeholder", comment: "Text displayed on text field placeholder")
+        textField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("trackerTitle.placeholder", comment: "Text displayed on text field placeholder"),
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.grayApp]
+        )
         textField.textAlignment = Utilities.isCurrentLanguageRTL() ? .right : .left
-        
         return textField
     }()
     
@@ -88,7 +90,8 @@ final class TrackerEditingViewController: UIViewController {
         tableView.delegate = categoryAndScheduleTableViewDelegate
         tableView.dataSource = categoryAndScheduleTableViewDataSource
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "categoryAndScheduleCell")
-        
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = .grayApp
         tableView.isUserInteractionEnabled = true
         tableView.allowsSelection = true
         tableView.layer.masksToBounds = true

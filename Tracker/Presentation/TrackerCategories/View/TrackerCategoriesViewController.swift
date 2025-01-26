@@ -65,6 +65,8 @@ final class TrackerCategoriesViewController: UIViewController {
         tableView.layer.cornerRadius = 16
         tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         tableView.isScrollEnabled = false
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = .grayApp
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
