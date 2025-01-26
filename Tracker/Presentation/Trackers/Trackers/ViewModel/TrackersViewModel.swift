@@ -13,6 +13,7 @@ protocol TrackersViewModel: AnyObject {
     var onVisibleCategoriesChange: (([TrackerCategory], Bool) -> Void)? { get set }
     var onTodayFilterApply: (() -> Void)? { get set }
     var totalTrackersAmount: Int { get }
+    var filter: TrackerFilter { get }
     
     func didUpdate(date: Date)
     func didUpdate(searchText: String)
@@ -41,11 +42,12 @@ final class DefaultTrackersViewModel: TrackersViewModel {
         trackerStore.fetchTrackersCount()
     }
     
+    private(set) var filter: TrackerFilter
+    
     private var visibleCategories: [TrackerCategory] = []
     
     private var date: Date
     private var searchText: String
-    private var filter: TrackerFilter
     
     private let trackerStore: TrackerStoring
     private var trackerProvider: TrackerProviding
@@ -141,7 +143,7 @@ final class DefaultTrackersViewModel: TrackersViewModel {
 extension DefaultTrackersViewModel: TrackerProviderDelegate {
     func didUpdateFetchedTrackers(_ categories: [TrackerCategory]) {
         visibleCategories = categories
-        let isFilterButtonHidden = visibleCategories.count == 0 && (filter == .all || filter == .today) && searchText.isEmpty
+        let isFilterButtonHidden = visibleCategories.count == 0 && (filter == .all || filter == .today) 
         onVisibleCategoriesChange?(visibleCategories, isFilterButtonHidden)
     }
 }

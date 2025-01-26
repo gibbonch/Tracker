@@ -278,10 +278,13 @@ final class TrackersViewController: UIViewController {
         trackersCollectionView.isHidden = true
         placeholderView.setImage(trackersViewModel.totalTrackersAmount == 0 ? .trackersPlaceholder : .searchPlaceholder)
         
-        if trackersViewModel.totalTrackersAmount != 0 {
-            placeholderView.setTitle(NSLocalizedString("emptyState.searchTitle", comment: "Text displayed on empty search state"))
-        } else {
+        if (trackersViewModel.filter == .all || trackersViewModel.filter == .today) && (searchController.searchBar.text ?? "").isEmpty ||
+            placeholderView.imageView.image == .trackersPlaceholder {
+            placeholderView.setImage(.trackersPlaceholder)
             placeholderView.setTitle(NSLocalizedString("emptyState.title", comment: "Text displayed on empty state"))
+        } else {
+            placeholderView.setImage(.searchPlaceholder)
+            placeholderView.setTitle(NSLocalizedString("emptyState.searchTitle", comment: "Text displayed on empty search state"))
         }
         
         placeholderView.isHidden = false
