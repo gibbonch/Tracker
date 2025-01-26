@@ -56,6 +56,7 @@ final class TrackersViewController: UIViewController {
             string: NSLocalizedString("search", comment: "Search placeholder"),
             attributes: [NSAttributedString.Key.foregroundColor: placeholderColor]
         )
+        
         searchController.searchBar.searchTextField.clearButtonMode = .never
         searchController.searchBar.delegate = self
         return searchController
@@ -415,5 +416,9 @@ extension TrackersViewController: UICollectionViewDelegate {
 extension TrackersViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         trackersViewModel.didUpdate(searchText: searchText)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        trackersViewModel.didUpdate(searchText: "")
     }
 }

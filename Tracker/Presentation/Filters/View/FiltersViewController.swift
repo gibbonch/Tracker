@@ -32,7 +32,8 @@ final class FiltersViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.identifier)
-        
+        tableView.separatorColor = .grayApp
+        tableView.backgroundColor = .clear
         tableView.isUserInteractionEnabled = true
         tableView.isScrollEnabled = false
         tableView.layer.masksToBounds = true
