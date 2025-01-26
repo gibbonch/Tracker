@@ -9,6 +9,8 @@ import UIKit
 
 final class StatisticsViewController: UIViewController {
     
+    let provider = TrackerRecordProvider()
+    
     // MARK: - Subviews
     
     private lazy var placeholderView: PlaceholderView = {
@@ -37,7 +39,8 @@ final class StatisticsViewController: UIViewController {
         super.viewDidLoad()
         setupNavigationBar()
         setupView()
-        setConstraints()
+        setupLayout()
+        provider.performFetch()
     }
     
     // MARK: - Private Methods
@@ -51,7 +54,7 @@ final class StatisticsViewController: UIViewController {
         view.addSubview(placeholderView)
     }
     
-    private func setConstraints() {
+    private func setupLayout() {
         NSLayoutConstraint.activate([
             placeholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),

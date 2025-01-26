@@ -18,6 +18,7 @@
 		1833F4D92D44E75200CA7A48 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1833F4D72D44E75200CA7A48 /* InfoPlist.strings */; };
 		1833F4F32D450C4000CA7A48 /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F4F22D450C4000CA7A48 /* FiltersViewController.swift */; };
 		1833F4F52D4510DB00CA7A48 /* FiltersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F4F42D4510DB00CA7A48 /* FiltersViewModel.swift */; };
+		1833F4F72D46838A00CA7A48 /* TrackerRecordProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F4F62D46838A00CA7A48 /* TrackerRecordProvider.swift */; };
 		1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1841E4B02D2AA55D00EC7933 /* Emojis.plist */; };
 		1841E4B32D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */; };
 		1847BBAE2CE9D13200092A7A /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */; };
@@ -113,6 +114,7 @@
 		1833F4DC2D44E77700CA7A48 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1833F4F22D450C4000CA7A48 /* FiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
 		1833F4F42D4510DB00CA7A48 /* FiltersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewModel.swift; sourceTree = "<group>"; };
+		1833F4F62D46838A00CA7A48 /* TrackerRecordProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordProvider.swift; sourceTree = "<group>"; };
 		1841E4B02D2AA55D00EC7933 /* Emojis.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Emojis.plist; sourceTree = "<group>"; };
 		1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -477,6 +479,7 @@
 			children = (
 				1898D6592D1F105900EDCD42 /* TrackerProvider.swift */,
 				1898D6632D2196AA00EDCD42 /* TrackerCategoryProvider.swift */,
+				1833F4F62D46838A00CA7A48 /* TrackerRecordProvider.swift */,
 			);
 			path = DataProviders;
 			sourceTree = "<group>";
@@ -918,6 +921,7 @@
 				18D20E292CDCFB5C007E9083 /* TrackerRecord.swift in Sources */,
 				18CB8A002D0779C100BE9F71 /* TrackerEditingViewController.swift in Sources */,
 				18CB8A142D0B279D00BE9F71 /* TrackerScheduleViewController.swift in Sources */,
+				1833F4F72D46838A00CA7A48 /* TrackerRecordProvider.swift in Sources */,
 				18CB8A2F2D0C449700BE9F71 /* PickerHeaderReusableView.swift in Sources */,
 				18CB8A022D077A0F00BE9F71 /* TrackerEditingViewModel.swift in Sources */,
 				181F9EC42CFDE76B00B0F835 /* TrackerQuery.swift in Sources */,
