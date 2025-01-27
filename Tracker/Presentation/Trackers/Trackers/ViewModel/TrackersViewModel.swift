@@ -70,8 +70,16 @@ final class DefaultTrackersViewModel: TrackersViewModel {
     // MARK: - Public Methods
     
     func didUpdate(date: Date) {
+        
+        let currentDate = Calendar.current.startOfDay(for: Date())
+        
+        if date == currentDate && filter == .all {
+            filter = .today
+        } else if self.date == currentDate && filter == .today {
+            filter = .all
+        }
+        
         self.date = date
-        filter = date == Calendar.current.startOfDay(for: Date()) ? .today : .all
         
         NotificationCenter.default.post(name: Notification.dateDidChange, object: date)
         trackerProvider.updateTrackerQuery(trackerQuery)
