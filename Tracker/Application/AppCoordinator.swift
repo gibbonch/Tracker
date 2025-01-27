@@ -23,7 +23,9 @@ final class AppCoordinator {
         let trackersViewModel = DefaultTrackersViewModel(trackerStore: trackerStore, trackerProvider: trackerProvider)
         let trackersViewController = TrackersViewController(viewModel: trackersViewModel)
         
-        let statisticsViewController = StatisticsViewController()
+        let recordProvider = TrackerRecordProvider()
+        let service = StatisticsService(trackerRecordProvider: recordProvider, trackerStore: trackerStore)
+        let statisticsViewController = StatisticsViewController(statisticsService: service)
         
         let mainTabBarController = MainTabBarController(viewControllers: [trackersViewController, statisticsViewController])
         window?.rootViewController = mainTabBarController

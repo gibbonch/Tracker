@@ -33,6 +33,10 @@
 
 "statistics" = "الإحصائيات";
 "emptyStatsState.title" = "لا يوجد شيء لتحليله حتى الآن";
+"statistics.bestPeriod" = "أفضل فترة";
+"statistics.perfectDays" = "أيام مثالية";
+"statistics.completedTrackers" = "بتتبع الانتهاء";
+"statistics.averageValue" = "متوسط القيمة";
 
 // MARK: - Tracker Creation
 

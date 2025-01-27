@@ -33,6 +33,10 @@
 
 "statistics" = "Statistics";
 "emptyStatsState.title" = "Nothing to analyze yet";
+"statistics.bestPeriod" = "The best period";
+"statistics.perfectDays" = "Perfect days";
+"statistics.completedTrackers" = "Completed trackers";
+"statistics.averageValue" = "Average value";
 
 // MARK: - Tracker Creation
 

@@ -20,6 +20,7 @@ protocol TrackerStoring {
     func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) -> TrackerCoreData?
     
     func fetchTracker(with id: UUID) -> TrackerCoreData?
+    func fetchTrackers(on date: Date) -> [Tracker]
     func fetchTrackersCount() -> Int
     func fetchCategoryTitle(tracker: Tracker) -> String
     func delete(tracker: Tracker)
@@ -72,6 +73,21 @@ final class TrackerStore: DataStore, TrackerStoring {
             #keyPath(TrackerCoreData.trackerID), id as NSUUID)
         
         return try? context.fetch(request).first
+    }
+    
+    func fetchTrackers(on date: Date) -> [Tracker] {
+        let bitMask = date.weekday?.bitMask ?? 0
+        let request = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "%K & %@ != 0 AND ((%K == %@ AND (ANY %K.date == %@ OR NONE %K.date != nil)) OR %K == %@)", 
+                                        #keyPath(TrackerCoreData.scheduleMask), NSNumber(value: bitMask),
+                                        #keyPath(TrackerCoreData.type), TrackerType.single.rawValue,
+                                        #keyPath(TrackerCoreData.records), date as NSDate,
+                                        #keyPath(TrackerCoreData.records),
+                                        #keyPath(TrackerCoreData.type), TrackerType.regular.rawValue)
+        
+        let trackerEntities = (try? context.fetch(request)) ?? []
+        let trackers = trackerEntities.compactMap { $0.mapToDomainModel() }
+        return trackers
     }
     
     func fetchCategoryTitle(tracker: Tracker) -> String {

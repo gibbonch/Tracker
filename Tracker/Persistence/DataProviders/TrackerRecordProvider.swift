@@ -13,6 +13,9 @@ protocol TrackerRecordProviderDelegate: AnyObject {
 }
 
 final class TrackerRecordProvider: NSObject {
+    
+    // MARK: - Properties
+    
     weak var delegate: TrackerRecordProviderDelegate?
     let context: NSManagedObjectContext
     
@@ -31,32 +34,41 @@ final class TrackerRecordProvider: NSObject {
         return controller
     }()
     
+    private var records: [TrackerRecord] {
+        guard let objects = fetchedResultsController.fetchedObjects else {
+            return []
+        }
+        
+        let records = objects.compactMap { entity in
+            let record = entity.mapToDomainModel()
+            return record
+        }
+        return records
+    }
+    
+    // MARK: - Initializer
+    
     init(coreDataStack: CoreDataStack = CoreDataStack.shared) {
         context = coreDataStack.context
         super.init()
     }
     
+    // MARK: - Public Methods
+    
     func performFetch() {
         do {
             try fetchedResultsController.performFetch()
+            delegate?.didChangeTrackerRecords(records)
         } catch {
             Logger.error("Failed to perform fetch with error: \(error.localizedDescription)")
         }
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
+
 extension TrackerRecordProvider: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<any NSFetchRequestResult>) {
-        guard let objects = controller.fetchedObjects else {
-            return
-        }
-        
-        let records = objects.compactMap { object in
-            let recordEntity = object as? TrackerRecordCoreData
-            let record = recordEntity?.mapToDomainModel()
-            return record
-        }
-        
         delegate?.didChangeTrackerRecords(records)
     }
 }

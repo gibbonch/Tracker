@@ -33,6 +33,10 @@
 
 "statistics" = "Статистика";
 "emptyStatsState.title" = "Анализировать пока нечего";
+"statistics.bestPeriod" = "Лучший период";
+"statistics.perfectDays" = "Идеальные дни";
+"statistics.completedTrackers" = "Трекеров завершено";
+"statistics.averageValue" = "Среднее значение";
 
 // MARK: - Tracker Creation
 
