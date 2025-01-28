@@ -11,6 +11,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    private let appMetrica = AppMetricaService()
     private var trackerCellViewModel: TrackerCellViewModel?
     
     // MARK: - Subviews
@@ -130,6 +131,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     @objc private func completeButtonDidTap() {
         guard let trackerCellViewModel else { return }
+        appMetrica.reportEvent(event: .click, screen: .Main, item: .track)
         trackerCellViewModel.didCompleteTracker()
     }
 }

@@ -9,6 +9,10 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
+    // MARK: - AppMetrica
+    
+    private let appMetricaService = AppMetricaService()
+    
     // MARK: - DiffableDataSource
     
     private typealias DataSource = UICollectionViewDiffableDataSource<TrackerCategorySection, TrackerItem>
@@ -146,6 +150,16 @@ final class TrackersViewController: UIViewController {
                 attributes: [NSAttributedString.Key.foregroundColor: placeholderColor]
             )
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        appMetricaService.reportEvent(event: .open, screen: .Main, item: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        appMetricaService.reportEvent(event: .close, screen: .Main, item: nil)
     }
     
     // MARK: - Private Methods
@@ -293,6 +307,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Objc Methods
     
     @objc private func didTapAddTrackerButton() {
+        appMetricaService.reportEvent(event: .click, screen: .Main, item: .addTrack)
         let trackerCreationViewController = TrackerCreationViewController()
         present(trackerCreationViewController, animated: true)
     }
@@ -322,6 +337,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapFilterButton() {
+        appMetricaService.reportEvent(event: .click, screen: .Main, item: .filter)
         let filtersViewModel = trackersViewModel.createFiltersViewModel()
         let filterViewController = FiltersViewController(viewModel: filtersViewModel)
         present(filterViewController, animated: true)
@@ -386,12 +402,15 @@ extension TrackersViewController: UICollectionViewDelegate {
         let editAction = UIAction(title: NSLocalizedString("edit", comment: "Edit action text")) { [weak self] _ in
             guard let self else { return }
             
+            appMetricaService.reportEvent(event: .click, screen: .Main, item: .edit)
+            
             let trackerEditingViewModel = trackersViewModel.createTrackerEditingViewModel(at: indexPath)
             let trackerEditingViewController = TrackerEditingViewController(title: NSLocalizedString("title.existingTracker", comment: "Existing tracker title"), viewModel: trackerEditingViewModel)
             present(trackerEditingViewController, animated: true)
         }
         
         let deleteAction = UIAction(title: NSLocalizedString("delete", comment: "Delete action text"), attributes: .destructive) { [weak self] _ in
+            self?.appMetricaService.reportEvent(event: .click, screen: .Main, item: .delete)
             self?.presentDeleteTrackerAlert(indexPath: indexPath)
         }
         

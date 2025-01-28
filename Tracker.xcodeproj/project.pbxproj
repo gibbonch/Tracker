@@ -27,6 +27,7 @@
 		1833F5092D48F15200CA7A48 /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 1833F5082D48F15200CA7A48 /* InlineSnapshotTesting */; };
 		1833F50B2D48F15200CA7A48 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 1833F50A2D48F15200CA7A48 /* SnapshotTesting */; };
 		1833F50D2D48F15200CA7A48 /* SnapshotTestingCustomDump in Frameworks */ = {isa = PBXBuildFile; productRef = 1833F50C2D48F15200CA7A48 /* SnapshotTestingCustomDump */; };
+		1833F5102D493F2A00CA7A48 /* AppMetricaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F50F2D493F2A00CA7A48 /* AppMetricaService.swift */; };
 		1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1841E4B02D2AA55D00EC7933 /* Emojis.plist */; };
 		1841E4B32D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */; };
 		1847BBAE2CE9D13200092A7A /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */; };
@@ -128,6 +129,7 @@
 		1833F4FC2D46962200CA7A48 /* StatisticsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCell.swift; sourceTree = "<group>"; };
 		1833F5012D48EBD300CA7A48 /* TrackerSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerSnapshotTests.swift; sourceTree = "<group>"; };
 		1833F5052D48ECF900CA7A48 /* MocksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocksViewModel.swift; sourceTree = "<group>"; };
+		1833F50F2D493F2A00CA7A48 /* AppMetricaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMetricaService.swift; sourceTree = "<group>"; };
 		1841E4B02D2AA55D00EC7933 /* Emojis.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Emojis.plist; sourceTree = "<group>"; };
 		1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				1898D6602D218F7A00EDCD42 /* Logging */,
 				18D20E302CDD22ED007E9083 /* Common */,
 				180B5CC22CDBD90A003FDE88 /* Resources */,
+				1833F50E2D493F1500CA7A48 /* AppMetrica */,
 				1833F4D62D44E72F00CA7A48 /* Localization */,
 			);
 			path = Tracker;
@@ -391,6 +394,14 @@
 				1833F5052D48ECF900CA7A48 /* MocksViewModel.swift */,
 			);
 			path = SnapshotTests;
+			sourceTree = "<group>";
+		};
+		1833F50E2D493F1500CA7A48 /* AppMetrica */ = {
+			isa = PBXGroup;
+			children = (
+				1833F50F2D493F2A00CA7A48 /* AppMetricaService.swift */,
+			);
+			path = AppMetrica;
 			sourceTree = "<group>";
 		};
 		1841E4B42D2AA78900EC7933 /* ColorCollectionView */ = {
@@ -971,6 +982,7 @@
 				187295512D3BE863004B4D18 /* CategoryEditingViewModel.swift in Sources */,
 				18CB8A072D08A26D00BE9F71 /* Utilities.swift in Sources */,
 				187295442D3A76A6004B4D18 /* TrackerCategoriesViewModel.swift in Sources */,
+				1833F5102D493F2A00CA7A48 /* AppMetricaService.swift in Sources */,
 				189AC1D12D15B16F00717D6F /* Constants.swift in Sources */,
 				1872954D2D3A8E4B004B4D18 /* CategoryEditingViewController.swift in Sources */,
 				180B5CB12CDBD78E003FDE88 /* SceneDelegate.swift in Sources */,
