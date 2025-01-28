@@ -22,6 +22,11 @@
 		1833F4F92D46896700CA7A48 /* StatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F4F82D46896700CA7A48 /* StatisticsService.swift */; };
 		1833F4FB2D468D8100CA7A48 /* Statistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F4FA2D468D8100CA7A48 /* Statistic.swift */; };
 		1833F4FD2D46962200CA7A48 /* StatisticsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F4FC2D46962200CA7A48 /* StatisticsCell.swift */; };
+		1833F5022D48EBD300CA7A48 /* TrackerSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F5012D48EBD300CA7A48 /* TrackerSnapshotTests.swift */; };
+		1833F5062D48ECF900CA7A48 /* MocksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1833F5052D48ECF900CA7A48 /* MocksViewModel.swift */; };
+		1833F5092D48F15200CA7A48 /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 1833F5082D48F15200CA7A48 /* InlineSnapshotTesting */; };
+		1833F50B2D48F15200CA7A48 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 1833F50A2D48F15200CA7A48 /* SnapshotTesting */; };
+		1833F50D2D48F15200CA7A48 /* SnapshotTestingCustomDump in Frameworks */ = {isa = PBXBuildFile; productRef = 1833F50C2D48F15200CA7A48 /* SnapshotTestingCustomDump */; };
 		1841E4B12D2AA55D00EC7933 /* Emojis.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1841E4B02D2AA55D00EC7933 /* Emojis.plist */; };
 		1841E4B32D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */; };
 		1847BBAE2CE9D13200092A7A /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */; };
@@ -121,6 +126,8 @@
 		1833F4F82D46896700CA7A48 /* StatisticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsService.swift; sourceTree = "<group>"; };
 		1833F4FA2D468D8100CA7A48 /* Statistic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistic.swift; sourceTree = "<group>"; };
 		1833F4FC2D46962200CA7A48 /* StatisticsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCell.swift; sourceTree = "<group>"; };
+		1833F5012D48EBD300CA7A48 /* TrackerSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerSnapshotTests.swift; sourceTree = "<group>"; };
+		1833F5052D48ECF900CA7A48 /* MocksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocksViewModel.swift; sourceTree = "<group>"; };
 		1841E4B02D2AA55D00EC7933 /* Emojis.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Emojis.plist; sourceTree = "<group>"; };
 		1841E4B22D2AA5B300EC7933 /* PickerCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		1847BBAD2CE9D13200092A7A /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -216,6 +223,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1833F50D2D48F15200CA7A48 /* SnapshotTestingCustomDump in Frameworks */,
+				1833F50B2D48F15200CA7A48 /* SnapshotTesting in Frameworks */,
+				1833F5092D48F15200CA7A48 /* InlineSnapshotTesting in Frameworks */,
 				89FF9D7DBE8AC190CA56D227 /* Pods_TrackerTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -374,6 +384,15 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		1833F5002D48EBBD00CA7A48 /* SnapshotTests */ = {
+			isa = PBXGroup;
+			children = (
+				1833F5012D48EBD300CA7A48 /* TrackerSnapshotTests.swift */,
+				1833F5052D48ECF900CA7A48 /* MocksViewModel.swift */,
+			);
+			path = SnapshotTests;
+			sourceTree = "<group>";
+		};
 		1841E4B42D2AA78900EC7933 /* ColorCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -386,6 +405,7 @@
 		187294E62D33C1C6004B4D18 /* TrackerTests */ = {
 			isa = PBXGroup;
 			children = (
+				1833F5002D48EBBD00CA7A48 /* SnapshotTests */,
 				187295562D3CF3FE004B4D18 /* DataStoreTests */,
 				187294F92D355ED7004B4D18 /* TrackersViewModel */,
 				187294EE2D33C1E2004B4D18 /* LoggerTests.swift */,
@@ -755,6 +775,11 @@
 				187294EA2D33C1C6004B4D18 /* PBXTargetDependency */,
 			);
 			name = TrackerTests;
+			packageProductDependencies = (
+				1833F5082D48F15200CA7A48 /* InlineSnapshotTesting */,
+				1833F50A2D48F15200CA7A48 /* SnapshotTesting */,
+				1833F50C2D48F15200CA7A48 /* SnapshotTestingCustomDump */,
+			);
 			productName = TrackerTests;
 			productReference = 187294E52D33C1C6004B4D18 /* TrackerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -790,6 +815,9 @@
 				ru,
 			);
 			mainGroup = 180B5CA22CDBD78E003FDE88;
+			packageReferences = (
+				1833F5072D48F15200CA7A48 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			productRefGroup = 180B5CAC2CDBD78E003FDE88 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -967,7 +995,9 @@
 			files = (
 				187294FB2D355EEF004B4D18 /* MockTrackerStore.swift in Sources */,
 				187294FD2D3560F8004B4D18 /* TrackersViewModelTests.swift in Sources */,
+				1833F5022D48EBD300CA7A48 /* TrackerSnapshotTests.swift in Sources */,
 				187294F32D33CA57004B4D18 /* MainTabBarControllerTests.swift in Sources */,
+				1833F5062D48ECF900CA7A48 /* MocksViewModel.swift in Sources */,
 				1872955A2D3D00FF004B4D18 /* TrackerStoreTests.swift in Sources */,
 				187294EF2D33C1E2004B4D18 /* LoggerTests.swift in Sources */,
 				187294FF2D356501004B4D18 /* MockTrackerProvider.swift in Sources */,
@@ -1229,7 +1259,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3UVVPY2T4W;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.gibbonch.TrackerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1249,7 +1279,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3UVVPY2T4W;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.gibbonch.TrackerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1291,6 +1321,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1833F5072D48F15200CA7A48 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.18.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1833F5082D48F15200CA7A48 /* InlineSnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1833F5072D48F15200CA7A48 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = InlineSnapshotTesting;
+		};
+		1833F50A2D48F15200CA7A48 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1833F5072D48F15200CA7A48 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+		1833F50C2D48F15200CA7A48 /* SnapshotTestingCustomDump */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1833F5072D48F15200CA7A48 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTestingCustomDump;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		189AC18D2D0F2D3F00717D6F /* TrackerModel.xcdatamodeld */ = {

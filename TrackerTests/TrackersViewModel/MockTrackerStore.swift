@@ -9,6 +9,7 @@ import Foundation
 @testable import Tracker
 
 final class MockTrackerStore: TrackerStoring {
+    
     private(set) var trackerCategories: [TrackerCategory]
     
     private(set) var createTrackerCalled = false
@@ -60,5 +61,11 @@ final class MockTrackerStore: TrackerStoring {
         unpinTrackerCalled = true
     }
     
+    func fetchTrackers(on date: Date) -> [Tracker] {
+        return []
+    }
     
+    func fetchTrackersCount() -> Int {
+        return 0
+    }
 }

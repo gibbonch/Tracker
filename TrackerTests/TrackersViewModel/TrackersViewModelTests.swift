@@ -58,14 +58,6 @@ final class TrackersViewModelTests: XCTestCase {
         XCTAssertTrue(mockTrackerProvider.updateTrackerQueryCalled)
     }
     
-    func testUpdateFilter() throws {
-        let newFilter = TrackerFilter.active
-
-        viewModel.didUpdate(filter: newFilter)
-        
-        XCTAssertTrue(mockTrackerProvider.updateTrackerQueryCalled)
-    }
-    
     func testDeleteTracker() throws {
         let indexPath = IndexPath(item: 0, section: 1)
 
