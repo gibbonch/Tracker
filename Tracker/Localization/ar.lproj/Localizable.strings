@@ -49,6 +49,7 @@
 "title.newTracker" = "عادة جديدة";
 "title.newIrregularTracker" = "حدث غير منتظم جديد";
 "title.existingTracker" = "تعديل العادة";
+"title.existingEventTracker" = "تحرير حدث غير منتظم";
 "trackerTitle.placeholder" = "أدخل اسم المتعقب";
 "trackerTitle.warning" = "الحد الأقصى ٣٨ حرفًا";
 "category" = "فئة";

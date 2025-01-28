@@ -49,6 +49,7 @@
 "title.newTracker" = "Новая привычка";
 "title.newIrregularTracker" = "Новое нерегулярное событие";
 "title.existingTracker" = "Редактирование привычки";
+"title.existingEventTracker" = "Редактирование нерегулярного события";
 "trackerTitle.placeholder" = "Введите название трекера";
 "trackerTitle.warning" = "Ограничение 38 символов";
 "category" = "Категория";

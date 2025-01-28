@@ -49,6 +49,7 @@
 "title.newTracker" = "Neue Gewohnheit";
 "title.newIrregularTracker" = "Neues unregelmäßiges Ereignis";
 "title.existingTracker" = "Gewohnheit bearbeiten";
+"title.existingEventTracker" = "Bearbeiten eines unregelmäßigen Ereignisses";
 "trackerTitle.placeholder" = "Tracker-Namen eingeben";
 "trackerTitle.warning" = "Begrenzung auf 38 Zeichen";
 "category" = "Kategorie";

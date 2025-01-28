@@ -405,7 +405,9 @@ extension TrackersViewController: UICollectionViewDelegate {
             appMetricaService.reportEvent(event: .click, screen: .Main, item: .edit)
             
             let trackerEditingViewModel = trackersViewModel.createTrackerEditingViewModel(at: indexPath)
-            let trackerEditingViewController = TrackerEditingViewController(title: NSLocalizedString("title.existingTracker", comment: "Existing tracker title"), viewModel: trackerEditingViewModel)
+            let title = trackerEditingViewModel.trackerType == .regular ? NSLocalizedString("title.existingTracker", comment: "Existing tracker title") :
+            NSLocalizedString("title.existingEventTracker", comment: "Existing tracker title")
+            let trackerEditingViewController = TrackerEditingViewController(title: title, viewModel: trackerEditingViewModel)
             present(trackerEditingViewController, animated: true)
         }
         

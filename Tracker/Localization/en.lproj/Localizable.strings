@@ -49,6 +49,7 @@
 "title.newTracker" = "New Habit";
 "title.newIrregularTracker" = "New Irregular Event";
 "title.existingTracker" = "Edit Habit";
+"title.existingEventTracker" = "Edit Irregular Event";
 "trackerTitle.placeholder" = "Enter tracker name";
 "trackerTitle.warning" = "Limit of 38 characters";
 "category" = "Category";
