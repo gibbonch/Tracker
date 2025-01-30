@@ -1,0 +1,81 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Александр Торопов on 24.01.2025.
+  
+*/
+
+// MARK: - Onboarding
+
+"blueView.message" = "Verfolge nur, was du willst";
+"redView.message" = "Selbst wenn es keine Liter Wasser und Yoga sind";
+"skip" = "Was für eine Technologie!";
+
+// MARK: - Trackers
+
+"trackers" = "Tracker";
+"search" = "Suche";
+"emptyState.title" = "Was sollen wir verfolgen?";
+"emptyState.searchTitle" = "Nichts gefunden";
+"pinnedCategory.title" = "Angeheftet";
+"deleteTracker.confirmation" = "Sind Sie sicher, dass Sie den Tracker löschen möchten?";
+"filters" = "Preisauswahl";
+
+// MARK: - Filters
+
+"filter.all" = "Alle Tracker";
+"filter.today" = "Tracker für heute";
+"filter.completed" = "Abgeschlossene";
+"filter.active" = "Unvollendete";
+
+// MARK: - Statistics
+
+"statistics" = "Statistik";
+"emptyStatsState.title" = "Noch nichts zu analysieren";
+"statistics.bestPeriod" = "Beste Zeit";
+"statistics.perfectDays" = "Perfekte Tage";
+"statistics.completedTrackers" = "Trecker abgeschlossen";
+"statistics.averageValue" = "Durchschnittswert";
+
+// MARK: - Tracker Creation
+
+"trackerCreation.title" = "Tracker erstellen";
+"habit" = "Gewohnheit";
+"irregularEvent" = "Unregelmäßiges Ereignis";
+
+// MARK: - Tracker Editing
+
+"title.newTracker" = "Neue Gewohnheit";
+"title.newIrregularTracker" = "Neues unregelmäßiges Ereignis";
+"title.existingTracker" = "Gewohnheit bearbeiten";
+"title.existingEventTracker" = "Bearbeiten eines unregelmäßigen Ereignisses";
+"trackerTitle.placeholder" = "Tracker-Namen eingeben";
+"trackerTitle.warning" = "Begrenzung auf 38 Zeichen";
+"category" = "Kategorie";
+"schedule" = "Zeitplan";
+"schedule.everydayReplacement" = "Jeden Tag";
+"color" = "Farbe";
+
+// MARK: - Tracker Categories
+
+"emptyCategoryState.title" = "Gewohnheiten und Ereignisse können sinnvoll gruppiert werden";
+"addCategory" = "Kategorie hinzufügen";
+"deleteCategory.confirmation" = "Sind Sie sicher, dass diese Kategorie nicht benötigt wird?";
+
+// MARK: - Tracker Category Editing
+
+"categoryTitle.placeholder" = "Kategoriename eingeben";
+"title.newCategory" = "Neue Kategorie";
+"title.editCategory" = "Kategorie bearbeiten";
+
+// MARK: - Actions
+
+"pin" = "Anheften";
+"unpin" = "Lösen";
+"edit" = "Bearbeiten";
+"delete" = "Löschen";
+"cancel" = "Abbrechen";
+"save" = "Speichern";
+"create" = "Erstellen";
+"done" = "Fertig";

@@ -14,7 +14,7 @@ final class TrackerScheduleViewController: UIViewController {
     private let viewModel: TrackerScheduleViewModel
     private var weekdays = {
         var weekdays = Weekday.allCases
-        Utilities.bringScheduleIntoRuFormat(&weekdays)
+        Utilities.bringScheduleIntoLocaleFormat(&weekdays)
         return weekdays
     }()
     
@@ -22,7 +22,7 @@ final class TrackerScheduleViewController: UIViewController {
     
     private lazy var headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = NSLocalizedString("schedule", comment: "Schedule title")
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .blackApp
         label.textAlignment = .center
@@ -52,6 +52,8 @@ final class TrackerScheduleViewController: UIViewController {
         tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: ScheduleTableViewCell.identifier)
         tableView.isUserInteractionEnabled = true
         tableView.allowsSelection = true
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = .grayApp
         tableView.layer.masksToBounds = true
         tableView.layer.cornerRadius = 16
         tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
@@ -60,7 +62,7 @@ final class TrackerScheduleViewController: UIViewController {
         return tableView
     }()
     
-    private lazy var applyButton = FilledButton(title: "Готово") { [weak self] in
+    private lazy var applyButton = FilledButton(title: NSLocalizedString("done", comment: "Done action text")) { [weak self] in
         self?.viewModel.didEndScheduleEditing()
         self?.dismiss(animated: true)
     }
@@ -141,7 +143,7 @@ extension TrackerScheduleViewController: UITableViewDataSource {
         let scheduleCell = ScheduleTableViewCell()
         let weekday = weekdays[indexPath.row]
         scheduleCell.setupCell(with: weekday, isSelected: viewModel.schedule.contains(weekday)) { [weak self] in
-            self?.viewModel.didSelectWeekday(at: indexPath)
+            self?.viewModel.didSelect(weekday: weekday)
         }
         
         return scheduleCell

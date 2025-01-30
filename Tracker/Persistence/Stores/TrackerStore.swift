@@ -10,12 +10,20 @@ import CoreData
 // MARK: - TrackerStoring
 
 protocol TrackerStoring {
+    @discardableResult
     func create(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData?
+    
+    @discardableResult
+    func update(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData?
+    
+    @discardableResult
+    func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) -> TrackerCoreData?
+    
     func fetchTracker(with id: UUID) -> TrackerCoreData?
+    func fetchTrackers(on date: Date) -> [Tracker]
+    func fetchTrackersCount() -> Int
     func fetchCategoryTitle(tracker: Tracker) -> String
     func delete(tracker: Tracker)
-    func update(tracker: Tracker, in categoryTitle: String) -> TrackerCoreData?
-    func update(tracker: Tracker, from originalCategoryTitle: String, to newCategoryTitle: String) -> TrackerCoreData?
     func pin(tracker: Tracker)
     func unpin(tracker: Tracker)
 }
@@ -23,6 +31,15 @@ protocol TrackerStoring {
 // MARK: - TrackerStore
 
 final class TrackerStore: DataStore, TrackerStoring {
+    
+    // MARK: - Initializer
+    
+    override init(coreDataStack: CoreDataStack) {
+        super.init(coreDataStack: coreDataStack)
+        
+        // Correct localization of the pinned category
+        let _ = TrackerCategoryStore(coreDataStack: coreDataStack)
+    }
     
     // MARK: - Public Methods
     
@@ -58,10 +75,36 @@ final class TrackerStore: DataStore, TrackerStoring {
         return try? context.fetch(request).first
     }
     
+    func fetchTrackers(on date: Date) -> [Tracker] {
+        let bitMask = date.weekday?.bitMask ?? 0
+        let request = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "%K & %@ != 0 AND ((%K == %@ AND (ANY %K.date == %@ OR NONE %K.date != nil)) OR %K == %@)", 
+                                        #keyPath(TrackerCoreData.scheduleMask), NSNumber(value: bitMask),
+                                        #keyPath(TrackerCoreData.type), TrackerType.single.rawValue,
+                                        #keyPath(TrackerCoreData.records), date as NSDate,
+                                        #keyPath(TrackerCoreData.records),
+                                        #keyPath(TrackerCoreData.type), TrackerType.regular.rawValue)
+        
+        let trackerEntities = (try? context.fetch(request)) ?? []
+        let trackers = trackerEntities.compactMap { $0.mapToDomainModel() }
+        return trackers
+    }
+    
     func fetchCategoryTitle(tracker: Tracker) -> String {
         let trackerEntity = fetchTracker(with: tracker.id)
         let categoryEntity = trackerEntity?.categories.first(where: { $0.title != Constants.pinnedCategoryTitle })
         return categoryEntity?.title ?? ""
+    }
+    
+    func fetchTrackersCount() -> Int {
+        let request = TrackerCoreData.fetchRequest()
+        do {
+            let entities = try context.fetch(request)
+            return entities.count
+        } catch {
+            Logger.error("Failed to fetch trackers count")
+            return 0
+        }
     }
 
     @discardableResult

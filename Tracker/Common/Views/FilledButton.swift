@@ -13,11 +13,14 @@ final class FilledButton: UIButton {
     
     private let enabledBackgroundColor = UIColor.blackApp
     private let disabledBackgroundColor = UIColor.grayApp
+    private let enabledTextColor = UIColor.whiteApp
+    private let disabledTextColor = UIColor.white
+    
     private let handler: () -> Void
     
     override var isEnabled: Bool {
         didSet {
-            updateBackground()
+            updateAppearance()
         }
     }
     
@@ -33,7 +36,7 @@ final class FilledButton: UIButton {
         super.init(frame: .zero)
         setupButton(title: title)
         self.isEnabled = isEnabled
-        updateBackground()
+        updateAppearance()
         addTarget(self, action: #selector(buttonDidTap), for: .touchUpInside)
     }
     
@@ -46,18 +49,18 @@ final class FilledButton: UIButton {
     private func setupButton(title: String) {
         setTitle(title, for: .normal)
         titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        titleLabel?.textColor = .whiteApp
         layer.cornerRadius = 16
         isEnabled = true
         translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private func updateBackground() {
+    private func updateAppearance() {
         backgroundColor = isEnabled ? enabledBackgroundColor : disabledBackgroundColor
+        setTitleColor(isEnabled ? enabledTextColor : disabledTextColor, for: .normal)
     }
     
     @objc private func buttonDidTap() {
         handler()
     }
-    
 }
+

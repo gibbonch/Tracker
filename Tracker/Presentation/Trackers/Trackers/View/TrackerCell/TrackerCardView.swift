@@ -14,8 +14,7 @@ final class TrackerCardView: UIView {
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.layer.masksToBounds = true
-        label.layer.cornerRadius = 15
-        label.backgroundColor = .whiteApp.withAlphaComponent(0.3)
+        label.backgroundColor = .white.withAlphaComponent(0.3)
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -33,7 +32,7 @@ final class TrackerCardView: UIView {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .whiteApp
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -49,6 +48,13 @@ final class TrackerCardView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        emojiLabel.layer.cornerRadius = emojiLabel.frame.height / 2
     }
     
     // MARK: - Public Methods

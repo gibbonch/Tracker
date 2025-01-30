@@ -9,6 +9,10 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
+    // MARK: - AppMetrica
+    
+    private let appMetricaService = AppMetricaService()
+    
     // MARK: - DiffableDataSource
     
     private typealias DataSource = UICollectionViewDiffableDataSource<TrackerCategorySection, TrackerItem>
@@ -38,11 +42,10 @@ final class TrackersViewController: UIViewController {
     
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
-        datePicker.locale = Locale(identifier: "ru-RU")
-        datePicker.calendar.firstWeekday = 2
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        datePicker.locale = .current
         datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         return datePicker
     }()
@@ -50,8 +53,14 @@ final class TrackersViewController: UIViewController {
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
         searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.setValue("Отменить", forKey: "cancelButtonText")
-        searchController.searchBar.placeholder = "Поиск"
+        searchController.searchBar.setValue(NSLocalizedString("cancel", comment: "Text displayed on search cancel button"), forKey: "cancelButtonText")
+        
+        let placeholderColor = traitCollection.userInterfaceStyle == .dark ? UIColor(rgb: 0xEBEBF5) : UIColor(rgb: 0xAEAFB4)
+        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("search", comment: "Search placeholder"),
+            attributes: [NSAttributedString.Key.foregroundColor: placeholderColor]
+        )
+        
         searchController.searchBar.searchTextField.clearButtonMode = .never
         searchController.searchBar.delegate = self
         return searchController
@@ -87,10 +96,23 @@ final class TrackersViewController: UIViewController {
         collectionView.register(TrackerHeaderView.self,
                                         forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                         withReuseIdentifier: TrackerHeaderView.identifier)
-        collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 24, right: 0)
+        collectionView.backgroundColor = .clear
+        collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 90, right: 0)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
+    }()
+    
+    private lazy var filterButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(NSLocalizedString("filters", comment: "Text displayed on filter button"), for: .normal)
+        button.backgroundColor = .blueApp
+        button.layer.cornerRadius = 16
+        button.titleLabel?.textColor = .white
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
+        button.addTarget(self, action: #selector(didTapFilterButton), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     // MARK: - Initializer
@@ -98,7 +120,7 @@ final class TrackersViewController: UIViewController {
     init(viewModel: TrackersViewModel) {
         self.trackersViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        tabBarItem = UITabBarItem(title: "Трекеры", image: .trackers, selectedImage: nil)
+        tabBarItem = UITabBarItem(title: NSLocalizedString("trackers", comment: "Trackers title"), image: .trackers, selectedImage: nil)
     }
     
     @available(*, unavailable)
@@ -117,10 +139,33 @@ final class TrackersViewController: UIViewController {
         bind()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if #available(iOS 13.0, *),
+           traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            
+            let placeholderColor = traitCollection.userInterfaceStyle == .dark ? UIColor(rgb: 0xEBEBF5) : UIColor(rgb: 0xAEAFB4)
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+                string: NSLocalizedString("search", comment: "Search placeholder"),
+                attributes: [NSAttributedString.Key.foregroundColor: placeholderColor]
+            )
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        appMetricaService.reportEvent(event: .open, screen: .Main, item: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        appMetricaService.reportEvent(event: .close, screen: .Main, item: nil)
+    }
+    
     // MARK: - Private Methods
     
     private func setupNavigationBar() {
-        title = "Трекеры"
+        title = NSLocalizedString("trackers", comment: "Trackers title")
         navigationItem.leftBarButtonItem = addTrackerBarButtonItem
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         navigationItem.searchController = searchController
@@ -132,7 +177,7 @@ final class TrackersViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .whiteApp
-        view.addSubviews(trackersCollectionView, placeholderView)
+        view.addSubviews(trackersCollectionView, placeholderView, filterButton)
         
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
         
@@ -155,6 +200,11 @@ final class TrackersViewController: UIViewController {
             placeholderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             placeholderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             placeholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
     
@@ -196,8 +246,15 @@ final class TrackersViewController: UIViewController {
     }
     
     private func bind() {
-        trackersViewModel.onVisibleCategoriesChange = { [weak self] categories in
+        trackersViewModel.onVisibleCategoriesChange = { [weak self] categories, isFilterButtonHidden in
             self?.applySnapshot(categories)
+            self?.filterButton.isHidden = isFilterButtonHidden
+        }
+        
+        trackersViewModel.onTodayFilterApply = { [weak self] in
+            let date = Calendar.current.startOfDay(for: Date())
+            self?.datePicker.setDate(date, animated: true)
+            self?.trackersViewModel.didUpdate(date: date)
         }
     }
     
@@ -233,14 +290,24 @@ final class TrackersViewController: UIViewController {
     
     private func showPlaceholderView() {
         trackersCollectionView.isHidden = true
-        placeholderView.setImage(searchController.searchBar.text?.isEmpty == true ? .trackersPlaceholder : .searchPlaceholder)
-        placeholderView.setTitle(searchController.searchBar.text?.isEmpty == true ? "Что будем отслеживать?" : "Ничего не найдено")
+        placeholderView.setImage(trackersViewModel.totalTrackersAmount == 0 ? .trackersPlaceholder : .searchPlaceholder)
+        
+        if (trackersViewModel.filter == .all || trackersViewModel.filter == .today) && (searchController.searchBar.text ?? "").isEmpty ||
+            placeholderView.imageView.image == .trackersPlaceholder {
+            placeholderView.setImage(.trackersPlaceholder)
+            placeholderView.setTitle(NSLocalizedString("emptyState.title", comment: "Text displayed on empty state"))
+        } else {
+            placeholderView.setImage(.searchPlaceholder)
+            placeholderView.setTitle(NSLocalizedString("emptyState.searchTitle", comment: "Text displayed on empty search state"))
+        }
+        
         placeholderView.isHidden = false
     }
     
     // MARK: - Objc Methods
     
     @objc private func didTapAddTrackerButton() {
+        appMetricaService.reportEvent(event: .click, screen: .Main, item: .addTrack)
         let trackerCreationViewController = TrackerCreationViewController()
         present(trackerCreationViewController, animated: true)
     }
@@ -267,6 +334,13 @@ final class TrackersViewController: UIViewController {
         
         datePicker.setDate(updatedDate, animated: true)
         trackersViewModel.didUpdate(date: updatedDate)
+    }
+    
+    @objc private func didTapFilterButton() {
+        appMetricaService.reportEvent(event: .click, screen: .Main, item: .filter)
+        let filtersViewModel = trackersViewModel.createFiltersViewModel()
+        let filterViewController = FiltersViewController(viewModel: filtersViewModel)
+        present(filterViewController, animated: true)
     }
 }
 
@@ -316,7 +390,7 @@ extension TrackersViewController: UICollectionViewDelegate {
         let section = snapshot?.sectionIdentifiers[indexPath.section]
         let isPinned = section == .section(title: Constants.pinnedCategoryTitle)
         
-        let pinActionTitle = isPinned ? "Открепить" : "Закрепить"
+        let pinActionTitle = isPinned ? NSLocalizedString("unpin", comment: "Unpin action text") : NSLocalizedString("pin", comment: "Pin action text")
         let pinAction = UIAction(title: pinActionTitle) { [weak self] _ in
             if isPinned {
                 self?.trackersViewModel.didUnpinTracker(at: indexPath)
@@ -325,15 +399,20 @@ extension TrackersViewController: UICollectionViewDelegate {
             }
         }
         
-        let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+        let editAction = UIAction(title: NSLocalizedString("edit", comment: "Edit action text")) { [weak self] _ in
             guard let self else { return }
             
+            appMetricaService.reportEvent(event: .click, screen: .Main, item: .edit)
+            
             let trackerEditingViewModel = trackersViewModel.createTrackerEditingViewModel(at: indexPath)
-            let trackerEditingViewController = TrackerEditingViewController(title: "Редактирование привычки", viewModel: trackerEditingViewModel)
+            let title = trackerEditingViewModel.trackerType == .regular ? NSLocalizedString("title.existingTracker", comment: "Existing tracker title") :
+            NSLocalizedString("title.existingEventTracker", comment: "Existing tracker title")
+            let trackerEditingViewController = TrackerEditingViewController(title: title, viewModel: trackerEditingViewModel)
             present(trackerEditingViewController, animated: true)
         }
         
-        let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+        let deleteAction = UIAction(title: NSLocalizedString("delete", comment: "Delete action text"), attributes: .destructive) { [weak self] _ in
+            self?.appMetricaService.reportEvent(event: .click, screen: .Main, item: .delete)
             self?.presentDeleteTrackerAlert(indexPath: indexPath)
         }
         
@@ -341,11 +420,15 @@ extension TrackersViewController: UICollectionViewDelegate {
     }
     
     private func presentDeleteTrackerAlert(indexPath: IndexPath) {
-        let alert = UIAlertController(title: nil, message: "Уверены что хотите удалить трекер?", preferredStyle: .actionSheet)
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let alert = UIAlertController(title: nil,
+                                      message:  NSLocalizedString("deleteTracker.confirmation", comment: "Text displayed on delete alert"),
+                                      preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title:  NSLocalizedString("delete", comment: "Delete action text"),
+                                         style: .destructive) { [weak self] _ in
             self?.trackersViewModel.didDeleteTracker(at: indexPath)
         }
-        let cancelAction = UIAlertAction(title: "Отменить", style: .cancel) { _ in }
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: "Cancel action text"),
+                                         style: .cancel)
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
         present(alert, animated: true)
@@ -357,5 +440,9 @@ extension TrackersViewController: UICollectionViewDelegate {
 extension TrackersViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         trackersViewModel.didUpdate(searchText: searchText)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        trackersViewModel.didUpdate(searchText: "")
     }
 }

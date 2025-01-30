@@ -55,7 +55,8 @@ final class TrackerEditingViewController: UIViewController {
         label.textAlignment = .center
         label.baselineAdjustment = .alignCenters
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "\(viewModel.completionsCount ?? 0) \(Utilities.dayWord(for: viewModel.completionsCount ?? 0))"
+        let cnt = viewModel.completionsCount ?? 0
+        label.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: "Number of tracked days"), cnt)
         return label
     }()
     
@@ -63,16 +64,18 @@ final class TrackerEditingViewController: UIViewController {
         let textField = TitleTextField()
         textField.delegate = trackerTitleTextFieldDelegate
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        
         textField.text = viewModel.title
-        textField.placeholder = "Введите название трекера"
-        
+        textField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("trackerTitle.placeholder", comment: "Text displayed on text field placeholder"),
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.grayApp]
+        )
+        textField.textAlignment = Utilities.isCurrentLanguageRTL() ? .right : .left
         return textField
     }()
     
     private lazy var warningLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ограничение 38 символов"
+        label.text = NSLocalizedString("trackerTitle.warning", comment: "Text displayed on title limit warning")
         label.font = .systemFont(ofSize: 17, weight: .regular)
         label.textColor = .redApp
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +90,8 @@ final class TrackerEditingViewController: UIViewController {
         tableView.delegate = categoryAndScheduleTableViewDelegate
         tableView.dataSource = categoryAndScheduleTableViewDataSource
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "categoryAndScheduleCell")
-        
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = .grayApp
         tableView.isUserInteractionEnabled = true
         tableView.allowsSelection = true
         tableView.layer.masksToBounds = true
@@ -146,7 +150,7 @@ final class TrackerEditingViewController: UIViewController {
         self?.dismiss(animated: true)
     }
     
-    private lazy var dismissButton = UndoButton(title: "Отменить") { [weak self] in
+    private lazy var dismissButton = UndoButton(title: NSLocalizedString("cancel", comment: "Text displayed on cancel button")) { [weak self] in
         self?.dismiss(animated: true)
     }
     

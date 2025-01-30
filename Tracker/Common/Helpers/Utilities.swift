@@ -5,7 +5,7 @@
 //  Created by Александр Торопов on 10.12.2024.
 //
 
-import Foundation
+import UIKit
 
 final class Utilities {
     static func dayWord(for count: Int) -> String {
@@ -16,11 +16,20 @@ final class Utilities {
         }
     }
     
-    static func bringScheduleIntoRuFormat(_ schedule: inout [Weekday]) {
-        schedule.sort { $0.rawValue < $1.rawValue }
-        if let index = schedule.firstIndex(where: { $0 == .sunday }) {
-            let sunday = schedule.remove(at: index)
-            schedule.append(sunday)
+    static func bringScheduleIntoLocaleFormat(_ schedule: inout [Weekday]) {
+        let calendar = Calendar.current
+        let firstWeekday = calendar.firstWeekday - 1
+
+        let fullWeek = (0..<7).map { ($0 + firstWeekday) % 7 }
+
+        schedule.sort { day1, day2 in
+            let index1 = fullWeek.firstIndex(of: day1.rawValue) ?? 0
+            let index2 = fullWeek.firstIndex(of: day2.rawValue) ?? 0
+            return index1 < index2
         }
+    }
+    
+    static func isCurrentLanguageRTL() -> Bool {
+        return Locale.characterDirection(forLanguage: Locale.current.languageCode ?? "") == .rightToLeft
     }
 }

@@ -11,7 +11,7 @@ final class PlaceholderView: UIView {
     
     // MARK: - Subviews
     
-    private lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView

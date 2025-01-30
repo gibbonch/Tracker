@@ -11,6 +11,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    private let appMetrica = AppMetricaService()
     private var trackerCellViewModel: TrackerCellViewModel?
     
     // MARK: - Subviews
@@ -103,7 +104,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     private func updateCompletionsCount(with cnt: Int) {
-        dayLabel.text = "\(cnt) \(Utilities.dayWord(for: cnt))"
+        dayLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: "Number of tracked days"), cnt)
     }
     
     private func updateButtonAppearance(isCompleted: Bool) {
@@ -130,6 +131,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     @objc private func completeButtonDidTap() {
         guard let trackerCellViewModel else { return }
+        appMetrica.reportEvent(event: .click, screen: .Main, item: .track)
         trackerCellViewModel.didCompleteTracker()
     }
 }

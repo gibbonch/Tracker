@@ -44,7 +44,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     
     func setupCell(with weekday: Weekday, isSelected: Bool, switchTogglingHandler: @escaping () -> Void) {
         handler = switchTogglingHandler
-        backgroundColor = UIColor.lightGrayApp.withAlphaComponent(0.3)
+        backgroundColor = UIColor.backgroundApp
         selectionStyle = .none
         dayLabel.text = weekday.toString()
         daySwitch.isOn = isSelected

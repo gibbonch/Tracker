@@ -10,11 +10,13 @@ import Foundation
 // MARK: - TrackersViewModel
 
 protocol TrackersViewModel: AnyObject {
-    var onVisibleCategoriesChange: Binding<[TrackerCategory]>? { get set }
+    var onVisibleCategoriesChange: (([TrackerCategory], Bool) -> Void)? { get set }
+    var onTodayFilterApply: (() -> Void)? { get set }
+    var totalTrackersAmount: Int { get }
+    var filter: TrackerFilter { get }
     
     func didUpdate(date: Date)
     func didUpdate(searchText: String)
-    func didUpdate(filter: TrackerFilter)
     
     func didDeleteTracker(at indexPath: IndexPath)
     func didPinTracker(at indexPath: IndexPath)
@@ -22,6 +24,7 @@ protocol TrackersViewModel: AnyObject {
     
     func createTrackerEditingViewModel(at indexPath: IndexPath) -> any TrackerEditingViewModel
     func createTrackerCellViewModel(at indexPath: IndexPath) -> any TrackerCellViewModel
+    func createFiltersViewModel() -> any FiltersViewModel
 }
 
 // MARK: - DefaultTrackersViewModel
@@ -30,15 +33,21 @@ final class DefaultTrackersViewModel: TrackersViewModel {
     
     // MARK: - Properties
     
-    var onVisibleCategoriesChange: Binding<[TrackerCategory]>? {
+    var onVisibleCategoriesChange: (([TrackerCategory], Bool) -> Void)? {
         didSet { trackerProvider.updateTrackerQuery(trackerQuery) }
     }
+    
+    var onTodayFilterApply: (() -> Void)?
+    var totalTrackersAmount: Int {
+        trackerStore.fetchTrackersCount()
+    }
+    
+    private(set) var filter: TrackerFilter
     
     private var visibleCategories: [TrackerCategory] = []
     
     private var date: Date
     private var searchText: String
-    private var filter: TrackerFilter
     
     private let trackerStore: TrackerStoring
     private var trackerProvider: TrackerProviding
@@ -54,25 +63,30 @@ final class DefaultTrackersViewModel: TrackersViewModel {
         self.trackerProvider = trackerProvider
         date = Calendar.current.startOfDay(for: Date())
         searchText = ""
-        filter = .all
+        filter = .today
         self.trackerProvider.delegate = self
     }
     
     // MARK: - Public Methods
     
     func didUpdate(date: Date) {
+        
+        let currentDate = Calendar.current.startOfDay(for: Date())
+        
+        if date == currentDate && filter == .all {
+            filter = .today
+        } else if self.date == currentDate && filter == .today {
+            filter = .all
+        }
+        
         self.date = date
+        
         NotificationCenter.default.post(name: Notification.dateDidChange, object: date)
         trackerProvider.updateTrackerQuery(trackerQuery)
     }
     
     func didUpdate(searchText: String) {
         self.searchText = searchText
-        trackerProvider.updateTrackerQuery(trackerQuery)
-    }
-    
-    func didUpdate(filter: TrackerFilter) {
-        self.filter = filter
         trackerProvider.updateTrackerQuery(trackerQuery)
     }
     
@@ -94,7 +108,7 @@ final class DefaultTrackersViewModel: TrackersViewModel {
         trackerStore.unpin(tracker: tracker)
     }
     
-    func createTrackerCellViewModel(at indexPath: IndexPath) -> any TrackerCellViewModel {        
+    func createTrackerCellViewModel(at indexPath: IndexPath) -> any TrackerCellViewModel {
         let category = visibleCategories[indexPath.section]
         return DefaultTrackerCellViewModel(store: TrackerRecordStore(coreDataStack: CoreDataStack.shared),
                                            date: date,
@@ -115,6 +129,21 @@ final class DefaultTrackersViewModel: TrackersViewModel {
                                               completionsCount: completionsCount,
                                               categoryTitle: categoryTitle)
     }
+    
+    func createFiltersViewModel() -> any FiltersViewModel {
+        let viewModel = DefaultFiltersViewModel(filter: filter)
+        viewModel.onChangeSelectedFilter = { [weak self] filter in
+            guard let self else { return }
+            self.filter = filter
+            
+            if filter == .today {
+                onTodayFilterApply?()
+            } else {
+                trackerProvider.updateTrackerQuery(trackerQuery)
+            }
+        }
+        return viewModel
+    }
 }
 
 // MARK: - TrackerProviderDelegate
@@ -122,7 +151,8 @@ final class DefaultTrackersViewModel: TrackersViewModel {
 extension DefaultTrackersViewModel: TrackerProviderDelegate {
     func didUpdateFetchedTrackers(_ categories: [TrackerCategory]) {
         visibleCategories = categories
-        onVisibleCategoriesChange?(visibleCategories)
+        let isFilterButtonHidden = visibleCategories.count == 0 && (filter == .all || filter == .today) 
+        onVisibleCategoriesChange?(visibleCategories, isFilterButtonHidden)
     }
 }
 

@@ -22,8 +22,7 @@ final class TitleTextField: UITextField {
     private func setupTextField() {
         textColor = .blackApp
         font = .systemFont(ofSize: 17, weight: .regular)
-        
-        backgroundColor = .lightGrayApp.withAlphaComponent(0.3)
+        backgroundColor = .backgroundApp
         layer.cornerRadius = 16
         clearButtonMode = .whileEditing
         leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 75))

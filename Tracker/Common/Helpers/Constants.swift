@@ -8,6 +8,7 @@
 import Foundation
 
 struct Constants {
-    static let pinnedCategoryTitle = "Закрепленные"
+    static let pinnedCategoryTitle = NSLocalizedString("pinnedCategory.title", comment: "Pinned category title")
     static let didPresentOnboarding = "didPresentOnboarding"
+    static let locales = ["en", "ru", "ar", "de"]
 }
